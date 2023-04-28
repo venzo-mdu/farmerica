@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:farmerica/models/Categories.dart';
-import 'package:farmerica/models/Category.dart';
 import 'package:farmerica/models/ParentCategory.dart' as pc;
 import 'package:farmerica/models/Products.dart';
 import 'package:farmerica/ui/widgets/component.dart';
@@ -12,7 +10,7 @@ class Item extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new ItemState(id);
+    return ItemState(id);
   }
 }
 
@@ -33,87 +31,77 @@ class ItemState extends State<Item> {
     var price = (product[id].price) as int;
     var sale = (product[id].salePrice) as int;
     var off = ((price - sale) / price) * 100;
-    return new GestureDetector(
+    return GestureDetector(
         child: Container(
           width: width * 0.5,
           child: Card(
-            child: new Container(
-              padding: new EdgeInsets.all(width * 0.025),
-              child: new Column(
+            child: Container(
+              padding: EdgeInsets.all(width * 0.025),
+              child: Column(
                 children: <Widget>[
-                  new Stack(
+                  Stack(
                     children: <Widget>[
-                      new Image.network(
+                      Image.network(
                         product[id].images[0].src,
                         width: width * 0.3,
                       ),
                       (price == sale)
-                          ? new Text("")
-                          : new Container(
+                          ? Text("")
+                          : Container(
                               padding: const EdgeInsets.all(3.0),
-                              decoration: new BoxDecoration(
-                                  border: new Border.all(
-                                      color: Colors.lightGreen,
-                                      width: width * 0.00625),
-                                  color: Colors.lightGreen[100]),
-                              child: new Text(
+                              decoration:
+                                  BoxDecoration(border: Border.all(color: Colors.lightGreen, width: width * 0.00625), color: Colors.lightGreen[100]),
+                              child: Text(
                                 off.round().toString() + "% OFF",
-                                style: new TextStyle(fontSize: width * 0.03),
+                                style: TextStyle(fontSize: width * 0.03),
                               ),
                             ),
                     ],
                   ),
-                  new Container(
+                  Container(
                     height: width * 0.11,
-                    child: new Column(
+                    child: Column(
                       children: <Widget>[
-                        new Text(
+                        Text(
                           product[id].name,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
-                          style: new TextStyle(fontSize: width * 0.045),
+                          style: TextStyle(fontSize: width * 0.045),
                         ),
                       ],
                     ),
                   ),
-                  new Text(
+                  Text(
                     (product[id] as Map)[1]["quantity"],
-                    style: new TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Colors.grey),
                   ),
-                  new Container(
-                    padding: new EdgeInsets.only(top: width * 0.022),
-                    child: new Row(
+                  Container(
+                    padding: EdgeInsets.only(top: width * 0.022),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        new Text(
+                        Text(
                           "₹" + product[id].salePrice.toString(),
-                          style: new TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: width * 0.05),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: width * 0.05),
                         ),
                         (price == sale)
-                            ? new Text("")
+                            ? Text("")
                             : Padding(
-                                padding: new EdgeInsets.all(width * 0.022),
+                                padding: EdgeInsets.all(width * 0.022),
                               ),
                         (price == sale)
-                            ? new Text("")
+                            ? Text("")
                             : Container(
-                                foregroundDecoration:
-                                    new StrikeThroughDecoration(),
-                                child: new Text(
-                                  "₹" +
-                                      (product[id] as Map)[1]["price"]
-                                          .toString(),
-                                  style: new TextStyle(
-                                      fontSize: width * 0.05,
-                                      color: Colors.grey),
+                                foregroundDecoration: StrikeThroughDecoration(),
+                                child: Text(
+                                  "₹" + (product[id] as Map)[1]["price"].toString(),
+                                  style: TextStyle(fontSize: width * 0.05, color: Colors.grey),
                                 ))
                       ],
                     ),
                   ),
-                  new Container(
-                    padding: new EdgeInsets.only(top: width * 0.022),
+                  Container(
+                    padding: EdgeInsets.only(top: width * 0.022),
                     child: 1 == 1
                         ? ElevatedButton(
                             onPressed: () {
@@ -121,31 +109,30 @@ class ItemState extends State<Item> {
                                 addtocart = 1;
                               });
                             },
-                            child: new Text("View"),
+                            child: Text("View"),
                             // color: Colors.blueAccent,
                             // textColor: Colors.white,
                           )
-                        : new Row(
+                        : Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                              new Container(
+                              Container(
                                 width: width * 0.16,
                                 child: ElevatedButton(
                                   onPressed: () => setState(() {
                                     addtocart = addtocart + 1;
                                   }),
-                                  child: new Text(
+                                  child: Text(
                                     "+",
-                                    style:
-                                        new TextStyle(fontSize: width * 0.07),
+                                    style: TextStyle(fontSize: width * 0.07),
                                   ),
                                   // color: Colors.blueAccent,
                                   // textColor: Colors.white,
                                 ),
                               ),
-                              new Container(
+                              Container(
                                 width: width * 0.1,
-                                child: new Text(
+                                child: Text(
                                   (addtocart.toString()),
                                   textAlign: TextAlign.center,
                                 ),
@@ -158,10 +145,9 @@ class ItemState extends State<Item> {
                                       addtocart = addtocart - 1;
                                     });
                                   },
-                                  child: new Text(
+                                  child: Text(
                                     "-",
-                                    style:
-                                        new TextStyle(fontSize: width * 0.07),
+                                    style: TextStyle(fontSize: width * 0.07),
                                   ),
                                   // color: Colors.blueAccent,
                                   // textColor: Colors.white,
@@ -178,7 +164,7 @@ class ItemState extends State<Item> {
         onTap: () {
           // Navigator.push(
           //     context,
-          //     new MaterialPageRoute(
+          //      MaterialPageRoute(
           //         builder: (context) => ProductDetailsPage(id: id)));
         });
   }
@@ -209,16 +195,16 @@ class _ProductsCategoryState extends State<ProductsCategory> {
     // var sale = (widget.product[id].salePrice) as int;
     // var off = ((price - sale) / price) * 100;
     var items = <Widget>[];
-    items.add(new Padding(
+    items.add(Padding(
       padding: EdgeInsets.all(3.0),
     ));
-    widget.product.forEach((id) => items.add(new Item(id)));
-    items.add(new Padding(
+    widget.product.forEach((id) => items.add(Item(id)));
+    items.add(Padding(
       padding: EdgeInsets.all(3.0),
     ));
     return Scaffold(
         appBar: AppBar(
-          title: new Text(
+          title: Text(
             " All Product Category",
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -227,7 +213,7 @@ class _ProductsCategoryState extends State<ProductsCategory> {
         ),
         body: Container(
           padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-          child: new Column(
+          child: Column(
             children: <Widget>[
               Expanded(
                   child: ListView.builder(
@@ -242,23 +228,19 @@ class _ProductsCategoryState extends State<ProductsCategory> {
                             child: Container(
                               width: width * 0.5,
                               child: Card(
-                                child: new Container(
-                                  padding: new EdgeInsets.all(width * 0.025),
-                                  child: new Column(
+                                child: Container(
+                                  padding: EdgeInsets.all(width * 0.025),
+                                  child: Column(
                                     children: <Widget>[
-                                      new Stack(
+                                      Stack(
                                         children: <Widget>[
-                                          new Container(
+                                          Container(
                                             padding: const EdgeInsets.all(3.0),
-                                            decoration: new BoxDecoration(
-                                                border: new Border.all(
-                                                    color: Colors.lightGreen,
-                                                    width: width * 0.00625),
-                                                color: Colors.lightGreen[100]),
-                                            child: new Text(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(color: Colors.lightGreen, width: width * 0.00625), color: Colors.lightGreen[100]),
+                                            child: Text(
                                               "50" + "% OFF",
-                                              style: new TextStyle(
-                                                  fontSize: width * 0.03),
+                                              style: TextStyle(fontSize: width * 0.03),
                                             ),
                                           ),
                                         ],
@@ -266,34 +248,31 @@ class _ProductsCategoryState extends State<ProductsCategory> {
                                       SizedBox(
                                         height: 15,
                                       ),
-                                      new Container(
+                                      Container(
                                         height: width * 0.11,
-                                        child: new Column(
+                                        child: Column(
                                           children: <Widget>[
-                                            new Text(
+                                            Text(
                                               product[id].name,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 2,
-                                              style: new TextStyle(
-                                                  fontSize: width * 0.060),
+                                              style: TextStyle(fontSize: width * 0.060),
                                             ),
                                             Text(
                                               "count : ${product[id].count.toString()}",
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 2,
-                                              style: new TextStyle(
-                                                  fontSize: width * 0.040),
+                                              style: TextStyle(fontSize: width * 0.040),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      new Container(
-                                        padding: new EdgeInsets.only(
-                                            top: width * 0.019),
+                                      Container(
+                                        padding: EdgeInsets.only(top: width * 0.019),
                                         child: 1 == 1
-                                            ? new Row(
+                                            ? Row(
                                                 children: <Widget>[
-                                                  new Expanded(
+                                                  Expanded(
                                                       child: ElevatedButton(
                                                     onPressed: () {
                                                       setState(() {
@@ -304,42 +283,35 @@ class _ProductsCategoryState extends State<ProductsCategory> {
                                                       // globals.server.simulateMessage(
                                                       //     globals.cart.length.toString());
                                                     },
-                                                    child:
-                                                        new Text("View"),
+                                                    child: Text("View"),
                                                     // color: Colors.blueAccent,
                                                     // textColor: Colors.white,
                                                   ))
                                                 ],
                                               )
-                                            : new Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
+                                            : Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                 children: <Widget>[
-                                                  new Container(
+                                                  Container(
                                                     width: width * 0.16,
                                                     child: ElevatedButton(
-                                                      onPressed: () =>
-                                                          setState(() {}),
-                                                      child: new Text(
+                                                      onPressed: () => setState(() {}),
+                                                      child: Text(
                                                         "+",
-                                                        style: new TextStyle(
-                                                            fontSize:
-                                                                width * 0.07),
+                                                        style: TextStyle(fontSize: width * 0.07),
                                                       ),
                                                       // color: Colors.blueAccent,
                                                       // textColor: Colors.white,
                                                     ),
                                                   ),
-                                                  new Container(
+                                                  Container(
                                                     width: width * 0.1,
-                                                    child: new Text(
+                                                    child: Text(
                                                       "no. of",
-                                                      textAlign:
-                                                          TextAlign.center,
+                                                      textAlign: TextAlign.center,
                                                     ),
                                                   ),
-                                                  new Container(
+                                                  Container(
                                                     width: width * 0.16,
                                                     child: ElevatedButton(
                                                       onPressed: () {
@@ -351,11 +323,9 @@ class _ProductsCategoryState extends State<ProductsCategory> {
                                                         //       globals.cart.length.toString());
                                                         //  .
                                                       },
-                                                      child: new Text(
+                                                      child: Text(
                                                         "-",
-                                                        style: new TextStyle(
-                                                            fontSize:
-                                                                width * 0.07),
+                                                        style: TextStyle(fontSize: width * 0.07),
                                                       ),
                                                       // color: Colors.blueAccent,
                                                       // textColor: Colors.white,
@@ -372,7 +342,7 @@ class _ProductsCategoryState extends State<ProductsCategory> {
                             onTap: () {
                               // Navigator.push(
                               //     context,
-                              //     new MaterialPageRoute(
+                              //      MaterialPageRoute(
                               //         builder: (context) => ProductDetailsPage(id: id)));
                             });
                       }))

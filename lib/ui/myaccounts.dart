@@ -60,106 +60,6 @@ class _MyAccountState extends BasePageState<MyAccount> {
                   child: Row(
                     children: [
                       Icon(
-                        Icons.person,
-                        color: Colors.redAccent,
-                        size: 22,
-                      ),
-                      SizedBox(width: 20),
-                      Expanded(
-                          child: TextFormField(
-                        autofocus: true,
-                        enabled: b1,
-                        onChanged: (valu) {
-                          first = valu;
-                        },
-                        validator: (value) {
-                          setState(() {
-                            first = widget.customer.firstName;
-                          });
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            hintText: " First Name: "
-                                " ${customer.firstName}",
-                            hintStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              // fontWeight: FontWeight.bold
-                            )),
-                        controller: t1,
-                      )),
-                      IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              b1 = true;
-                            });
-                            //  t1.value = TextEditingValue(text: "00");
-                          }),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                  color: Color(0xFFF5F6F9),
-                  // onPressed: press,
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.person,
-                        color: Colors.redAccent,
-                        size: 22,
-                      ),
-                      SizedBox(width: 20),
-                      Expanded(
-                          child: TextFormField(
-                        autofocus: true,
-                        enabled: b2,
-                        onChanged: (valu) {
-                          last = valu;
-                        },
-                        validator: (value) {
-                          setState(() {
-                            last = widget.customer.lastName;
-                          });
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            hintText: "Last Name:"
-                                "${customer.lastName}",
-                            hintStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              // fontWeight: FontWeight.bold
-                            )),
-                        controller: t2,
-                      )),
-                      IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              b2 = true;
-                            });
-                            // t2.value = TextEditingValue(text: "00");
-                          }),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                  color: Color(0xFFF5F6F9),
-                  // onPressed: press,
-                  child: Row(
-                    children: [
-                      Icon(
                         Icons.mail,
                         color: Colors.redAccent,
                         size: 22,
@@ -251,50 +151,43 @@ class _MyAccountState extends BasePageState<MyAccount> {
                 ),
               ),
               OpenFlutterButton(
-                  title: "Update",
-                  // onPressed: () async {
-                  //   if (_formKey.currentState.validate()) {
-                  //     Customers customers = await api_services
-                  //         .updateCustomers(
-                  //             firstName: first,
-                  //             lastName: last,
-                  //             email: mail,
-                  //             id: widget.customer.id)
-                  //         .then((value) {
-                  //       Fluttertoast.showToast(
-                  //           msg: "Update Successfully",
-                  //           toastLength: Toast.LENGTH_SHORT,
-                  //           gravity: ToastGravity.BOTTOM,
-                  //           timeInSecForIosWeb: 1,
-                  //           backgroundColor: Colors.black,
-                  //           textColor: Colors.white,
-                  //           fontSize: 16.0);
-                  //       services.setLoginDetails(customer);
-                  //     });
-                  //     setState(() {
-                  //       b1 = false;
-                  //       b2 = false;
-                  //       b3 = false;
-                  //       b4 = false;
-                  //     });
-                  //   }
-                  // }
-                )
+                title: "Update",
+                // onPressed: () async {
+                //   if (_formKey.currentState.validate()) {
+                //     Customers customers = await api_services
+                //         .updateCustomers(
+                //             firstName: first,
+                //             lastName: last,
+                //             email: mail,
+                //             id: widget.customer.id)
+                //         .then((value) {
+                //       Fluttertoast.showToast(
+                //           msg: "Update Successfully",
+                //           toastLength: Toast.LENGTH_SHORT,
+                //           gravity: ToastGravity.BOTTOM,
+                //           timeInSecForIosWeb: 1,
+                //           backgroundColor: Colors.black,
+                //           textColor: Colors.white,
+                //           fontSize: 16.0);
+                //       services.setLoginDetails(customer);
+                //     });
+                //     setState(() {
+                //       b1 = false;
+                //       b2 = false;
+                //       b3 = false;
+                //       b4 = false;
+                //     });
+                //   }
+                // }
+              )
             ],
           ),
-        )
-    );
+        ));
   }
 }
 
 class ProfileMenu extends StatelessWidget {
-  ProfileMenu(
-      {Key key,
-      @required this.text,
-      @required this.icon,
-      this.press,
-      this.textEditingController})
-      : super(key: key);
+  ProfileMenu({Key key, @required this.text, @required this.icon, this.press, this.textEditingController}) : super(key: key);
 
   final String text;
   final IconData icon;

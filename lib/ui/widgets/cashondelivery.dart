@@ -77,9 +77,10 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xff00ab55),
-          title: Image.network(
-            'https://www.farmerica.in/wp-content/uploads/2023/01/farmerica-logo.png',
+          title: Image.asset(
+            'assets/images/farmerica-logo.png',
             color: Colors.white,
+            width: MediaQuery.of(context).size.width * 0.5,
           ),
         ),
         body: SafeArea(
@@ -93,11 +94,11 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                     child: Text(
                       'Thank You!!',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
                     )),
                 Text(
                   'Your order is Placed!',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
                 ),
                 Container(
                   width: double.infinity,
@@ -106,39 +107,44 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                   decoration: BoxDecoration(
                     color: Color(0XFFF0F0F1),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      FutureBuilder<List<Orders>>(
-                          future: orderId,
-                          builder: (context, snapshot) {
-                            var orderIds;
-                            if (snapshot.hasData) {
-                              orderIds = snapshot.data[0].id;
-                              print(snapshot.data[0].id);
-                            }
-                            return Text('Order number: ${orderIds.toString()}',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w500));
-                          }),
-                      SizedBox(width: 25),
-                      Text('Date : ${widget.delivery_type}',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500)),
-                      SizedBox(width: 25),
-                      Text('Total: ${widget.cartProducts[0].price}',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500)),
-                      SizedBox(width: 25),
-                      Text('Gift From: ${widget.gift_from.toString()}',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500)),
-                      SizedBox(width: 25),
-                      Text('Gift Msg: ${widget.gift_message.toString()}',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500)),
-                    ],
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          FutureBuilder<List<Orders>>(
+                              future: orderId,
+                              builder: (context, snapshot) {
+                                var orderIds;
+                                if (snapshot.hasData) {
+                                  orderIds = snapshot.data[0].id;
+                                  print(snapshot.data[0].id);
+                                }
+                                return Text('Order number: ${orderIds.toString()}',
+                                    style: TextStyle(
+                                        fontSize: 16, fontWeight: FontWeight.w500));
+                              }),
+                          SizedBox(width: 25),
+                          Text('Date : ${widget.delivery_type}',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500)),
+                          SizedBox(width: 25),
+                          Text('Total: ${widget.cartProducts[0].price}',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500)),
+                          SizedBox(width: 25),
+                          Text('Gift From: ${widget.gift_from.toString()}',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500)),
+                          SizedBox(width: 25),
+                          Text('Gift Msg: ${widget.gift_message.toString()}',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
 
@@ -146,7 +152,7 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
 
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
+                      backgroundColor: Color(0xff00ab55),
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {

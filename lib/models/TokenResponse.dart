@@ -4,6 +4,7 @@ class TokenResponses {
   String userNicename;
   String userDisplayName;
 
+
   TokenResponses(
       {this.token, this.userEmail, this.userNicename, this.userDisplayName});
 

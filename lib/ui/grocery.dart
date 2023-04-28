@@ -36,74 +36,42 @@ class _GroceryState extends State<Grocery> {
 
     List dummyProduct = product;
     lowToHigh() {
-      for (int i = 0; i < dummyProduct.length - 1; i++){
-        for (int j = 0; j < dummyProduct.length - i -1; j++){
-          // print('dummyProductPrice: ${double.parse((dummyProduct[j].price))}');
-          // print('dummyProductPriceType: ${double.parse((dummyProduct[j].price)).runtimeType}');
-          if (double.parse((dummyProduct[j].price)) > double.parse(dummyProduct[j+1].price)) {
-            // print('insideSwap:');
-
+      for (int i = 0; i < dummyProduct.length - 1; i++) {
+        for (int j = 0; j < dummyProduct.length - i - 1; j++) {
+          if (double.parse((dummyProduct[j].price)) > double.parse(dummyProduct[j + 1].price)) {
             var temp = dummyProduct[j];
-            dummyProduct[j] = dummyProduct[j+1];
-            dummyProduct[j+1] = temp;
-            // print('temp: $temp');
+            dummyProduct[j] = dummyProduct[j + 1];
+            dummyProduct[j + 1] = temp;
           }
         }
       }
-      // print('calling GridList53:${dummyProduct.length}');
-      // print('objectDummyProduct: ${dummyProduct.length}');
-      for(int i =0; i<dummyProduct.length; i++) {
-        // print('objectDummyProduct: ${dummyProduct[i].price.toString()}');
-      }
+      for (int i = 0; i < dummyProduct.length; i++) {}
       GridViewList(product: dummyProduct);
     }
 
     highToLow() {
-      // List dummyProduct = product;
-      // print('dummyProduct: $dummyProduct');
-
-      for (int i = 0; i < dummyProduct.length - 1; i++){
-        for (int j = 0; j < dummyProduct.length - i -1; j++){
-          // print('dummyProductPrice: ${double.parse((dummyProduct[j].price))}');
-          // print('dummyProductPriceType: ${double.parse((dummyProduct[j].price)).runtimeType}');
-          if (double.parse((dummyProduct[j].price)) < double.parse(dummyProduct[j+1].price)) {
+      for (int i = 0; i < dummyProduct.length - 1; i++) {
+        for (int j = 0; j < dummyProduct.length - i - 1; j++) {
+          if (double.parse((dummyProduct[j].price)) < double.parse(dummyProduct[j + 1].price)) {
             var temp = dummyProduct[j];
-
-            dummyProduct[j] = dummyProduct[j+1];
-            dummyProduct[j+1] = temp;
-            // print('temp: $temp');
+            dummyProduct[j] = dummyProduct[j + 1];
+            dummyProduct[j + 1] = temp;
           }
         }
       }
-      // print('calling GridList75:${dummyProduct.length}');
-
-      // print('objectDummyProduct: ${dummyProduct.length}');
-      // print('objectDummyProduct: ${dummyProduct[0].price.toString()}');
       GridViewList(product: dummyProduct);
     }
 
     latest() {
-      // List dummyProduct = product;
-      // print('CallingLatest: $dummyProduct');
-      for (int i = 0; i < dummyProduct.length - 1; i++){
-        for (int j = 0; j < dummyProduct.length - i -1; j++){
-          // print('dummyProductPrice: ${double.parse((dummyProduct[j].price))}');
-          // print('dummyProductPriceType: ${double.parse((dummyProduct[j].dateModified)).runtimeType}');
-          // if (dummyProduct[j].dateModified < dummyProduct[j+1].dateModified) {
-          if(dummyProduct[j].dateModified.compareTo(dummyProduct[j+1].dateModified) < 0) {
-            // print('callingLastestInsideIf');
+      for (int i = 0; i < dummyProduct.length - 1; i++) {
+        for (int j = 0; j < dummyProduct.length - i - 1; j++) {
+          if (dummyProduct[j].dateModified.compareTo(dummyProduct[j + 1].dateModified) < 0) {
             var temp = dummyProduct[j];
-
-            dummyProduct[j] = dummyProduct[j+1];
-            dummyProduct[j+1] = temp;
-            // print('temp: $temp');
+            dummyProduct[j] = dummyProduct[j + 1];
+            dummyProduct[j + 1] = temp;
           }
         }
       }
-      // print('calling GridList75:${dummyProduct.length}');
-
-      // print('objectDummyProduct: ${dummyProduct.length}');
-      // print('objectDummyProduct: ${dummyProduct[0].price.toString()}');
       GridViewList(product: dummyProduct);
     }
 
@@ -116,12 +84,11 @@ class _GroceryState extends State<Grocery> {
               elevation: 0,
               backgroundColor: const Color(0xff00ab55),
               centerTitle: true,
-              title: Image.network(
-                'https://www.farmerica.in/wp-content/uploads/2023/01/farmerica-logo.png',
-                color: Colors.white,
+              title: Image.asset('assets/images/farmerica-logo.png',
+                color: Colors.white,width: MediaQuery.of(context).size.width * 0.5,
               ),
               leading: IconButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
@@ -138,19 +105,18 @@ class _GroceryState extends State<Grocery> {
                         Text(
                           'Showing all ${widget.product.length} products',
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 13,
                             fontFamily: 'OutFit',
                             fontWeight: FontWeight.w400,
                           ),
                         ),
                         DropdownButton(
-                          hint: const Text("Please select value",
+                          hint: const Text("Sort",
                               style: TextStyle(
-                                fontSize: 17,
+                                fontSize: 13,
                                 fontFamily: 'OutFit',
                                 fontWeight: FontWeight.w500,
-                              )
-                          ),
+                              )),
                           value: isSelectedDropDown,
                           items: <String>[
                             'Sort by Latest',
@@ -160,38 +126,30 @@ class _GroceryState extends State<Grocery> {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(
-                                  value,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'OutFit',
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                                value,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontFamily: 'OutFit',
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             );
                           }).toList(),
                           onChanged: (value) {
                             setState(() {
-                              // print('isSelectedDropDown: $isSelectedDropDown');
-                              // print('isSelectedDropDown: ${isSelectedDropDown.runtimeType}');
-                              // print('isSelectedDropDown: $value');
                               isSelectedDropDown = value;
-                              if(value == 'Sort by Low to High') {
+                              if (value == 'Sort by Low to High') {
                                 setState(() {
                                   lowToHigh();
-                                  // isDropDown=true;
-                                  // print('isDropDown: $isDropDown');
                                 });
-                              } else if(value == 'Sort by High to Low') {
+                              } else if (value == 'Sort by High to Low') {
                                 setState(() {
                                   highToLow();
-                                  // isDropDown=false;
-                                  // print('isDropDown: $isDropDown');
                                 });
                               } else {
                                 setState(() {
                                   latest();
                                 });
-
                               }
                             });
                           },
@@ -203,8 +161,6 @@ class _GroceryState extends State<Grocery> {
                 ),
               ),
             ),
-
           );
   }
 }
-

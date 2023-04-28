@@ -49,32 +49,26 @@ class FormHelper {
       helperText: helperText,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
-      enabledBorder: OutlineInputBorder(
+      focusedBorder: const OutlineInputBorder(
         borderSide: BorderSide(
-          color: Colors.redAccent,
-          width: 1,
+          color: Color(0xff00ab55),
         ),
       ),
-      border: OutlineInputBorder(
+      enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: Colors.white,
-          width: 1,
+          color: Colors.grey.shade400,
         ),
       ),
     );
   }
 
   static Widget fieldLabel(String labelName) {
-    return new Padding(
-      padding: EdgeInsets.fromLTRB(0, 5, 0, 10),
-      child: Text(
-        labelName,
-        style: new TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 15.0,
-
-        ),
-
+    return Text(
+      labelName,
+      style: const TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 15.0,
+        fontFamily: 'Outfit'
       ),
     );
   }
@@ -92,12 +86,11 @@ class FormHelper {
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.redAccent,
+              color: Color(0xff00ab55),
               style: BorderStyle.solid,
-              width: 1.0,
             ),
-            color: Colors.redAccent,
-            borderRadius: BorderRadius.circular(30.0),
+            color: Color(0xff00ab55),
+            borderRadius: BorderRadius.circular(10.0),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -105,11 +98,11 @@ class FormHelper {
               Center(
                 child: Text(
                   buttonText,
-                  style: TextStyle(
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    letterSpacing: 1,
                   ),
                 ),
               ),

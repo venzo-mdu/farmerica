@@ -7,21 +7,10 @@ import 'package:farmerica/ui/payment.dart';
 
 // ignore: must_be_immutable
 class VerifyAddress extends BasePage {
+  var couponSelection;
   List product = [];
   final int id;
-  final String first,
-      last,
-      city,
-      state,
-      postcode,
-      apartmnt,
-      flat,
-      address,
-      country,
-      mobile,
-      mail,
-      giftFrom,
-      giftMsg;
+  final String first, last, city, state, postcode, apartmnt, flat, address, country, mobile, mail, giftFrom, giftMsg;
   var shippingMode;
   final String deliveryDate;
   final String deliveryTime;
@@ -47,7 +36,8 @@ class VerifyAddress extends BasePage {
       this.deliveryTime,
       this.giftMsg,
       this.giftFrom,
-      this.shippingMode});
+      this.shippingMode,
+      this.couponSelection});
   @override
   _VerifyAddressState createState() => _VerifyAddressState();
 }
@@ -63,11 +53,12 @@ class _VerifyAddressState extends BasePageState<VerifyAddress> {
     // basePage.title = "Checkout Page";
     // basePage.selected = 2;
   }
+
   bool showDropDownValue = true;
 
   @override
   Widget body(BuildContext context) {
-    if(widget.deliveryTime == null) {
+    if (widget.deliveryTime == null) {
       showDropDownValue = false;
     }
 
@@ -98,9 +89,6 @@ class _VerifyAddressState extends BasePageState<VerifyAddress> {
                     )
                   ],
                 ),
-
-
-
                 Row(
                   children: [
                     Flexible(
@@ -124,10 +112,6 @@ class _VerifyAddressState extends BasePageState<VerifyAddress> {
                     ),
                   ],
                 ),
-
-
-
-
                 Row(
                   children: [
                     Flexible(
@@ -193,8 +177,7 @@ class _VerifyAddressState extends BasePageState<VerifyAddress> {
                       flex: 1,
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
-                        child:
-                            FormHelper.fieldLabelValu(context, widget.country),
+                        child: FormHelper.fieldLabelValu(context, widget.country),
                       ),
                     ),
                     Flexible(
@@ -242,8 +225,7 @@ class _VerifyAddressState extends BasePageState<VerifyAddress> {
                       flex: 1,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child:
-                            FormHelper.fieldLabelValu(context, widget.postcode),
+                        child: FormHelper.fieldLabelValu(context, widget.postcode),
                       ),
                     ),
                   ],
@@ -283,8 +265,7 @@ class _VerifyAddressState extends BasePageState<VerifyAddress> {
                       flex: 1,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child:
-                        FormHelper.fieldLabelValu(context, widget.giftMsg),
+                        child: FormHelper.fieldLabelValu(context, widget.giftMsg),
                       ),
                     ),
                   ],
@@ -296,29 +277,28 @@ class _VerifyAddressState extends BasePageState<VerifyAddress> {
                   child: FormHelper.saveButton("Confirm", () {
                     final route = MaterialPageRoute(
                         builder: (context) => PaymentGateway(
-                          shippingMode: widget.shippingMode,
-                          first: widget.first,
-                          last: widget.last,
-                          cartProducts: widget.cartProducts,
-                          id: widget.id,
-                          city: widget.city,
-                          country: widget.country,
-                          postcode: widget.postcode,
-                          address: widget.address,
-                          apartmnt: widget.apartmnt,
-                          state: widget.state,
-                          flat: widget.flat,
-                          mail: widget.mail,
-                          deliveryDate: widget.deliveryDate,
-                          deliveryTime: widget.deliveryTime,
-                          giftFrom: widget.giftFrom,
-                          giftMsg: widget.giftMsg,
-                          mobile: widget.mobile,
-                          product: widget.product,
-                        ));
-                    Navigator.push(
-                        context,
-                        route);
+                              shippingMode: widget.shippingMode,
+                              first: widget.first,
+                              last: widget.last,
+                              cartProducts: widget.cartProducts,
+                              id: widget.id,
+                              city: widget.city,
+                              country: widget.country,
+                              postcode: widget.postcode,
+                              address: widget.address,
+                              apartmnt: widget.apartmnt,
+                              state: widget.state,
+                              flat: widget.flat,
+                              mail: widget.mail,
+                              deliveryDate: widget.deliveryDate,
+                              deliveryTime: widget.deliveryTime,
+                              giftFrom: widget.giftFrom,
+                              giftMsg: widget.giftMsg,
+                              mobile: widget.mobile,
+                              product: widget.product,
+                              couponSelection: widget.couponSelection,
+                            ));
+                    Navigator.push(context, route);
                   }),
                 )
               ],
