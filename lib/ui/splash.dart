@@ -32,15 +32,12 @@ class _AnimatedSplashState extends State<AnimatedSplash> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        // title: 'Clean Code',
         home: AnimatedSplashScreen(
+            // centered: true,
             duration: 4000,
-            splash: const Center(
-              child: Image(
-                image: NetworkImage(
-                  'https://www.farmerica.in/wp-content/uploads/2023/01/farmerica-logo.png',
-                ),
-              ),
+            splash: Image.asset(
+              'assets/images/farmerica-logo-icon.png',
+              color: Colors.white
             ),
             nextScreen: loginDetails == null
                 ? WelcomePage()
@@ -50,6 +47,6 @@ class _AnimatedSplashState extends State<AnimatedSplash> {
                   ),
             splashTransition: SplashTransition.fadeTransition,
             // pageTransitionType: PageTransitionType.scale,
-            backgroundColor: Colors.white));
+            backgroundColor: Color(0xff00ab55)));
   }
 }

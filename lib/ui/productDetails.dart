@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:farmerica/models/Customers.dart';
+import 'package:farmerica/utils/pincode.dart';
 import 'package:flutter/material.dart';
 import 'package:farmerica/Providers/CartProviders.dart';
 import 'package:farmerica/models/Products.dart' as p;
@@ -32,142 +33,20 @@ class _ProductDetailState extends State<ProductDetail> {
     });
     return pars;
   }
+
+  final textController = TextEditingController();
+  final focusNode = FocusNode();
+
   List<Product> response;
 
   String shortDes;
-  final List<String> pinCodes = [
-    '751001',
-    '752103',
-    '751022',
-    '751020',
-    '752103',
-    '751003',
-    '751009',
-    '752102',
-    '751014',
-    '751018',
-    '752100',
-    '752101',
-    '752102',
-    '752103',
-    '751002',
-    '751009',
-    '751003',
-    '752101',
-    '752100',
-    '752103',
-    '752103',
-    '751003',
-    '751002',
-    '751022',
-    '751014',
-    '751001',
-    '751009',
-    '751001',
-    '752102',
-    '752100',
-    '752102',
-    '751006',
-    '751011',
-    '752102',
-    '751016',
-    '752102',
-    '752103',
-    '752102',
-    '751019',
-    '751025',
-    '752100',
-    '752102',
-    '751003',
-    '751002',
-    '751002',
-    '751015',
-    '751002',
-    '752101',
-    '752101',
-    '752100',
-    '751024',
-    '752102',
-    '751024',
-    '751019',
-    '751006',
-    '751002',
-    '752103',
-    '751002',
-    '751030',
-    '751001',
-    '751002',
-    '752100',
-    '751006',
-    '751022',
-    '752102',
-    '752103',
-    '751003',
-    '751017',
-    '751017',
-    '751017',
-    '752101',
-    '751012',
-    '752102',
-    '751002',
-    '751001',
-    '751017',
-    '752103',
-    '751024',
-    '751019',
-    '751020',
-    '752102',
-    '752102',
-    '751008',
-    '751010',
-    '751013',
-    '751023',
-    '751007',
-    '751021',
-    '751005',
-    '751002',
-    '752100',
-    '751019',
-    '752102',
-    '752100',
-    '751007',
-    '752100',
-    '751006',
-    '751002',
-    '751003',
-    '752100',
-    '752102',
-    '751009',
-    '751004',
-    '751007',
-    '752054',
-    '752050',
-    '752054',
-    '752054',
-    '752050',
-    '752054',
-    '752054',
-    '752050',
-    '752050',
-    '752050',
-    '752050',
-    '752054',
-    '752054',
-    '752054',
-    '752054',
-    '752050',
-    '752050',
-    '752054',
-    '752050',
-    '752054',
-    '752050',
-    '752050',
-    '753015'
-  ];
+
   var pincodeController = TextEditingController();
   bool flag = false;
   bool errorMsg = true;
   SharedPreferences pinCodePrefs;
+
+  getCustomerData() async {}
 
   @override
   void initState() {
@@ -183,312 +62,295 @@ class _ProductDetailState extends State<ProductDetail> {
     List<Product> cart = [];
     String title = widget.product.name;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: const Color(0xff00ab55),
-        title: Text(
-          widget.product.name,
-          maxLines: 3,
-          style: const TextStyle(
-            fontSize: 22,
-            fontFamily: 'OutFit',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-        ),
-      ),
-      body: ListView(
-        children: [
-          // container for the image of the product
-          Container(
-            height: screenHeight - 100,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: NetworkImage(
-                    widget.product.images[0].src,
-                  )),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: const Color(0xff00ab55),
+            elevation: 0,
+            centerTitle: true,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+            ),
+            expandedHeight: screenHeight - 100,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Image.network(
+                widget.product.images[0].src,
+                fit: BoxFit.fill,
+              ),
             ),
           ),
-          // provides vertical space of 10 pxl
-          const SizedBox(height: 10),
-
-          // container for the price & detail contents of the product
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 10),
-                buildRowPriceRating(),
-                const SizedBox(height: 10),
-                Text(widget.product.name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'OutFit',
-                      fontWeight: FontWeight.w500,
-                    )),
-                const SizedBox(height: 10),
-                Text(loa ? "" : shortDes, style: normalText),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const Text(
-                      'Delivery Check',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: 'OutFit',
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    // SizedBox(width: 10),
-                    SizedBox(
-                      width: 80,
-                      child: Autocomplete(
-                        optionsBuilder: (textEditingValue) {
-                          if (textEditingValue.text == '') {
-                            setState(() {
-                              flag = false;
-                              errorMsg = true;
-                            });
-                            if(textEditingValue.text != pinCodes) {
-                              setState(() {
-                                errorMsg = false;
-                              });
-                            }
-                            return const Iterable.empty();
-                          }
-
-                          return pinCodes.where((element) {
-                            return element.contains(textEditingValue.text);
-                          });
-                        },
-                        onSelected: (value) async {
-                          pinCodePrefs = await SharedPreferences.getInstance();
-                          pinCodePrefs.setString('pinCode', value);
-
-                          setState(() {
-                            flag = true;
-                            errorMsg = false;
-                          });
-
-                          print('the $value was selected');
-                          print('pinCodePrefs: ${pinCodePrefs.toString()}');
-                        },
-                      ),
-                      // child: TextFormField(
-                      //   // initialValue: 'hi' ?? pinCodePrefs.getString('pinCode'),
-                      //   controller: pincodeController,
-                      //   keyboardType: TextInputType.number,
-                      //   decoration: InputDecoration(
-                      //     hintText: "Postcode / ZIP",
-                      //     border: OutlineInputBorder(
-                      //         borderRadius:
-                      //         BorderRadius.all(Radius.circular(0))),
-                      //   ),
-                      //   validator: (String value){},
-                      // ),
-                    ),
-
-                    // ElevatedButton(
-                    //   style: ElevatedButton.styleFrom(
-                    //     backgroundColor: Color(0xffffb240),
-                    //     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                    //     textStyle:
-                    //     TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    //   ),
-                    //   onPressed: () async {
-                    //     // pinCodePrefs = await SharedPreferences.getInstance();
-                    //     // pinCodePrefs.setString('pinCode', pincodeController.text);
-                    //
-                    //
-                    //     bool found = pinCodes.contains(pincodeController.text);
-                    //     if(found) {
-                    //       print('Same');
-                    //       setState(() {
-                    //         flag = true;
-                    //         flags = false;
-                    //         // print('shippingVisibility: $shippingVisibility');
-                    //       });
-                    //     } else {
-                    //       setState(() {
-                    //         flag = false;
-                    //         flags = false;
-                    //         // print('shippingVisibility: $shippingVisibility');
-                    //       });
-                    //     }
-                    //   },
-                    //   // color: product.color,
-                    //   child: Text(
-                    //     "CHECK",
-                    //     style: TextStyle(
-                    //         fontSize: 15,
-                    //
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                flag
-                    ? Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 20),
-                        decoration:
-                            const BoxDecoration(color: Color(0xfff7f6f7)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            sliver: SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        Text(widget.product.name,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'OutFit',
+                              fontWeight: FontWeight.w500,
+                            )),
+                        const SizedBox(height: 10),
+                        Text("Price: ₹${widget.product.price}",
+                            style: const TextStyle(fontFamily: 'Outfit', fontSize: 20, fontWeight: FontWeight.w600, color: Color(0xff00ab55))),
+                        const SizedBox(height: 20),
+                        Visibility(
+                            visible: shortDes.isNotEmpty,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Product Description:',
+                                    style: TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black)),
+                                const SizedBox(height: 10),
+                                Text(shortDes,
+                                    style: const TextStyle(fontFamily: 'Outfit', fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black)),
+                                const SizedBox(height: 10),
+                              ],
+                            )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                                '${String.fromCharCode(8226)} Shipping methods available for your location:'),
-                            Text('${String.fromCharCode(8226)} Free shipping'),
-                            Text(
-                                '${String.fromCharCode(8226)} Midnight Delivery 11pm to 12am: 200.00'),
-                            Text(
-                                '${String.fromCharCode(8226)} Early morning Delivery 6:30am to 7am : 75.00'),
-                            const SizedBox(height: 15),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xff00ab55),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 15),
-                                textStyle: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                            const Text(
+                              'Delivery Check',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'OutFit',
+                                fontWeight: FontWeight.w500,
                               ),
-                              onPressed: () {
-                                Provider.of<CartModel>(context, listen: false);
-                                cart.add(widget.product);
-                                Provider.of<CartModel>(context, listen: false)
-                                    .addCartProduct(
-                                        widget.product.id,
-                                        1,
-                                        widget.product.name,
-                                        widget.product.price,
-                                        widget.product.images[0].src);
-                                Fluttertoast.showToast(
-                                  msg:
-                                      "${widget.product.name} successfully added to cart",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.black,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0,
-                                );
-                                // Navigator.of(context).push(MaterialPageRoute(
-                                //     builder: (context) => CartScreen(
-                                //         product: response,
-                                //         details: widget.customer,
-                                //         )));
+                            ),
+                            const SizedBox(width: 20),
+                            RawAutocomplete<String>(
+                              textEditingController: textController,
+                              focusNode: focusNode,
+                              optionsBuilder: (textEditingValue) {
+                                if (textEditingValue.text != pinCodes) {
+                                  setState(() {
+                                    errorMsg = false;
+                                    // flag = true;
+                                  });
+                                }
+                                return pinCodes.where((element) {
+                                  return element.contains(textEditingValue.text);
+                                });
                               },
-                              // color: product.color,
-                              child: const Text(
-                                "BUY NOW",
-                                style: TextStyle(fontSize: 15),
+                              onSelected: (value) async {
+                                pinCodePrefs = await SharedPreferences.getInstance();
+                                pinCodePrefs.setString('pinCode', value);
+                                setState(() {
+                                  flag = true;
+                                  errorMsg = false;
+                                });
+                              },
+                              fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+                                return SizedBox(
+                                  width: MediaQuery.of(context).size.width / 2.3,
+                                  child: TextFormField(
+                                    controller: textController,
+                                    focusNode: focusNode,
+                                    onEditingComplete: onEditingComplete,
+                                    decoration: InputDecoration(
+                                      hintStyle: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
+                                      hintText: 'Enter Pin Code',
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.grey.shade400,
+                                        ),
+                                      ),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xff00ab55),
+                                        ),
+                                      ),
+                                      // focusedBorder:
+                                    ),
+                                  ),
+                                );
+                              },
+                              optionsViewBuilder: (context, onSelected, options) {
+                                return Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Material(
+                                    elevation: 2,
+                                    child: Container(
+                                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10))),
+                                      width: MediaQuery.of(context).size.width / 2,
+                                      height: MediaQuery.of(context).size.height / 3.5,
+                                      child: ListView.builder(
+                                        shrinkWrap: false,
+                                        itemCount: options.length,
+                                        itemBuilder: (context, index) {
+                                          final option = options.elementAt(index);
+                                          return ListTile(
+                                            title: Text(option),
+                                            onTap: () {
+                                              onSelected(option);
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              displayStringForOption: (option) => option,
+                            ),
+                            const SizedBox(width: 10),
+                            GestureDetector(
+                              onTap: () {
+                                textController.clear();
+                                setState(() {
+                                  errorMsg = true;
+                                  flag = false;
+                                });
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(2.0),
+                                  child: Icon(
+                                    Icons.clear,
+                                    size: 15,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      )
-                    : Center(
-                        child: errorMsg
+                        const SizedBox(height: 10),
+                        flag
                             ? Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 20),
-                                decoration:
-                                    const BoxDecoration(color: Color(0xfff7f6f7)),
-                                child: Row(
-                                  children: const [
-                                    Icon(Icons.info, color: Color(0xffb81c23)),
-                                    SizedBox(width: 10),
-                                    Text('Please enter a postcode / ZIP.',
-                                        style: TextStyle(color: Colors.black)),
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(bottom: 20),
+                                      child: Text(
+                                        'Shipping methods available for your location:',
+                                        style: TextStyle(fontFamily: 'Outfit', fontSize: 16, fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 10),
+                                      child: Text(
+                                        '${String.fromCharCode(8226)} Free shipping',
+                                        style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 10),
+                                      child: Text(
+                                        '${String.fromCharCode(8226)} Midnight Delivery 11pm to 12am: 200.00',
+                                        style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 10),
+                                      child: Text(
+                                        '${String.fromCharCode(8226)} Early morning Delivery 6:30am to 7am : 75.00',
+                                        style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 50),
+                                    Center(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (textController.text.isEmpty || textController.text == null) {
+                                            Fluttertoast.showToast(
+                                              msg: "Please enter the Pincode",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 2,
+                                              backgroundColor: Color(0xff00ab55),
+                                              textColor: Colors.white,
+                                              fontSize: 16.0,
+                                            );
+                                          } else {
+                                            Provider.of<CartModel>(context, listen: false);
+                                            cart.add(widget.product);
+                                            Provider.of<CartModel>(context, listen: false).addCartProduct(
+                                                widget.product.id, 1, widget.product.name, widget.product.price, widget.product.images[0].src);
+                                            Fluttertoast.showToast(
+                                              msg: "${widget.product.name} successfully added to cart",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 2,
+                                              backgroundColor: Color(0xff00ab55),
+                                              textColor: Colors.white,
+                                              fontSize: 16.0,
+                                            );
+                                            Navigator.of(context).push(MaterialPageRoute(
+                                                builder: (context) => CartScreen(
+                                                      product: response,
+                                                      fromHomePage: false,
+                                                      // details: widget.customer,
+                                                    )));
+                                          }
+                                        },
+                                        child: Container(
+                                          decoration:
+                                              const BoxDecoration(color: Color(0xff00ab55), borderRadius: BorderRadius.all(Radius.circular(10))),
+                                          child: const Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                                            child: Text(
+                                              'Buy Now',
+                                              style: TextStyle(fontFamily: 'Outfit', fontWeight: FontWeight.w500, fontSize: 18, color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               )
-                            : Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 20),
-                                decoration:
-                                    const BoxDecoration(color: Color(0xfff7f6f7)),
-                                child: const Text('Delivery not available',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black)))),
-              ],
+                            : Center(
+                                child: errorMsg
+                                    ? Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                                        decoration: const BoxDecoration(color: Color(0xfff7f6f7)),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: const [
+                                            Icon(Icons.info, color: Color(0xffb81c23)),
+                                            SizedBox(width: 10),
+                                            Text('Please enter a postcode / ZIP.',
+                                                style: TextStyle(color: Color(0xffb81c23), fontFamily: 'Outfit', fontSize: 15)),
+                                          ],
+                                        ),
+                                      )
+                                    : Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                                        decoration: const BoxDecoration(color: Color(0xfff7f6f7)),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: const [
+                                            Icon(Icons.swap_horizontal_circle_outlined, color: Color(0xffb81c23)),
+                                            SizedBox(width: 10),
+                                            Text('Delivery not Available',
+                                                style: TextStyle(color: Color(0xffb81c23), fontFamily: 'Outfit', fontSize: 15)),
+                                          ],
+                                        ))),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
+          // Add other Sliver widgets as needed for your content
         ],
       ),
     );
   }
-
-  AppBar buildAppBar() {
-    return AppBar(
-      elevation: 0,
-      //  backgroundColor: product.color,
-      title: Text(
-        widget.product.name,
-        style: const TextStyle(fontSize: 22),
-      ),
-      centerTitle: true,
-      actions: const [
-        Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: Icon(
-            Icons.add_shopping_cart,
-            size: 30,
-          ),
-        )
-      ],
-    );
-  }
-
-  Row buildRowPriceRating() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text("Price: ₹${widget.product.price}", style: largeText),
-        // RatingBarIndicator(
-        //   rating: 3.75,
-        //   itemBuilder: (context, index) => Icon(
-        //     Icons.star,
-        //     color: Colors.amberAccent,
-        //   ),
-        //   itemCount: 5,
-        //   itemSize: 25.0,
-        //   direction: Axis.horizontal,
-        // ),
-      ],
-    );
-  }
 }
-
-TextStyle smallText = const TextStyle(
-  fontSize: 12,
-  fontWeight: FontWeight.normal,
-);
-
-TextStyle normalText = const TextStyle(
-  fontSize: 14,
-  fontWeight: FontWeight.normal,
-);
-
-TextStyle mediumText = const TextStyle(
-  fontSize: 18,
-  fontWeight: FontWeight.bold,
-);
-
-TextStyle largeText = const TextStyle(
-  fontSize: 22,
-  fontWeight: FontWeight.bold,
-);

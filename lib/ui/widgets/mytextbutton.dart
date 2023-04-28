@@ -17,11 +17,10 @@ class MyTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
-      width: double.infinity,
       decoration: BoxDecoration(
+        border: Border.all(width: 0.5, color: const Color(0xff00ab55)),
         color: bgColor,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: TextButton(
         style: ButtonStyle(
@@ -30,9 +29,13 @@ class MyTextButton extends StatelessWidget {
           ),
         ),
         onPressed: onTap,
-        child: Text(
-          buttonName,
-          style: kButtonText.copyWith(color: textColor),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Text(
+            buttonName,
+            style: TextStyle(color: textColor, fontFamily: 'Outfit', fontSize: 20, fontWeight: FontWeight.w500),
+            // style: kButtonText.copyWith(color: textColor),
+          ),
         ),
       ),
     );

@@ -1,21 +1,19 @@
+import 'package:farmerica/ui/Welcome.dart';
 import 'package:farmerica/ui/widgets/input_outline_button.dart';
 import 'package:farmerica/ui/widgets/input_text_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:farmerica/utils/sharedServices.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:farmerica/constant.dart';
 import 'package:farmerica/models/Customers.dart';
 import 'package:farmerica/networks/ApiServices.dart';
 import 'package:farmerica/ui/BasePage.dart';
-
 import 'package:farmerica/ui/LoginPage.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:farmerica/ui/homepage.dart';
-import 'package:farmerica/ui/widgets/mytextbutton.dart';
-import 'package:string_validator/string_validator.dart';
 
 class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key key}) : super(key: key);
+
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
@@ -47,23 +45,16 @@ class _SignUpPageState extends State<SignUpPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Spacer(),
-                const Text("Create Account,",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold)),
+                const Text("Create Account,", style: TextStyle(fontFamily: 'Outfit', color: Colors.black, fontSize: 32, fontWeight: FontWeight.w600)),
                 const Text(
                   "Sign up to started!",
-                  style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: 1.2),
+                  style: TextStyle(color: Colors.grey, fontFamily: 'Outfit', fontSize: 22, fontWeight: FontWeight.w400, letterSpacing: 1.2),
                 ),
                 const Spacer(
                   flex: 3,
                 ),
                 TextFormField(
+                  style: const TextStyle(fontFamily: 'Outfit', fontSize: 18, fontWeight: FontWeight.w400),
                   controller: t1,
                   keyboardType: TextInputType.emailAddress,
                   validator: (text) {
@@ -78,22 +69,25 @@ class _SignUpPageState extends State<SignUpPage> {
                     mail = text;
                   },
                   decoration: const InputDecoration(
-                      labelStyle: kBodyText,
-                      contentPadding:
-                          EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      hintStyle: kBodyText,
-                      hintText: "Email",
-                      labelText: "Email Address"),
+                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xff00ab55))),
+                    hintText: "Email Address",
+                    labelText: "Email",
+                    labelStyle: TextStyle(fontFamily: 'Outfit', fontSize: 17, fontWeight: FontWeight.w400, color: Color(0xff00ab55)),
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 TextFormField(
+                  style: const TextStyle(fontFamily: 'Outfit', fontSize: 18, fontWeight: FontWeight.w400),
                   controller: t2,
                   keyboardType: TextInputType.text,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
+                      return 'Please enter your First name';
                     }
                     return null;
                   },
@@ -103,38 +97,44 @@ class _SignUpPageState extends State<SignUpPage> {
                     // print(firstName);
                   },
                   decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                    hintStyle: kBodyText,
+                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xff00ab55))),
                     hintText: "First Name",
                     labelText: "First Name",
-                    labelStyle: kBodyText,
+                    labelStyle: TextStyle(fontFamily: 'Outfit', fontSize: 17, fontWeight: FontWeight.w400, color: Color(0xff00ab55)),
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
                   ),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 TextFormField(
+                  style: const TextStyle(fontFamily: 'Outfit', fontSize: 18, fontWeight: FontWeight.w400),
                   onChanged: (text) {
                     lastName = text;
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
+                      return 'Please enter your Last name';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      hintStyle: kBodyText,
-                      labelStyle: kBodyText,
-                      hintText: "Last Name",
-                      labelText: "Last Name"),
+                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xff00ab55))),
+                    hintText: "Last Name",
+                    labelText: "Last Name",
+                    labelStyle: TextStyle(fontFamily: 'Outfit', fontSize: 17, fontWeight: FontWeight.w400, color: Color(0xff00ab55)),
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 TextFormField(
+                  style: const TextStyle(fontFamily: 'Outfit', fontSize: 18, fontWeight: FontWeight.w400),
                   controller: t4,
                   keyboardType: TextInputType.text,
                   onChanged: (text) {
@@ -142,16 +142,19 @@ class _SignUpPageState extends State<SignUpPage> {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
+                      return 'Please enter your Username';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      hintText: "Username",
-                      labelStyle: kBodyText,
-                      labelText: "Username"),
+                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xff00ab55))),
+                    hintText: "Username",
+                    labelText: "Username",
+                    labelStyle: TextStyle(fontFamily: 'Outfit', fontSize: 17, fontWeight: FontWeight.w400, color: Color(0xff00ab55)),
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 const Spacer(),
@@ -159,11 +162,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   title: "Sign Up",
                   onClick: () async {
                     if (_formKey.currentState.validate()) {
-                      var msg = await apiServices.createCustomers(
-                          email: mail,
-                          firstName: firstName,
-                          lastName: lastName,
-                          username: username);
+                      var msg = await apiServices.createCustomers(email: mail, firstName: firstName, lastName: lastName, username: username);
 
                       Fluttertoast.showToast(
                           msg: msg,
@@ -175,8 +174,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           fontSize: 16.0);
 
                       if (msg == "Signup successful") {
-                        Customers customer =
-                            await apiServices.getCustomersByMail(mail);
+                        Customers customer = await apiServices.getCustomersByMail(mail);
                         sharedServices.setLoginDetails(customer);
                         Navigator.pushReplacement(
                             context,
@@ -194,7 +192,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 InputOutlineButton(
                   title: "Back",
                   onClick: () {
-                    Navigator.of(context).pop();
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WelcomePage()));
                   },
                 ),
                 const Spacer(
@@ -203,23 +201,19 @@ class _SignUpPageState extends State<SignUpPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("I'm already a member, "),
+                    const Text("I'm already a member, ",style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300, fontFamily: 'Outfit'),),
                     InkWell(
                       onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    LoginPage()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
                       },
                       child: const Text(
                         "Sign In",
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, fontFamily: 'Outfit', color: const Color(0xff00ab55 )),
                       ),
                     )
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 30),
               ],
             ),
           ),

@@ -1,15 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:farmerica/constant.dart';
-
 import 'package:farmerica/ui/LoginPage.dart';
-
 import 'package:farmerica/ui/SignUp.dart';
-
 import 'package:farmerica/ui/widgets/mytextbutton.dart';
 
 class WelcomePage extends StatelessWidget {
+  const WelcomePage({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -17,85 +14,67 @@ class WelcomePage extends StatelessWidget {
         child: Scaffold(
           body: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 100),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Flexible(
-                    child: Column(
-                      children: [
-                        Center(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: const Image(
-                              image: NetworkImage(
-                                  'https://www.farmerica.in/wp-content/uploads/2023/01/farmerica-logo.png'),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const Text(
-                          "Farmerica",
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Image.asset('assets/images/farmerica-logo.png'),
+                  ),
+                  const SizedBox(
+                    height: 100,
+                  ),
+                  Column(
+                    children: [
+                      const Text(
+                        "Farmerica",
+                        style: TextStyle(color: Color(0xff00ab55), fontWeight: FontWeight.w600, fontFamily: 'Outfit', fontSize: 30),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.75,
+                        child: const Text(
+                          'Hand-crafted with care and attention to packaging detail makes our gift packs best seller and perfect for any occasion. Send them as a thanks or congratulations gift, our gifts are sure to please.',
                           style: TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 26),
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w300,
+                            fontFamily: 'Outfit',
+                            fontSize: 18,
+                          ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: const Text(
-                            "We are Farmerica: value added and natural grown agriculture and horticulture Solutions Provider.",
-                            style: kBodyText,
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[850],
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: MyTextButton(
-                            bgColor: Colors.white,
-                            buttonName: 'Register',
-                            onTap: () {
-                              // Customers customer = Customers();
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SignUpPage()));
-                            },
-                            textColor: Colors.black87,
-                          ),
-                        ),
-                        Expanded(
-                          child: MyTextButton(
-                            bgColor: Colors.transparent,
-                            buttonName: 'Sign In',
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (context) => LoginPage(),
-                                  ));
-                            },
-                            textColor: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
+                  Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MyTextButton(
+                        bgColor: Colors.white,
+                        buttonName: 'Register',
+                        onTap: () {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SignUpPage()));
+                        },
+                        textColor: const Color(0xff00ab55),
+                      ),
+                      MyTextButton(
+                        bgColor: const Color(0xff00ab55),
+                        buttonName: 'Sign In',
+                        onTap: () {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                        },
+                        textColor: Colors.white,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
                 ],
               ),
             ),

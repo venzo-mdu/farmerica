@@ -24,7 +24,7 @@ class InputTextButton extends StatelessWidget {
       },
       child: Text(
         title,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+        style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w600, fontFamily: 'Outfit'),
       ),
     );
   }
