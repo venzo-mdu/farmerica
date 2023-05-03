@@ -43,12 +43,12 @@ dependencies:
   carousel_slider: ^3.0.0
   crypto: any
   oauth1: any
-
+  url_launcher: any
   email_validator: any
 
   flutter_search_bar: any
   flutter_svg: any
-  image_picker: any
+#  image_picker: any
   intl:
   flutter_local_notifications: 3.0.1+6
   flutter_rating_bar: any

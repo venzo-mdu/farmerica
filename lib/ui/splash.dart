@@ -35,16 +35,17 @@ class _AnimatedSplashState extends State<AnimatedSplash> {
         home: AnimatedSplashScreen(
             // centered: true,
             duration: 4000,
-            splash: Image.asset(
-              'assets/images/farmerica-logo-icon.png',
-              color: Colors.white
+            splash: Image.asset('assets/images/farmerica-logo-icon.png', color: Colors.white),
+            nextScreen: BasePage(
+              customer: loginDetails,
+              title: "Farmerica App",
             ),
-            nextScreen: loginDetails == null
-                ? WelcomePage()
-                : BasePage(
-                    customer: loginDetails,
-                    title: "Farmerica App",
-                  ),
+
+            // loginDetails == null
+            //     ? BasePage(
+            //         customer: loginDetails,
+            //         title: "Farmerica App",
+            //       ): WelcomePage(),
             splashTransition: SplashTransition.fadeTransition,
             // pageTransitionType: PageTransitionType.scale,
             backgroundColor: Color(0xff00ab55)));

@@ -6,7 +6,7 @@ import 'package:farmerica/ui/BasePage.dart';
 import 'package:farmerica/ui/payment.dart';
 
 // ignore: must_be_immutable
-class VerifyAddress extends BasePage {
+class VerifyAddress extends StatefulWidget {
   var couponSelection;
   List product = [];
   final int id;
@@ -42,7 +42,7 @@ class VerifyAddress extends BasePage {
   _VerifyAddressState createState() => _VerifyAddressState();
 }
 
-class _VerifyAddressState extends BasePageState<VerifyAddress> {
+class _VerifyAddressState extends State<VerifyAddress> {
   int selected = 2;
   String title = "";
   // BasePage basePage = BasePage();
@@ -57,251 +57,262 @@ class _VerifyAddressState extends BasePageState<VerifyAddress> {
   bool showDropDownValue = true;
 
   @override
-  Widget body(BuildContext context) {
+  Widget build(BuildContext context) {
     if (widget.deliveryTime == null) {
       showDropDownValue = false;
     }
 
     // print(widget.product);
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Container(
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: FormHelper.fieldLabel("Delivery Date"),
-                    ),
-                    Visibility(
-                      visible: showDropDownValue,
-                      child: Flexible(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xff00ab55),
+        centerTitle: true,
+        title: Image.asset(
+          'assets/images/farmerica-logo.png',
+          color: Colors.white,
+          width: MediaQuery.of(context).size.width * 0.5,
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Container(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
                         fit: FlexFit.tight,
                         flex: 1,
-                        child: FormHelper.fieldLabel("Delivery Time"),
+                        child: FormHelper.fieldLabel("Delivery Date"),
                       ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: FormHelper.fieldLabelValu(context, widget.deliveryDate),
+                      Visibility(
+                        visible: showDropDownValue,
+                        child: Flexible(
+                          fit: FlexFit.tight,
+                          flex: 1,
+                          child: FormHelper.fieldLabel("Delivery Time"),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: FormHelper.fieldLabelValu(context, widget.deliveryDate),
+                        ),
                       ),
-                    ),
-                    Visibility(
-                      visible: showDropDownValue,
-                      child: Flexible(
+                      Visibility(
+                        visible: showDropDownValue,
+                        child: Flexible(
+                          fit: FlexFit.tight,
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FormHelper.fieldLabelValu(context, widget.deliveryTime),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: FormHelper.fieldLabel("First Name"),
+                      ),
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: FormHelper.fieldLabel("Last Name"),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: FormHelper.fieldLabelValu(context, widget.first),
+                        ),
+                      ),
+                      Flexible(
                         fit: FlexFit.tight,
                         flex: 1,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: FormHelper.fieldLabelValu(context, widget.deliveryTime),
+                          child: FormHelper.fieldLabelValu(context, widget.last),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: FormHelper.fieldLabel("First Name"),
-                    ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: FormHelper.fieldLabel("First Name"),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: FormHelper.fieldLabelValu(context, widget.first),
+                    ],
+                  ),
+                  FormHelper.fieldLabel("Address"),
+                  FormHelper.fieldLabelValu(context, widget.address),
+                  FormHelper.fieldLabel("Apartmnt ,Flat"),
+                  FormHelper.fieldLabelValu(context, widget.apartmnt),
+                  Row(
+                    children: [
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: FormHelper.fieldLabel("Country"),
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FormHelper.fieldLabelValu(context, widget.last),
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FormHelper.fieldLabel("State"),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                FormHelper.fieldLabel("Address"),
-                FormHelper.fieldLabelValu(context, widget.address),
-                FormHelper.fieldLabel("Apartmnt ,Flat"),
-                FormHelper.fieldLabelValu(context, widget.apartmnt),
-                Row(
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: FormHelper.fieldLabel("Country"),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: FormHelper.fieldLabelValu(context, widget.country),
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FormHelper.fieldLabel("State"),
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FormHelper.fieldLabelValu(context, widget.state),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: FormHelper.fieldLabelValu(context, widget.country),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: FormHelper.fieldLabel("City"),
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FormHelper.fieldLabelValu(context, widget.state),
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FormHelper.fieldLabel("PostCode"),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: FormHelper.fieldLabel("City"),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: FormHelper.fieldLabelValu(context, widget.city),
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FormHelper.fieldLabel("PostCode"),
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FormHelper.fieldLabelValu(context, widget.postcode),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: FormHelper.fieldLabelValu(context, widget.city),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: FormHelper.fieldLabel("Gift From"),
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FormHelper.fieldLabelValu(context, widget.postcode),
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FormHelper.fieldLabel("Gift Msg"),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: FormHelper.fieldLabel("Gift From"),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: FormHelper.fieldLabelValu(context, widget.giftFrom),
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FormHelper.fieldLabel("Gift Msg"),
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FormHelper.fieldLabelValu(context, widget.giftMsg),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: FormHelper.fieldLabelValu(context, widget.giftFrom),
-                      ),
-                    ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FormHelper.fieldLabelValu(context, widget.giftMsg),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: FormHelper.saveButton("Confirm", () {
-                    final route = MaterialPageRoute(
-                        builder: (context) => PaymentGateway(
-                              shippingMode: widget.shippingMode,
-                              first: widget.first,
-                              last: widget.last,
-                              cartProducts: widget.cartProducts,
-                              id: widget.id,
-                              city: widget.city,
-                              country: widget.country,
-                              postcode: widget.postcode,
-                              address: widget.address,
-                              apartmnt: widget.apartmnt,
-                              state: widget.state,
-                              flat: widget.flat,
-                              mail: widget.mail,
-                              deliveryDate: widget.deliveryDate,
-                              deliveryTime: widget.deliveryTime,
-                              giftFrom: widget.giftFrom,
-                              giftMsg: widget.giftMsg,
-                              mobile: widget.mobile,
-                              product: widget.product,
-                              couponSelection: widget.couponSelection,
-                            ));
-                    Navigator.push(context, route);
-                  }),
-                )
-              ],
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: FormHelper.saveButton("Confirm", () {
+                      final route = MaterialPageRoute(
+                          builder: (context) => PaymentGateway(
+                                shippingMode: widget.shippingMode,
+                                first: widget.first,
+                                last: widget.last,
+                                cartProducts: widget.cartProducts,
+                                id: widget.id,
+                                city: widget.city,
+                                country: widget.country,
+                                postcode: widget.postcode,
+                                address: widget.address,
+                                apartmnt: widget.apartmnt,
+                                state: widget.state,
+                                flat: widget.flat,
+                                mail: widget.mail,
+                                deliveryDate: widget.deliveryDate,
+                                deliveryTime: widget.deliveryTime,
+                                giftFrom: widget.giftFrom,
+                                giftMsg: widget.giftMsg,
+                                mobile: widget.mobile,
+                                product: widget.product,
+                                couponSelection: widget.couponSelection,
+                              ));
+                      Navigator.push(context, route);
+                    }),
+                  )
+                ],
+              ),
             ),
           ),
         ),

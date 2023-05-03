@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:farmerica/Config.dart';
 import 'package:farmerica/Providers/CartProviders.dart';
+import 'package:farmerica/models/Customers.dart';
 import 'package:farmerica/models/Products.dart';
 import 'package:farmerica/networks/ApiServices.dart';
 import 'package:farmerica/ui/CartPage.dart';
+import 'package:farmerica/ui/widgets/dialog_box.dart';
 import 'package:farmerica/utils/pincode.dart';
+import 'package:farmerica/utils/sharedServices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,6 +30,8 @@ class BundledProductPage extends StatefulWidget {
 class _BundledProductPageState extends State<BundledProductPage> {
   p.Product product;
   Map<String, dynamic> _product;
+  Customers loginCheck;
+  SharedServices sharedServices = SharedServices();
 
   List<dynamic> dummyId = [];
   Future _fetchProduct() async {
@@ -50,8 +55,8 @@ class _BundledProductPageState extends State<BundledProductPage> {
   }
 
   Future<Product> getProductsById(int id) async {
-    final response = await http
-        .get(Uri.parse('https://www.farmerica.in/wp-json/wc/v3/products/$id?consumer_key=ck_eedc4b30808be5c1110691e5b29f16280ebd3b72&consumer_secret=cs_2313913bc74d5e096c91d308745b50afee52e61c'));
+    final response = await http.get(Uri.parse(
+        'https://www.farmerica.in/wp-json/wc/v3/products/$id?consumer_key=ck_eedc4b30808be5c1110691e5b29f16280ebd3b72&consumer_secret=cs_2313913bc74d5e096c91d308745b50afee52e61c'));
 
     if (response.statusCode == 200) {
       final product = jsonDecode(response.body) as Map<String, dynamic>;
@@ -85,10 +90,18 @@ class _BundledProductPageState extends State<BundledProductPage> {
     return total;
   }
 
+  Future<Customers> loginCheckData() async {
+    final loginData = await sharedServices.loginDetails();
+    return loginData;
+  }
+
   @override
   void initState() {
     _fetchProduct();
-    print(dummyId.toList());
+    // print(dummyId.toList());
+    loginCheckData().then((value) => setState(() {
+          loginCheck = value;
+        }));
     super.initState();
   }
 
@@ -104,7 +117,8 @@ class _BundledProductPageState extends State<BundledProductPage> {
           backgroundColor: const Color(0xff00ab55),
           centerTitle: true,
           title: Image.asset(
-            'assets/images/farmerica-logo.png',width: MediaQuery.of(context).size.width*0.5,
+            'assets/images/farmerica-logo.png',
+            width: MediaQuery.of(context).size.width * 0.5,
             color: Colors.white,
           ),
         ),
@@ -121,13 +135,14 @@ class _BundledProductPageState extends State<BundledProductPage> {
         backgroundColor: const Color(0xff00ab55),
         centerTitle: true,
         title: Image.asset(
-          'assets/images/farmerica-logo.png',width: MediaQuery.of(context).size.width*0.5,
+          'assets/images/farmerica-logo.png',
+          width: MediaQuery.of(context).size.width * 0.5,
           color: Colors.white,
         ),
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -149,7 +164,9 @@ class _BundledProductPageState extends State<BundledProductPage> {
                     });
                     return Column(
                       children: [
-                        const SizedBox(height: 20,),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         Text("₹ $totalPrice", style: const TextStyle(fontFamily: 'Outfit', fontSize: 20, fontWeight: FontWeight.w400)),
                         Text('Total Price: $totalPrice', style: const TextStyle(fontFamily: 'Outfit', fontSize: 20, fontWeight: FontWeight.w400)),
                         GridView.builder(
@@ -157,10 +174,7 @@ class _BundledProductPageState extends State<BundledProductPage> {
                           shrinkWrap: true,
                           itemCount: snapshot.data.length,
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 4 / 6,
-                              mainAxisSpacing: 5,
-                              crossAxisSpacing: 3),
+                              crossAxisCount: 2, childAspectRatio: 4 / 6, mainAxisSpacing: 5, crossAxisSpacing: 3),
                           itemBuilder: (BuildContext context, int index) {
                             Product product = snapshot.data[index];
                             int count = counts[index] ?? 0;
@@ -180,7 +194,7 @@ class _BundledProductPageState extends State<BundledProductPage> {
                                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         children: [
                                           GestureDetector(
-                                            onTap: (){
+                                            onTap: () {
                                               setState(() {
                                                 if (count > 0) {
                                                   counts[index] = count - 1;
@@ -201,13 +215,16 @@ class _BundledProductPageState extends State<BundledProductPage> {
                                                 color: Colors.white,
                                                 borderRadius: BorderRadius.circular(5),
                                               ),
-                                              child: const Icon(Icons.remove, color: Color(0xff00ab55),size: 20,),
+                                              child: const Icon(
+                                                Icons.remove,
+                                                color: Color(0xff00ab55),
+                                                size: 20,
+                                              ),
                                             ),
                                           ),
-
                                           Text('${counts[index] ?? 0}'),
                                           GestureDetector(
-                                            onTap: (){
+                                            onTap: () {
                                               setState(() {
                                                 counts[index] = count + 1;
                                                 print('count: $count');
@@ -228,14 +245,17 @@ class _BundledProductPageState extends State<BundledProductPage> {
                                                 color: Colors.white,
                                                 borderRadius: BorderRadius.circular(5),
                                               ),
-                                              child: Icon(Icons.add , color: Color(0xff00ab55),size: 20,),
+                                              child: Icon(
+                                                Icons.add,
+                                                color: Color(0xff00ab55),
+                                                size: 20,
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
                                   ),
-
                                   Container(
                                     width: MediaQuery.of(context).size.width,
                                     height: 60,
@@ -245,13 +265,18 @@ class _BundledProductPageState extends State<BundledProductPage> {
                                       children: [
                                         Text(
                                           product.name,
-                                          maxLines: 2,textAlign: TextAlign.center,
-                                          style: const TextStyle(color:Colors.white,fontFamily: 'Outfit', fontWeight: FontWeight.w300, fontSize: 15),
+                                          maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              const TextStyle(color: Colors.white, fontFamily: 'Outfit', fontWeight: FontWeight.w300, fontSize: 15),
                                         ),
-                                        const SizedBox(height: 5,),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
                                         Text(
                                           '₹ ${product.price}',
-                                          style: const TextStyle(color:Colors.white,fontFamily: 'Outfit', fontWeight: FontWeight.w500, fontSize: 15),
+                                          style:
+                                              const TextStyle(color: Colors.white, fontFamily: 'Outfit', fontWeight: FontWeight.w500, fontSize: 15),
                                         ),
                                       ],
                                     ),
@@ -392,106 +417,112 @@ class _BundledProductPageState extends State<BundledProductPage> {
               const SizedBox(height: 10),
               flag
                   ? Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: Text(
-                        'Shipping methods available for your location:',
-                        style: TextStyle(fontFamily: 'Outfit', fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        '${String.fromCharCode(8226)} Free shipping',
-                        style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        '${String.fromCharCode(8226)} Midnight Delivery 11pm to 12am: 200.00',
-                        style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        '${String.fromCharCode(8226)} Early morning Delivery 6:30am to 7am : 75.00',
-                        style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                    const SizedBox(height: 50),
-                    Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          if (textController.text.isEmpty || textController.text == null) {
-                            Fluttertoast.showToast(
-                              msg: "Please enter the Pincode",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 2,
-                              backgroundColor: Color(0xff00ab55),
-                              textColor: Colors.white,
-                              fontSize: 16.0,
-                            );
-                          } else {
-                            Provider.of<CartModel>(context, listen: false);
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => CartScreen(
-                                  product: response,
-                                  fromHomePage: false,
-                                  // details: widget.customer,
-                                )));
-                          }
-                        },
-                        child: Container(
-                          decoration:
-                          const BoxDecoration(color: Color(0xff00ab55), borderRadius: BorderRadius.all(Radius.circular(10))),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 20),
                             child: Text(
-                              'Buy Now',
-                              style: TextStyle(fontFamily: 'Outfit', fontWeight: FontWeight.w500, fontSize: 18, color: Colors.white),
+                              'Shipping methods available for your location:',
+                              style: TextStyle(fontFamily: 'Outfit', fontSize: 16, fontWeight: FontWeight.w500),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-                  : Center(
-                  child: errorMsg
-                      ? Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                    decoration: const BoxDecoration(color: Color(0xfff7f6f7)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.info, color: Color(0xffb81c23)),
-                        SizedBox(width: 10),
-                        Text('Please enter a postcode / ZIP.',
-                            style: TextStyle(color: Color(0xffb81c23), fontFamily: 'Outfit', fontSize: 15)),
-                      ],
-                    ),
-                  )
-                      : Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                      decoration: const BoxDecoration(color: Color(0xfff7f6f7)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.swap_horizontal_circle_outlined, color: Color(0xffb81c23)),
-                          SizedBox(width: 10),
-                          Text('Delivery not Available',
-                              style: TextStyle(color: Color(0xffb81c23), fontFamily: 'Outfit', fontSize: 15)),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Text(
+                              '${String.fromCharCode(8226)} Free shipping',
+                              style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Text(
+                              '${String.fromCharCode(8226)} Midnight Delivery 11pm to 12am: 200.00',
+                              style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Text(
+                              '${String.fromCharCode(8226)} Early morning Delivery 6:30am to 7am : 75.00',
+                              style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                          const SizedBox(height: 50),
+                          Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                if (loginCheck == null) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => const MyDialogBox(),
+                                  );
+                                  // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                                } else {
+                                  if (textController.text.isEmpty || textController.text == null) {
+                                    Fluttertoast.showToast(
+                                      msg: "Please enter the Pincode",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 2,
+                                      backgroundColor: Color(0xff00ab55),
+                                      textColor: Colors.white,
+                                      fontSize: 16.0,
+                                    );
+                                  } else {
+                                    Provider.of<CartModel>(context, listen: false);
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => CartScreen(
+                                              product: response,
+                                              fromHomePage: false,
+                                              // details: widget.customer,
+                                            )));
+                                  }
+                                }
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(color: Color(0xff00ab55), borderRadius: BorderRadius.all(Radius.circular(10))),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                                  child: Text(
+                                    'Buy Now',
+                                    style: TextStyle(fontFamily: 'Outfit', fontWeight: FontWeight.w500, fontSize: 18, color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
-                      ))),
+                      ),
+                    )
+                  : Center(
+                      child: errorMsg
+                          ? Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                              decoration: const BoxDecoration(color: Color(0xfff7f6f7)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Icon(Icons.info, color: Color(0xffb81c23)),
+                                  SizedBox(width: 10),
+                                  Text('Please enter a postcode / ZIP.',
+                                      style: TextStyle(color: Color(0xffb81c23), fontFamily: 'Outfit', fontSize: 15)),
+                                ],
+                              ),
+                            )
+                          : Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                              decoration: const BoxDecoration(color: Color(0xfff7f6f7)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Icon(Icons.swap_horizontal_circle_outlined, color: Color(0xffb81c23)),
+                                  SizedBox(width: 10),
+                                  Text('Delivery not Available', style: TextStyle(color: Color(0xffb81c23), fontFamily: 'Outfit', fontSize: 15)),
+                                ],
+                              ))),
               const SizedBox(
                 height: 50,
               ),

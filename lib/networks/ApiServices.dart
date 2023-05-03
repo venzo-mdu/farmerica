@@ -240,6 +240,19 @@ class Api_Services {
   }
 
   Future<List<Orders>> getOrdersByUserId(int id) async {
+    var url = "${Config.urlfor}" "${Config.orderUrl}?customer=$id";
+    var response = await api.getAsync(url);
+    List<Orders> orderList = [];
+    for (var item in response) {
+      orderList.add(Orders.fromJson(item));
+    }
+    for(int i=0;i<orderList.length;i++){
+      print('orderList: ${orderList[i].id} => ${orderList[i].customerId}');
+    }
+    return orderList;
+  }
+
+  Future<List<Orders>> getOrderByUserId(int id) async {
     var url = "${Config.urlfor}" "${Config.orderUrl}?customers=$id";
     var response = await api.getAsync(url);
     List<Orders> orderList = [];
@@ -344,6 +357,7 @@ class Api_Services {
       '${Config.url}/wp-json/wc/v3/orders?consumer_key=${Config.key}&consumer_secret=${Config.secret}',
     );
     var parameters = <String, dynamic>{
+      // 'customer_id':,
       'payment_method_title': 'Cash on Delivery',
       'payment_method': 'cp',
       'billing': {

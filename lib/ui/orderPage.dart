@@ -9,7 +9,7 @@ import 'package:farmerica/networks/ApiServices.dart';
 import 'package:farmerica/ui/BasePage.dart';
 import 'package:farmerica/ui/checkoutPage.dart';
 
-class OrderPage extends BasePage {
+class OrderPage extends StatefulWidget {
   OrderPage({Key key, this.product, this.id, this.customers});
   final List<Product> product;
   final int id;
@@ -18,53 +18,59 @@ class OrderPage extends BasePage {
   _OrderPageState createState() => _OrderPageState();
 }
 
-class _OrderPageState extends BasePageState<OrderPage> {
+class _OrderPageState extends State<OrderPage> {
   List<Orders> orderList = [];
   bool loading = true;
   int selected = 3;
   ScrollController controller;
-  // BasePage basePage = BasePage();
   Api_Services api_services = Api_Services();
+
   Future<List<Orders>> getList() async {
     // print('objectWidgetID');
-    // print(widget.id);
+    print('widget.id: ${widget.id}');
     orderList = await api_services.getOrdersByUserId(widget.id);
-    // print('orderList33');
-    // print(orderList);
+    print('OrderLIst: $orderList');
     setState(() {
       loading = false;
     });
-    // print(orderList);
     return orderList;
   }
 
   @override
   void initState() {
     super.initState();
-    // getList();
+    getList();
     // basePage.title = "My Cart";
     // basePage.selected = 2;
-    controller = ScrollController();
-    controller.addListener(() {
-      if (controller.offset >= controller.position.maxScrollExtent &&
-          controller.position.outOfRange) {
-        setState(() {});
-        if (controller.offset >= controller.position.minScrollExtent &&
-            controller.position.outOfRange) {
-          setState(() {});
-        }
-      }
-
-      setState(() {
-        getList();
-      });
-    });
+    // controller = ScrollController();
+    // controller.addListener(() {
+    //   if (controller.offset >= controller.position.maxScrollExtent &&
+    //       controller.position.outOfRange) {
+    //     setState(() {});
+    //     if (controller.offset >= controller.position.minScrollExtent &&
+    //         controller.position.outOfRange) {
+    //       setState(() {});
+    //     }
+    //   }
+    //   setState(() {
+    //     getList();
+    //   });
+    // });
   }
 
   @override
-  Widget body(BuildContext context) {
+  Widget build(BuildContext context) {
     setState(() {});
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xff00ab55),
+          centerTitle: true,
+          title: Image.asset(
+            'assets/images/farmerica-logo.png',
+            color: Colors.white,
+            width: MediaQuery.of(context).size.width * 0.5,
+          ),
+        ),
         body: orderList.isEmpty
             ? Center(child: Text("You have not order anything yet"))
             : ListView.separated(
@@ -76,15 +82,15 @@ class _OrderPageState extends BasePageState<OrderPage> {
                   return GestureDetector(
                       onTap: () {
                         // print(orderList[inxt]);
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => CheckoutWrapper(
-                              state: orderList[inxt],
-                              product: widget.product,
-                            ),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   CupertinoPageRoute(
+                        //     builder: (context) => CheckoutWrapper(
+                        //       state: orderList[inxt],
+                        //       product: widget.product,
+                        //     ),
+                        //   ),
+                        // );
                       },
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,

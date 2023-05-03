@@ -1,6 +1,9 @@
 import 'dart:ui';
 import 'package:farmerica/models/Customers.dart';
+import 'package:farmerica/ui/LoginPage.dart';
+import 'package:farmerica/ui/widgets/dialog_box.dart';
 import 'package:farmerica/utils/pincode.dart';
+import 'package:farmerica/utils/sharedServices.dart';
 import 'package:flutter/material.dart';
 import 'package:farmerica/Providers/CartProviders.dart';
 import 'package:farmerica/models/Products.dart' as p;
@@ -22,6 +25,9 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailState extends State<ProductDetail> {
+  Customers loginCheck;
+  SharedServices sharedServices = SharedServices();
+
   int selected = 1;
   bool loa = true;
   String parsHtml(String as) {
@@ -48,9 +54,18 @@ class _ProductDetailState extends State<ProductDetail> {
 
   getCustomerData() async {}
 
+  Future<Customers> loginCheckData() async {
+    final loginData = await sharedServices.loginDetails();
+    return loginData;
+  }
+
   @override
   void initState() {
     super.initState();
+    loginCheckData().then((value) => setState(() {
+      loginCheck = value;
+    }));
+
     shortDes = parsHtml(widget.product.shortDescription);
   }
 
@@ -266,36 +281,44 @@ class _ProductDetailState extends State<ProductDetail> {
                                     Center(
                                       child: GestureDetector(
                                         onTap: () {
-                                          if (textController.text.isEmpty || textController.text == null) {
-                                            Fluttertoast.showToast(
-                                              msg: "Please enter the Pincode",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              timeInSecForIosWeb: 2,
-                                              backgroundColor: Color(0xff00ab55),
-                                              textColor: Colors.white,
-                                              fontSize: 16.0,
+                                          if(loginCheck == null){
+                                            showDialog(
+                                              context: context,
+                                              builder: (_) => const MyDialogBox(),
                                             );
-                                          } else {
-                                            Provider.of<CartModel>(context, listen: false);
-                                            cart.add(widget.product);
-                                            Provider.of<CartModel>(context, listen: false).addCartProduct(
-                                                widget.product.id, 1, widget.product.name, widget.product.price, widget.product.images[0].src);
-                                            Fluttertoast.showToast(
-                                              msg: "${widget.product.name} successfully added to cart",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              timeInSecForIosWeb: 2,
-                                              backgroundColor: Color(0xff00ab55),
-                                              textColor: Colors.white,
-                                              fontSize: 16.0,
-                                            );
-                                            Navigator.of(context).push(MaterialPageRoute(
-                                                builder: (context) => CartScreen(
-                                                      product: response,
-                                                      fromHomePage: false,
-                                                      // details: widget.customer,
-                                                    )));
+                                            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                                          }else{
+                                            if (textController.text.isEmpty || textController.text == null) {
+                                              Fluttertoast.showToast(
+                                                msg: "Please enter the Pincode",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 2,
+                                                backgroundColor: Color(0xff00ab55),
+                                                textColor: Colors.white,
+                                                fontSize: 16.0,
+                                              );
+                                            } else {
+                                              Provider.of<CartModel>(context, listen: false);
+                                              cart.add(widget.product);
+                                              Provider.of<CartModel>(context, listen: false).addCartProduct(
+                                                  widget.product.id, 1, widget.product.name, widget.product.price, widget.product.images[0].src);
+                                              Fluttertoast.showToast(
+                                                msg: "${widget.product.name} successfully added to cart",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 2,
+                                                backgroundColor: Color(0xff00ab55),
+                                                textColor: Colors.white,
+                                                fontSize: 16.0,
+                                              );
+                                              Navigator.of(context).push(MaterialPageRoute(
+                                                  builder: (context) => CartScreen(
+                                                    product: response,
+                                                    fromHomePage: false,
+                                                    // details: widget.customer,
+                                                  )));
+                                            }
                                           }
                                         },
                                         child: Container(
