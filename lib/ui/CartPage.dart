@@ -8,12 +8,10 @@ import 'package:farmerica/models/Products.dart';
 import 'package:farmerica/ui/BasePage.dart';
 import 'package:farmerica/ui/createOrder.dart';
 import "package:provider/provider.dart";
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:farmerica/Providers/CartProviders.dart';
 import 'package:farmerica/ui/productDetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:farmerica/models/global.dart' as Globals;
-
 import '../networks/ApiServices.dart';
 
 class AddToCart {
@@ -45,7 +43,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
   List counterArray = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
   double subTotals = 0.0;
-
+var couponError;
   List<AddToCart> addtoCart = [];
   List<Product> product;
   Product cart;
@@ -563,19 +561,26 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                 focusNode: focusNode,
                                 optionsBuilder: (textEditingValue) {
                                   if (textEditingValue.text == '') {
-                                    return const Iterable<String>.empty();
-                                  } else {
-                                    List matches = [];
-                                    List<String> tempCoupon = [];
-                                    for (int i = 0; i < couponList.length; i++) {
-                                      tempCoupon.add(couponList[i].code);
-                                      print('tempCoupon: $tempCoupon');
-                                    }
-                                    matches.addAll(tempCoupon);
-                                    matches.retainWhere((s) {
-                                      return s.toString().contains(textEditingValue.text.toString());
+                                    setState(() {
+                                      couponError= '';
                                     });
-                                    return matches;
+                                    return const Iterable<String>.empty();
+                                  }
+                                  else {
+                                    final matches = couponList.where((coupon) =>
+                                        coupon.code.toLowerCase().contains(textEditingValue.text.toLowerCase())
+                                    ).toList();
+                                    if (matches.isEmpty) {
+                                      // Entered coupon code is not valid
+                                      setState(() {
+                                        couponError = 'Invalid coupon code';
+                                      });
+                                    } else {
+                                      setState(() {
+                                        couponError = '';
+                                      });
+                                    }
+                                    return matches.map((coupon) => coupon.code);
                                   }
                                 },
                                 onSelected: (selection) async {
@@ -584,6 +589,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                   couponDiscount = (double.parse(trimValue) / 100) * finalTotal;
                                   setState(() {
                                     couponTotal = finalTotal - couponDiscount;
+                                    couponError = '';
                                   });
                                   print('couponTotal: $couponTotal');
                                 },
@@ -640,10 +646,15 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                 },
                                 displayStringForOption: (option) => option,
                               ),
+
                               const SizedBox(width: 10),
+
                               GestureDetector(
                                 onTap: () {
                                   textEditingController.clear();
+                                  setState(() {
+                                    couponError = '';
+                                  });
                                 },
                                 child: Container(
                                   decoration: const BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle),
@@ -659,6 +670,8 @@ class _CartScreenState extends BasePageState<CartScreen> {
                               ),
                             ],
                           ),
+                          if (couponError != null) Text(couponError, style: TextStyle(color: Colors.red)),
+
                           const Divider(color: Colors.grey),
                           const SizedBox(height: 10),
                           Row(
