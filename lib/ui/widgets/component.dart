@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -36,13 +37,25 @@ class Carousal extends StatelessWidget {
           // width: 500,
           // width: double.infinity,
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               print('CarouselSlider: $item');
             },
-            child: Image.network(
-              item,
+            child: CachedNetworkImage(
               fit: BoxFit.fill,
+              imageUrl: item,
+              placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(
+                color: Color(0xff3a9046),
+              )),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+              fadeOutDuration: const Duration(milliseconds: 300),
+              fadeInDuration: const Duration(milliseconds: 300),
             ),
+            //
+            // Image.network(
+            //   item,
+            //   fit: BoxFit.fill,
+            // ),
           ),
         );
       }).toList(),
@@ -63,35 +76,43 @@ class Catergories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    return new Container(
+    return Container(
       height: 500,
       // height: width * 0.50,
       color: Colors.white,
       child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4, crossAxisSpacing: 3),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, crossAxisSpacing: 3),
         scrollDirection: Axis.vertical,
         itemCount: catergories.length,
         shrinkWrap: true,
         itemBuilder: (context, i) {
           final category = catergories[i];
           final padding = (i == 0) ? 10.0 : 0.0;
-          return new GestureDetector(
+          return GestureDetector(
             onTap: () {},
-            child: new Container(
-              margin: new EdgeInsets.only(left: padding),
+            child: Container(
+              margin: EdgeInsets.only(left: padding),
               height: width * 0.1,
-              child: new Column(
+              child: Column(
                 children: <Widget>[
-                  new Image.network(
-                    category["image"] ??
-                        'https://as2.ftcdn.net/v2/jpg/03/15/18/09/1000_F_315180932_rhiXFrJN27zXCCdrgx8V5GWbLd9zTHHA.jpg',
+                  CachedNetworkImage(
                     height: width * 0.21,
+                    imageUrl: category["image"] ?? 'https://as2.ftcdn.net/v2/jpg/03/15/18/09/1000_F_315180932_rhiXFrJN27zXCCdrgx8V5GWbLd9zTHHA.jpg',
+                    placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(
+                      color: Color(0xff3a9046),
+                    )),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    fadeOutDuration: const Duration(milliseconds: 300),
+                    fadeInDuration: const Duration(milliseconds: 300),
                   ),
-                  new Text(
+                  // Image.network(
+                  //   category["image"] ?? 'https://as2.ftcdn.net/v2/jpg/03/15/18/09/1000_F_315180932_rhiXFrJN27zXCCdrgx8V5GWbLd9zTHHA.jpg',
+                  //   height: width * 0.21,
+                  // ),
+                  Text(
                     category["name"],
-                    style: new TextStyle(
-                        fontSize: 10, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.left,
                   )
                 ],
@@ -111,28 +132,27 @@ class Item extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new ItemState(id);
+    return ItemState(id);
   }
 }
 
 class StrikeThroughDecoration extends Decoration {
   @override
   BoxPainter createBoxPainter([VoidCallback onChanged]) {
-    return new _StrikeThroughPainter();
+    return _StrikeThroughPainter();
   }
 }
 
 class _StrikeThroughPainter extends BoxPainter {
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-    final paint = new Paint()
+    final paint = Paint()
       ..strokeWidth = 1.0
       ..color = Colors.black
       ..style = PaintingStyle.fill;
 
     final rect = offset & configuration.size;
-    canvas.drawLine(new Offset(rect.left, rect.top + rect.height / 2),
-        new Offset(rect.right, rect.top + rect.height / 2), paint);
+    canvas.drawLine(Offset(rect.left, rect.top + rect.height / 2), Offset(rect.right, rect.top + rect.height / 2), paint);
     canvas.restore();
   }
 }
@@ -153,31 +173,31 @@ class _HorizontalListState extends State<HorizontalList> {
   Widget build(BuildContext context) {
     Api_Services api_services = Api_Services();
     var items = <Widget>[];
-    items.add(new Padding(
+    items.add(const Padding(
       padding: EdgeInsets.all(3.0),
     ));
-    widget.ids.forEach((id) => items.add(new Item(id)));
-    items.add(new Padding(
+    widget.ids.forEach((id) => items.add(Item(id)));
+    items.add(const Padding(
       padding: EdgeInsets.all(3.0),
     ));
 
     return Container(
-      padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
       child: Column(
         children: <Widget>[
-          new Container(
+          Container(
             // color: Colors.black,
-            padding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
-            child: new Row(
+            padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+            child: Row(
               children: <Widget>[
-                new Expanded(
-                  child: new Text(
+                Expanded(
+                  child: Text(
                     widget.heading,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 ElevatedButton(
-                  child: new Text("See all"),
+                  child: const Text("See all"),
                   // color: Colors.blueAccent,
                   // textColor: Colors.white,
                   onPressed: () async {
@@ -185,7 +205,7 @@ class _HorizontalListState extends State<HorizontalList> {
 
                     Navigator.push(
                         context,
-                        new MaterialPageRoute(
+                        MaterialPageRoute(
                             builder: (context) => Products(
                                   product: response,
                                 )));
@@ -194,13 +214,13 @@ class _HorizontalListState extends State<HorizontalList> {
               ],
             ),
           ),
-          new Divider(
+          const Divider(
             height: 5.0,
           ),
-          new Divider(),
-          new SingleChildScrollView(
+          const Divider(),
+          SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: new Row(
+            child: Row(
               children: items,
             ),
           ),
@@ -214,8 +234,8 @@ class _HorizontalListState extends State<HorizontalList> {
   Widget container11(List<Product> product) {
     int addtoCart = 0;
     return Container(
-      padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-      child: new Column(
+      padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+      child: Column(
         children: <Widget>[
           Flexible(
               child: ListView.builder(
@@ -231,89 +251,82 @@ class _HorizontalListState extends State<HorizontalList> {
                           width: width * 0.5,
                           color: Colors.white,
                           child: Card(
-                            child: new Container(
-                              padding: new EdgeInsets.all(width * 0.025),
-                              child: new Column(
+                            child: Container(
+                              padding: EdgeInsets.all(width * 0.025),
+                              child: Column(
                                 children: <Widget>[
-                                  new Stack(
+                                  Stack(
                                     children: <Widget>[
-                                      new Image.network(
-                                        product[id].images[0].src,
+                                      CachedNetworkImage(
+                                        imageUrl: product[id].images[0].src,
                                         width: width * 0.3,
+                                        placeholder: (context, url) => const Center(
+                                            child: CircularProgressIndicator(
+                                          color: Color(0xff3a9046),
+                                        )),
+                                        errorWidget: (context, url, error) => Icon(Icons.error),
+                                        fadeOutDuration: const Duration(milliseconds: 300),
+                                        fadeInDuration: const Duration(milliseconds: 300),
                                       ),
-                                      new Container(
+                                      // Image.network(
+                                      //   product[id].images[0].src,
+                                      //   width: width * 0.3,
+                                      // ),
+                                      Container(
                                         padding: const EdgeInsets.all(3.0),
-                                        decoration: new BoxDecoration(
-                                            border: new Border.all(
-                                                color: Colors.lightGreen,
-                                                width: width * 0.00625),
-                                            color: Colors.lightGreen[100]),
-                                        child: new Text(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(color: Colors.lightGreen, width: width * 0.00625), color: Colors.lightGreen[100]),
+                                        child: Text(
                                           "50" + "% OFF",
-                                          style: new TextStyle(
-                                              fontSize: width * 0.03),
+                                          style: TextStyle(fontSize: width * 0.03),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  new Container(
+                                  Container(
                                     height: width * 0.11,
-                                    child: new Column(
+                                    child: Column(
                                       children: <Widget>[
-                                        new Text(
+                                        Text(
                                           product[id].name,
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 2,
-                                          style: new TextStyle(
-                                              fontSize: width * 0.045),
+                                          style: TextStyle(fontSize: width * 0.045),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  new Container(
-                                    padding:
-                                        new EdgeInsets.only(top: width * 0.022),
-                                    child: new Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                  Container(
+                                    padding: EdgeInsets.only(top: width * 0.022),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        new Text(
-                                          "₹" +
-                                              product[id].salePrice.toString(),
-                                          style: new TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: width * 0.05),
+                                        Text(
+                                          "₹" + product[id].salePrice.toString(),
+                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: width * 0.05),
                                         ),
                                         (price == sale)
-                                            ? new Text("")
+                                            ? const Text("")
                                             : Padding(
-                                                padding: new EdgeInsets.all(
-                                                    width * 0.022),
+                                                padding: EdgeInsets.all(width * 0.022),
                                               ),
                                         (price == sale)
-                                            ? new Text("")
+                                            ? const Text("")
                                             : Container(
-                                                foregroundDecoration:
-                                                    new StrikeThroughDecoration(),
-                                                child: new Text(
-                                                  "₹" +
-                                                      (product[id] as Map)[1]
-                                                              ["price"]
-                                                          .toString(),
-                                                  style: new TextStyle(
-                                                      fontSize: width * 0.05,
-                                                      color: Colors.grey),
+                                                foregroundDecoration: StrikeThroughDecoration(),
+                                                child: Text(
+                                                  "₹" + (product[id] as Map)[1]["price"].toString(),
+                                                  style: TextStyle(fontSize: width * 0.05, color: Colors.grey),
                                                 ))
                                       ],
                                     ),
                                   ),
-                                  new Container(
-                                    padding:
-                                        new EdgeInsets.only(top: width * 0.022),
+                                  Container(
+                                    padding: EdgeInsets.only(top: width * 0.022),
                                     child: addtoCart == 0
-                                        ? new Row(
+                                        ? Row(
                                             children: <Widget>[
-                                              new Expanded(
+                                              Expanded(
                                                   child: ElevatedButton(
                                                 onPressed: () {
                                                   setState(() {
@@ -323,41 +336,38 @@ class _HorizontalListState extends State<HorizontalList> {
                                                   // globals.server.simulateMessage(
                                                   //     globals.cart.length.toString());
                                                 },
-                                                child: new Text("View"),
+                                                child: const Text("View"),
                                                 // color: Colors.blueAccent,
                                                 // textColor: Colors.white,
                                               ))
                                             ],
                                           )
-                                        : new Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
+                                        : Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: <Widget>[
-                                              new Container(
+                                              Container(
                                                 width: width * 0.16,
                                                 child: ElevatedButton(
                                                   onPressed: () => setState(() {
                                                     addtoCart = addtoCart + 1;
                                                   }),
-                                                  child: new Text(
+                                                  child: Text(
                                                     "+",
-                                                    style: new TextStyle(
-                                                        fontSize: width * 0.07),
+                                                    style: TextStyle(fontSize: width * 0.07),
                                                   ),
                                                   // color: Colors.blueAccent,
                                                   // textColor: Colors.white,
                                                 ),
                                               ),
-                                              new Container(
+                                              Container(
                                                 width: width * 0.1,
-                                                child: new Text(
+                                                child: Text(
                                                   addtoCart.toString(),
-                                                  style:
-                                                      TextStyle(fontSize: 20),
+                                                  style: const TextStyle(fontSize: 20),
                                                   textAlign: TextAlign.center,
                                                 ),
                                               ),
-                                              new Container(
+                                              Container(
                                                 width: width * 0.16,
                                                 child: ElevatedButton(
                                                   onPressed: () {
@@ -372,10 +382,9 @@ class _HorizontalListState extends State<HorizontalList> {
                                                     //       globals.cart.length.toString());
                                                     //  .
                                                   },
-                                                  child: new Text(
+                                                  child: Text(
                                                     "-",
-                                                    style: new TextStyle(
-                                                        fontSize: width * 0.07),
+                                                    style: TextStyle(fontSize: width * 0.07),
                                                   ),
                                                   // color: Colors.blueAccent,
                                                   // textColor: Colors.white,
@@ -412,31 +421,31 @@ class HorizontalListView extends StatelessWidget {
   Widget build(BuildContext context) {
     Api_Services api_services = Api_Services();
     var items = <Widget>[];
-    items.add(new Padding(
+    items.add(const Padding(
       padding: EdgeInsets.all(3.0),
     ));
-    ids.forEach((id) => items.add(new Item(id)));
-    items.add(new Padding(
+    ids.forEach((id) => items.add(Item(id)));
+    items.add(const Padding(
       padding: EdgeInsets.all(3.0),
     ));
 
-    return new Container(
-      padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-      child: new Column(
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+      child: Column(
         children: <Widget>[
-          new Container(
+          Container(
             // color: Colors.black,
-            padding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
-            child: new Row(
+            padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+            child: Row(
               children: <Widget>[
-                new Expanded(
-                  child: new Text(
+                Expanded(
+                  child: Text(
                     heading,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 ElevatedButton(
-                  child: new Text("See all"),
+                  child: const Text("See all"),
                   // color: Colors.blueAccent,
                   // textColor: Colors.white,
                   onPressed: () async {
@@ -444,7 +453,7 @@ class HorizontalListView extends StatelessWidget {
 
                     Navigator.push(
                         context,
-                        new MaterialPageRoute(
+                        MaterialPageRoute(
                             builder: (context) => ProductsCategory(
                                   product: response,
                                 )));
@@ -453,13 +462,13 @@ class HorizontalListView extends StatelessWidget {
               ],
             ),
           ),
-          new Divider(
+          const Divider(
             height: 5.0,
           ),
           // new Divider(),
-          new SingleChildScrollView(
+          SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: new Row(
+            child: Row(
               children: items,
             ),
           ),
@@ -476,19 +485,19 @@ class UpperHeading extends StatelessWidget {
   // Api_Services api_services = Api_Services();
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      padding: EdgeInsets.fromLTRB(0.0, 2.5, 0.0, 2.5),
-      child: new Column(
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0.0, 2.5, 0.0, 2.5),
+      child: Column(
         children: <Widget>[
-          new Container(
+          Container(
             // color: Colors.black,
-            padding: EdgeInsets.fromLTRB(15.0, 2.5, 15.0, 5.0),
-            child: new Row(
+            padding: const EdgeInsets.fromLTRB(15.0, 2.5, 15.0, 5.0),
+            child: Row(
               children: <Widget>[
-                new Expanded(
-                  child: new Text(
+                Expanded(
+                  child: Text(
                     heading,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                 ),
                 // new RaisedButton(
@@ -521,98 +530,98 @@ class UpperHeading extends StatelessWidget {
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new AlertDialog(
-        title: new Center(
-          child: new Text('Log In '),
+    return AlertDialog(
+        title: const Center(
+          child: Text('Log In '),
         ),
-        content: new SingleChildScrollView(
-          child: new ListBody(
+        content: SingleChildScrollView(
+          child: ListBody(
             children: <Widget>[
-              new Row(
+              Row(
                 children: <Widget>[
                   // new Icon(Icons.),
-                  new Expanded(
+                  Expanded(
                       child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                       print("login with google");
                     },
-                    child: new Text(
+                    child: const Text(
                       "Sign in with Google",
-                      style: new TextStyle(color: Colors.black),
+                      style: TextStyle(color: Colors.black),
                     ),
                     // color: Color.fromRGBO(255, 255, 255, 1.0),
                     // textColor: Colors.white,
                   ))
                 ],
               ),
-              new Padding(
+              const Padding(
                 padding: EdgeInsets.all(5.0),
               ),
-              new Row(
+              Row(
                 children: <Widget>[
                   // new Icon(Icons.),
-                  new Expanded(
+                  Expanded(
                       child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                       print("login with google");
                     },
-                    child: new Text("Sign in with Facebook"),
+                    child: const Text("Sign in with Facebook"),
                     // color: Color.fromRGBO(48, 60, 136, 1.0),
                     // textColor: Colors.white,
                   ))
                 ],
               ),
-              new Padding(
+              const Padding(
                 padding: EdgeInsets.all(5.0),
               ),
-              new Row(
+              Row(
                 children: <Widget>[
                   // new Icon(Icons.),
-                  new Expanded(
+                  Expanded(
                       child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                       print("login with google");
                     },
-                    child: new Text("Sign in with Twitter"),
+                    child: const Text("Sign in with Twitter"),
                     // color: Color.fromRGBO(47, 125, 231, 1.0),
                     // textColor: Colors.white,
                   ))
                 ],
               ),
-              new Padding(
+              const Padding(
                 padding: EdgeInsets.all(5.0),
               ),
-              new Row(
+              Row(
                 children: <Widget>[
                   // new Icon(Icons.),
-                  new Expanded(
+                  Expanded(
                       child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                       print("login with google");
                     },
-                    child: new Text("Sign in with phone"),
+                    child: const Text("Sign in with phone"),
                     // color: Color.fromRGBO(0, 194, 152, 1.0),
                     // textColor: Colors.white,
                   ))
                 ],
               ),
-              new Padding(
+              const Padding(
                 padding: EdgeInsets.all(5.0),
               ),
-              new Row(
+              Row(
                 children: <Widget>[
                   // new Icon(Icons.),
-                  new Expanded(
+                  Expanded(
                       child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                       print("login with google");
                     },
-                    child: new Text("Sign in with email"),
+                    child: const Text("Sign in with email"),
                     // color: Color.fromRGBO(215, 0, 0, 1.0),
                     // textColor: Colors.white,
                   ))

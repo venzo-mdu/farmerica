@@ -56,6 +56,7 @@ dependencies:
   shared_preferences: any
   string_validator: any
   connectivity: any
+  cached_network_image: any
 
 dev_dependencies:
   flutter_test:

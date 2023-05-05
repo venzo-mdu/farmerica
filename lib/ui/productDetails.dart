@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farmerica/models/Customers.dart';
 import 'package:farmerica/ui/LoginPage.dart';
 import 'package:farmerica/ui/widgets/dialog_box.dart';
@@ -91,10 +92,21 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
             expandedHeight: screenHeight - 100,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
-                widget.product.images[0].src,
+              background: CachedNetworkImage(
                 fit: BoxFit.fill,
+                imageUrl: widget.product.images[0].src,
+                placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xff3a9046),
+                    )),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                fadeOutDuration: const Duration(milliseconds: 300),
+                fadeInDuration: const Duration(milliseconds: 300),
               ),
+              // Image.network(
+              //   widget.product.images[0].src,
+              //   fit: BoxFit.fill,
+              // ),
             ),
           ),
           SliverPadding(

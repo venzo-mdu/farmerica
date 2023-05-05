@@ -75,26 +75,28 @@ class _GroceryState extends State<Grocery> {
       GridViewList(product: dummyProduct);
     }
 
-    return product == []
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              backgroundColor: const Color(0xff00ab55),
-              centerTitle: true,
-              title: Image.asset('assets/images/farmerica-logo.png',
-                color: Colors.white,width: MediaQuery.of(context).size.width * 0.5,
-              ),
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-              ),
-            ),
-            body: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: const Color(0xff00ab55),
+        centerTitle: true,
+        title: Image.asset(
+          'assets/images/farmerica-logo.png',
+          color: Colors.white,
+          width: MediaQuery.of(context).size.width * 0.5,
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+        ),
+      ),
+      body: product == []
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
@@ -161,6 +163,6 @@ class _GroceryState extends State<Grocery> {
                 ),
               ),
             ),
-          );
+    );
   }
 }

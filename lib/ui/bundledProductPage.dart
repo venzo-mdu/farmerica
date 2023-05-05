@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farmerica/Config.dart';
 import 'package:farmerica/Providers/CartProviders.dart';
 import 'package:farmerica/models/Customers.dart';
@@ -181,10 +182,14 @@ class _BundledProductPageState extends State<BundledProductPage> {
                             return Card(
                               child: Column(
                                 children: [
-                                  Image.network(
-                                    product.images[0].src,
-                                    height: MediaQuery.of(context).size.height * 0.206,
+                                  CachedNetworkImage(
                                     fit: BoxFit.contain,
+                                    height: MediaQuery.of(context).size.height * 0.206,
+                                    imageUrl: product.images[0].src,
+                                    placeholder: (context, url) =>const Center(child: CircularProgressIndicator(color: Color(0xff3a9046),)),
+                                    errorWidget: (context, url, error) => Icon(Icons.error),
+                                    fadeOutDuration: const Duration(milliseconds: 300),
+                                    fadeInDuration: const Duration(milliseconds: 300),
                                   ),
                                   Container(
                                     color: Colors.grey.shade300,

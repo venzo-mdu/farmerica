@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:farmerica/models/Order.dart';
 import 'package:farmerica/models/Products.dart';
@@ -703,7 +704,18 @@ class _CartCardState extends State<CartCard> {
                   color: Color(0xFFF5F6F9),
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Image.network(widget.cart.images[0].src),
+                child:CachedNetworkImage(
+                  imageUrl: widget.cart.images[0].src,
+                  placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xff3a9046),
+                      )),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  fadeOutDuration: const Duration(milliseconds: 300),
+                  fadeInDuration: const Duration(milliseconds: 300),
+                ),
+
+                // Image.network(widget.cart.images[0].src),
               ),
             ),
           ),

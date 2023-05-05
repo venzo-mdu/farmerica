@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:farmerica/models/CartRequest.dart';
 import 'package:farmerica/models/Customers.dart';
@@ -221,7 +222,15 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                 SizedBox(
                                   height: 100,
                                   width: 100,
-                                  child: Image.network(cartItem[index]['images']),
+                                  child:CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageUrl: cartItem[index]['images'],
+                                    placeholder: (context, url) =>const Center(child: CircularProgressIndicator(color: Color(0xff3a9046),)),
+                                    errorWidget: (context, url, error) => Icon(Icons.error),
+                                    fadeOutDuration: const Duration(milliseconds: 300),
+                                    fadeInDuration: const Duration(milliseconds: 300),
+                                  )
+                                  // child: Image.network(cartItem[index]['images']),
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -854,7 +863,13 @@ class _CartCardState extends State<CartCard> {
                   color: const Color(0xFFF5F6F9),
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Image.network(widget.cart.images[0].src),
+                child: CachedNetworkImage(
+                    imageUrl: widget.cart.images[0].src,
+                    placeholder: (context, url) =>const Center(child: CircularProgressIndicator(color: Color(0xff3a9046),)),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    fadeOutDuration: const Duration(milliseconds: 300),
+                    fadeInDuration: const Duration(milliseconds: 300),
+                  ),
               ),
             ),
           ),
