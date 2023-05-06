@@ -7,6 +7,7 @@ import 'package:farmerica/ui/payment.dart';
 
 // ignore: must_be_immutable
 class VerifyAddress extends StatefulWidget {
+  var customerId;
   var couponSelection;
   List product = [];
   final int id;
@@ -18,7 +19,8 @@ class VerifyAddress extends StatefulWidget {
   List<CartProducts> cartProducts;
 
   VerifyAddress(
-      {this.id,
+      {this.customerId,
+      this.id,
       this.mobile,
       this.mail,
       this.address,
@@ -48,7 +50,7 @@ class _VerifyAddressState extends State<VerifyAddress> {
   // BasePage basePage = BasePage();
   @override
   void initState() {
-    print('verifyPage: ${widget.product}');
+    print('verifyId: ${widget.customerId}');
     super.initState();
     // basePage.title = "Checkout Page";
     // basePage.selected = 2;
@@ -280,13 +282,14 @@ class _VerifyAddressState extends State<VerifyAddress> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Center(
                     child: FormHelper.saveButton("Confirm", () {
                       final route = MaterialPageRoute(
                           builder: (context) => PaymentGateway(
+                                customerId: widget.customerId,
                                 shippingMode: widget.shippingMode,
                                 first: widget.first,
                                 last: widget.last,

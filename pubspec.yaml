@@ -57,6 +57,7 @@ dependencies:
   string_validator: any
   connectivity: any
   cached_network_image: any
+  otp_text_field: any
 
 dev_dependencies:
   flutter_test:

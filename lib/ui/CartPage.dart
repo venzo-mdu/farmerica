@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:farmerica/models/CartRequest.dart';
 import 'package:farmerica/models/Customers.dart';
 import 'package:farmerica/models/Products.dart' as p;
 import 'package:farmerica/models/Products.dart';
@@ -9,7 +8,6 @@ import 'package:farmerica/ui/BasePage.dart';
 import 'package:farmerica/ui/createOrder.dart';
 import "package:provider/provider.dart";
 import 'package:farmerica/Providers/CartProviders.dart';
-import 'package:farmerica/ui/productDetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:farmerica/models/global.dart' as Globals;
 import '../networks/ApiServices.dart';
@@ -43,7 +41,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
   List counterArray = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
   double subTotals = 0.0;
-var couponError;
+  var couponError;
   List<AddToCart> addtoCart = [];
   List<Product> product;
   Product cart;
@@ -218,18 +216,21 @@ var couponError;
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child:CachedNetworkImage(
-                                    fit: BoxFit.cover,
-                                    imageUrl: cartItem[index]['images'],
-                                    placeholder: (context, url) =>const Center(child: CircularProgressIndicator(color: Color(0xff3a9046),)),
-                                    errorWidget: (context, url, error) => Icon(Icons.error),
-                                    fadeOutDuration: const Duration(milliseconds: 300),
-                                    fadeInDuration: const Duration(milliseconds: 300),
-                                  )
-                                  // child: Image.network(cartItem[index]['images']),
-                                ),
+                                    height: 100,
+                                    width: 100,
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      imageUrl: cartItem[index]['images'],
+                                      placeholder: (context, url) => const Center(
+                                          child: CircularProgressIndicator(
+                                        color: Color(0xff3a9046),
+                                      )),
+                                      errorWidget: (context, url, error) => Icon(Icons.error),
+                                      fadeOutDuration: const Duration(milliseconds: 300),
+                                      fadeInDuration: const Duration(milliseconds: 300),
+                                    )
+                                    // child: Image.network(cartItem[index]['images']),
+                                    ),
                                 const SizedBox(
                                   width: 10,
                                 ),
@@ -562,14 +563,13 @@ var couponError;
                                 optionsBuilder: (textEditingValue) {
                                   if (textEditingValue.text == '') {
                                     setState(() {
-                                      couponError= '';
+                                      couponError = '';
                                     });
                                     return const Iterable<String>.empty();
-                                  }
-                                  else {
-                                    final matches = couponList.where((coupon) =>
-                                        coupon.code.toLowerCase().contains(textEditingValue.text.toLowerCase())
-                                    ).toList();
+                                  } else {
+                                    final matches = couponList
+                                        .where((coupon) => coupon.code.toLowerCase().contains(textEditingValue.text.toLowerCase()))
+                                        .toList();
                                     if (matches.isEmpty) {
                                       // Entered coupon code is not valid
                                       setState(() {
@@ -646,9 +646,7 @@ var couponError;
                                 },
                                 displayStringForOption: (option) => option,
                               ),
-
                               const SizedBox(width: 10),
-
                               GestureDetector(
                                 onTap: () {
                                   textEditingController.clear();
@@ -671,7 +669,6 @@ var couponError;
                             ],
                           ),
                           if (couponError != null) Text(couponError, style: TextStyle(color: Colors.red)),
-
                           const Divider(color: Colors.grey),
                           const SizedBox(height: 10),
                           Row(
@@ -728,225 +725,6 @@ var couponError;
   }
 }
 
-class Body extends StatefulWidget {
-  final List<p.Product> demoCarts;
-  Customers details;
-  Body({this.demoCarts});
-  @override
-  _BodyState createState() => _BodyState();
-}
-
-class _BodyState extends State<Body> {
-  List<p.Product> demoCarts = [p.Product()];
-  int addTocart = 0;
-  @override
-  Widget build(BuildContext context) {
-    demoCarts = widget.demoCarts;
-
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: 0 == 1
-            ? Center(
-                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: const [
-                Icon(
-                  Icons.hourglass_empty,
-                  size: 30,
-                ),
-                Text(
-                  "Your Cart is empty",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ]))
-            : ListView.builder(
-                itemCount: demoCarts.length,
-                itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: GestureDetector(
-                      child: Dismissible(
-                        key: Key(demoCarts[index].id.toString()),
-                        direction: DismissDirection.endToStart,
-                        onDismissed: (direction) {
-                          setState(() {
-                            demoCarts.removeAt(index);
-                          });
-                        },
-                        background: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFE6E6),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Row(
-                            children: const [
-                              Spacer(),
-                              // SvgPicture.asset("assets/icons/Trash.svg"),
-                            ],
-                          ),
-                        ),
-                        child: CartCard(
-                          cart: demoCarts[index],
-                          product: demoCarts,
-                        ),
-                      ),
-                      onTap: () {}),
-                ),
-              ));
-  }
-}
-
-class CartCard extends StatefulWidget {
-  const CartCard({
-    Key key,
-    @required this.product,
-    @required this.cart,
-  }) : super(key: key);
-  final List<p.Product> product;
-  final p.Product cart;
-
-  @override
-  _CartCardState createState() => _CartCardState();
-}
-
-class _CartCardState extends State<CartCard> {
-  int addtoCart = 1;
-  Widget addtoCartWi() {
-    var width = MediaQuery.of(context).size.width;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        SizedBox(
-          width: width * 0.16,
-          child: ElevatedButton(
-            onPressed: () => setState(() {
-              addtoCart = addtoCart + 1;
-            }),
-            child: Text(
-              "+",
-              style: TextStyle(fontSize: width * 0.07),
-            ),
-            // color: Colors.blueAccent,
-            // textColor: Colors.white,
-          ),
-        ),
-        SizedBox(
-          width: width * 0.1,
-          child: const Text(
-            "0",
-            style: TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        SizedBox(
-          width: width * 0.16,
-          child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                if (addtoCart == 1) {
-                } else {
-                  addtoCart = addtoCart - 1;
-                }
-              });
-            },
-            child: Text(
-              "-",
-              style: TextStyle(fontSize: width * 0.07),
-            ),
-            // color: Colors.blueAccent,
-            // textColor: Colors.white,
-          ),
-        ),
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-
-    return GestureDetector(
-      child: Row(
-        children: [
-          SizedBox(
-            width: 25,
-            child: AspectRatio(
-              aspectRatio: 0.88,
-              child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF5F6F9),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: CachedNetworkImage(
-                    imageUrl: widget.cart.images[0].src,
-                    placeholder: (context, url) =>const Center(child: CircularProgressIndicator(color: Color(0xff3a9046),)),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                    fadeOutDuration: const Duration(milliseconds: 300),
-                    fadeInDuration: const Duration(milliseconds: 300),
-                  ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 5),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.cart.name,
-                style: TextStyle(color: Colors.black, fontSize: width * 0.05),
-                maxLines: 2,
-              ),
-              const SizedBox(height: 10),
-              Text.rich(
-                TextSpan(
-                  text: "₹${widget.cart.price}",
-                  style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFFFF7643)),
-                  children: [
-                    TextSpan(text: " x2", style: Theme.of(context).textTheme.bodyText1),
-                  ],
-                ),
-              )
-            ],
-          ),
-          const SizedBox(
-            width: 5,
-          ),
-          Row(
-            children: <Widget>[
-              IconButton(
-                onPressed: () => setState(() {
-                  addtoCart = addtoCart + 1;
-                }),
-                icon: Icon(Icons.add, size: width * 0.05, color: Colors.blueAccent),
-              ),
-              Text(
-                addtoCart == 0 ? "0" : addtoCart.toString(),
-                style: const TextStyle(fontSize: 17),
-                textAlign: TextAlign.center,
-              ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    addtoCart == 0 ? 0 : addtoCart = addtoCart - 1;
-                  });
-                },
-                icon: Icon(Icons.remove, size: width * 0.05, color: Colors.blueAccent),
-              ),
-            ],
-          )
-        ],
-      ),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ProductDetail(
-                      product: widget.cart,
-                    )));
-      },
-    );
-  }
-}
-
 class SizeConfig {
   static MediaQueryData _mediaQueryData;
   static double screenWidth;
@@ -959,117 +737,5 @@ class SizeConfig {
     screenWidth = _mediaQueryData.size.width;
     screenHeight = _mediaQueryData.size.height;
     orientation = _mediaQueryData.orientation;
-  }
-}
-
-// Get the proportionate height as per screen size
-double getProportionateScreenHeight(double inputHeight) {
-  double screenHeight = SizeConfig.screenHeight;
-  //812 is the layout height that designer use
-  return (inputHeight / 812.0) * screenHeight;
-}
-
-// Get the proportionate height as per screen size
-double getProportionateScreenWidth(double inputWidth) {
-  double screenWidth = SizeConfig.screenWidth;
-  // 375 is the layout width that designer use
-  return (inputWidth / 375.0) * screenWidth;
-}
-
-// Demo data for our cart
-
-class CheckoutCard extends StatelessWidget {
-  List<CartProducts> cartProducts = [];
-  final int addTocart;
-  CheckoutCard({
-    this.cartProducts,
-    this.addTocart,
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 15,
-        horizontal: 30,
-      ),
-      // height: 174,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, -15),
-            blurRadius: 20,
-            color: const Color(0xFFDADADA).withOpacity(0.15),
-          )
-        ],
-      ),
-      child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F6F9),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  //  child: SvgPicture.asset("assets/icons/receipt.svg"),
-                ),
-                const Spacer(),
-                const Text("Add voucher code"),
-                const SizedBox(width: 10),
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 12,
-                )
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text.rich(
-                  TextSpan(
-                    text: "Total:\n",
-                    children: [
-                      TextSpan(
-                        text: "₹337.15",
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 190,
-                  child: ElevatedButton(
-                    child: const Text("Check Out"),
-                    onPressed: () {
-                      // print('cartProducts: $cartProducts');
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CreateOrder(
-                                    cartProducts: cartProducts,
-                                  )));
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

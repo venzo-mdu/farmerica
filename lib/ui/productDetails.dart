@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/ui/LoginPage.dart';
 import 'package:farmerica/ui/widgets/dialog_box.dart';
 import 'package:farmerica/utils/pincode.dart';
 import 'package:farmerica/utils/sharedServices.dart';
@@ -57,6 +56,7 @@ class _ProductDetailState extends State<ProductDetail> {
 
   Future<Customers> loginCheckData() async {
     final loginData = await sharedServices.loginDetails();
+    print('LoginData: ${loginData.id}');
     return loginData;
   }
 
@@ -77,6 +77,7 @@ class _ProductDetailState extends State<ProductDetail> {
 
     List<Product> cart = [];
     String title = widget.product.name;
+    // print('CustomerId: $customerId');
     return Scaffold(
       body: CustomScrollView(
         slivers: [

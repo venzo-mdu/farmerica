@@ -321,6 +321,7 @@ class Api_Services {
   }
 
   Future createOrder({
+    int customerId,
     String payment_method,
     String payment_method_title,
     String firstName,
@@ -357,7 +358,7 @@ class Api_Services {
       '${Config.url}/wp-json/wc/v3/orders?consumer_key=${Config.key}&consumer_secret=${Config.secret}',
     );
     var parameters = <String, dynamic>{
-      // 'customer_id':,
+      'customer_id':customerId,
       'payment_method_title': 'Cash on Delivery',
       'payment_method': 'cp',
       'billing': {

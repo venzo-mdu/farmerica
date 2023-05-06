@@ -240,7 +240,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) => OrderPage(
+                              builder: (BuildContext context) => OrderHistoryPage(
                                     product: widget.product,
                                     id: widget.customer.id,
                                     customers: widget.customer,

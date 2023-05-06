@@ -25,7 +25,10 @@ class PaymentGateway extends BasePage {
   final int id;
   List product = [];
   List<CartProducts> cartProducts;
+  int customerId;
+
   PaymentGateway({
+    this.customerId,
     this.address,
     this.product,
     this.apartmnt,
@@ -61,6 +64,7 @@ class _PaymentGatewayState extends BasePageState<PaymentGateway> {
 
   Future<Orders> createOrder() async {
     final orders = await api_services.createOrder(
+      customerId: widget.customerId,
       firstName: widget.first,
       lastName: widget.last,
       addressOne: widget.address,

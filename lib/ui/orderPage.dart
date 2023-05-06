@@ -9,16 +9,16 @@ import 'package:farmerica/networks/ApiServices.dart';
 import 'package:farmerica/ui/BasePage.dart';
 import 'package:farmerica/ui/checkoutPage.dart';
 
-class OrderPage extends StatefulWidget {
-  OrderPage({Key key, this.product, this.id, this.customers});
+class OrderHistoryPage extends StatefulWidget {
+  OrderHistoryPage({Key key, this.product, this.id, this.customers});
   final List<Product> product;
   final int id;
   final Customers customers;
   @override
-  _OrderPageState createState() => _OrderPageState();
+  _OrderHistoryPageState createState() => _OrderHistoryPageState();
 }
 
-class _OrderPageState extends State<OrderPage> {
+class _OrderHistoryPageState extends State<OrderHistoryPage> {
   List<Orders> orderList = [];
   bool loading = true;
   int selected = 3;
