@@ -49,9 +49,9 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
 
   Future<List<Orders>> orderId;
   Future<List<Orders>> getList() async {
-    orderList = await api_services.getOrdersByUserId(widget.id);
+    orderList = await api_services.getOrderByUserId(widget.id);
     // orderId = '${orderList[0].id}';
-    print('OrderData: ${orderList[0].id}');
+    print('OrderData: ${orderList}');
     return orderList;
   }
 
@@ -163,32 +163,6 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                           )), (route) => false);
                     },
                     child: Text('Continue Shopping')),
-
-                // Container(
-                //   width: double.infinity,
-                //   height: 180,
-                //   margin: EdgeInsets.symmetric(horizontal: 10),
-                //   decoration: BoxDecoration(
-                //     color: Color(0XFFF0F0F1),
-                //   ),
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //     children: [
-                //       Text('Pr: ${orderList[0].toString()}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                //       SizedBox(width: 25),
-                //       Text('Date : ${orderList[0].dateCreated.toString()}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                //       SizedBox(width: 25),
-                //       Text('Total: ${orderList[0].total.toString()}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                //
-                //       SizedBox(width: 25),
-                //       // Text('Gift From: ${orderList[0].metaData[1].value.toString()}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                //
-                //       SizedBox(width: 25),
-                //       // Text('Gift To: ${orderList[0].metaData[2].value.toString()}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                //     ],
-                //   ),
-                // ),
               ],
             ),
           ),

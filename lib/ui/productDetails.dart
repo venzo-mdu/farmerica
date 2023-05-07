@@ -1,6 +1,9 @@
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farmerica/models/Customers.dart';
+import 'package:farmerica/ui/widgets/dialog_box.dart';
 import 'package:farmerica/utils/pincode.dart';
+import 'package:farmerica/utils/sharedServices.dart';
 import 'package:flutter/material.dart';
 import 'package:farmerica/Providers/CartProviders.dart';
 import 'package:farmerica/models/Products.dart' as p;
@@ -22,6 +25,9 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailState extends State<ProductDetail> {
+  Customers loginCheck;
+  SharedServices sharedServices = SharedServices();
+
   int selected = 1;
   bool loa = true;
   String parsHtml(String as) {
@@ -48,9 +54,19 @@ class _ProductDetailState extends State<ProductDetail> {
 
   getCustomerData() async {}
 
+  Future<Customers> loginCheckData() async {
+    final loginData = await sharedServices.loginDetails();
+    print('LoginData: ${loginData.id}');
+    return loginData;
+  }
+
   @override
   void initState() {
     super.initState();
+    loginCheckData().then((value) => setState(() {
+      loginCheck = value;
+    }));
+
     shortDes = parsHtml(widget.product.shortDescription);
   }
 
@@ -61,6 +77,7 @@ class _ProductDetailState extends State<ProductDetail> {
 
     List<Product> cart = [];
     String title = widget.product.name;
+    // print('CustomerId: $customerId');
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -76,10 +93,21 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
             expandedHeight: screenHeight - 100,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
-                widget.product.images[0].src,
+              background: CachedNetworkImage(
                 fit: BoxFit.fill,
+                imageUrl: widget.product.images[0].src,
+                placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xff3a9046),
+                    )),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                fadeOutDuration: const Duration(milliseconds: 300),
+                fadeInDuration: const Duration(milliseconds: 300),
               ),
+              // Image.network(
+              //   widget.product.images[0].src,
+              //   fit: BoxFit.fill,
+              // ),
             ),
           ),
           SliverPadding(
@@ -266,36 +294,44 @@ class _ProductDetailState extends State<ProductDetail> {
                                     Center(
                                       child: GestureDetector(
                                         onTap: () {
-                                          if (textController.text.isEmpty || textController.text == null) {
-                                            Fluttertoast.showToast(
-                                              msg: "Please enter the Pincode",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              timeInSecForIosWeb: 2,
-                                              backgroundColor: Color(0xff00ab55),
-                                              textColor: Colors.white,
-                                              fontSize: 16.0,
+                                          if(loginCheck == null){
+                                            showDialog(
+                                              context: context,
+                                              builder: (_) => const MyDialogBox(),
                                             );
-                                          } else {
-                                            Provider.of<CartModel>(context, listen: false);
-                                            cart.add(widget.product);
-                                            Provider.of<CartModel>(context, listen: false).addCartProduct(
-                                                widget.product.id, 1, widget.product.name, widget.product.price, widget.product.images[0].src);
-                                            Fluttertoast.showToast(
-                                              msg: "${widget.product.name} successfully added to cart",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              timeInSecForIosWeb: 2,
-                                              backgroundColor: Color(0xff00ab55),
-                                              textColor: Colors.white,
-                                              fontSize: 16.0,
-                                            );
-                                            Navigator.of(context).push(MaterialPageRoute(
-                                                builder: (context) => CartScreen(
-                                                      product: response,
-                                                      fromHomePage: false,
-                                                      // details: widget.customer,
-                                                    )));
+                                            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                                          }else{
+                                            if (textController.text.isEmpty || textController.text == null) {
+                                              Fluttertoast.showToast(
+                                                msg: "Please enter the Pincode",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 2,
+                                                backgroundColor: Color(0xff00ab55),
+                                                textColor: Colors.white,
+                                                fontSize: 16.0,
+                                              );
+                                            } else {
+                                              Provider.of<CartModel>(context, listen: false);
+                                              cart.add(widget.product);
+                                              Provider.of<CartModel>(context, listen: false).addCartProduct(
+                                                  widget.product.id, 1, widget.product.name, widget.product.price, widget.product.images[0].src);
+                                              Fluttertoast.showToast(
+                                                msg: "${widget.product.name} successfully added to cart",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 2,
+                                                backgroundColor: Color(0xff00ab55),
+                                                textColor: Colors.white,
+                                                fontSize: 16.0,
+                                              );
+                                              Navigator.of(context).push(MaterialPageRoute(
+                                                  builder: (context) => CartScreen(
+                                                    product: response,
+                                                    fromHomePage: false,
+                                                    // details: widget.customer,
+                                                  )));
+                                            }
                                           }
                                         },
                                         child: Container(

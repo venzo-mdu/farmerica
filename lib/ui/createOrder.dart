@@ -5,6 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:farmerica/models/CartRequest.dart';
 import 'package:farmerica/models/Customers.dart';
 import 'package:farmerica/networks/ApiServices.dart';
+import 'package:otp_text_field/otp_field.dart';
+import 'package:otp_text_field/otp_field_style.dart';
+import 'package:otp_text_field/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:string_validator/string_validator.dart';
 
@@ -23,7 +26,7 @@ class CreateOrder extends StatefulWidget {
 class _CreateOrderState extends State<CreateOrder> {
   final _formKey = GlobalKey<FormState>();
   Customers details;
-  String first, last, city, state = 'Odisha', postcode, apartmnt, flat, address, country = 'India', mobile, mail, giftFrom, giftMsg;
+  // String first, last, city, state = 'Odisha', postcode, apartmnt, flat, address, country = 'India', mobile, mail, giftFrom, giftMsg;
   int selected = 2;
   String title = "Create Order";
   String dropDownValue;
@@ -31,16 +34,22 @@ class _CreateOrderState extends State<CreateOrder> {
   DateTime intialdate = DateTime.now();
   DateTime selectedDate;
   bool isCurrentDaySelected = false;
-
+  OtpFieldController otpController = OtpFieldController();
+  String otpValue = '';
+  var customerId;
   String firstName;
   String lastName;
   String emailId;
   String phoneNumber;
-
   String address1;
   String address2;
   String townCity;
   String pinsCode;
+  String giftFrom;
+  String giftMsg;
+  String country;
+  bool showOTPField = false;
+  Customers customer;
 
   getPinCode() async {
     SharedPreferences pinCodePrefs = await SharedPreferences.getInstance();
@@ -54,8 +63,19 @@ class _CreateOrderState extends State<CreateOrder> {
   Future<Customers> getUser() async {
     SharedPreferences userPrefs = await SharedPreferences.getInstance();
     String email = userPrefs.getString('email');
-    Customers customer = await api_services.getCustomersByMail(email);
-    return customer;
+    Customers fetchedCustomer = await api_services.getCustomersByMail(email);
+    print('customerId order page: ${fetchedCustomer.id}');
+    customerId = fetchedCustomer.id;
+    firstName = fetchedCustomer.firstName;
+    lastName = fetchedCustomer.lastName;
+    emailId = fetchedCustomer.email;
+    phoneNumber = fetchedCustomer.billing.phone;
+    address1 = fetchedCustomer.billing.address1;
+    address2 = fetchedCustomer.billing.address2;
+    townCity = fetchedCustomer.billing.city;
+    setState(() {
+      customer = fetchedCustomer;
+    });
   }
 
   List<String> timeDropDownValuesT = [
@@ -70,10 +90,13 @@ class _CreateOrderState extends State<CreateOrder> {
   @override
   void initState() {
     getPinCode();
+    getUser();
+    print('id: ${widget.id}');
     super.initState();
   }
 
   TextEditingController datePickerController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +105,7 @@ class _CreateOrderState extends State<CreateOrder> {
     // }
 
     // print(widget.product);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff00ab55),
@@ -92,19 +116,9 @@ class _CreateOrderState extends State<CreateOrder> {
           width: MediaQuery.of(context).size.width * 0.5,
         ),
       ),
-      body: FutureBuilder<Customers>(
-        future: getUser(),
-        builder: (BuildContext context, AsyncSnapshot<Customers> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-                child: CircularProgressIndicator(
-              color: Color(0xff00ab55),
-            ));
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            Customers customer = snapshot.data;
-            return SingleChildScrollView(
+      body: customer == null
+          ? const Center(child: CircularProgressIndicator(color: Color(0xff00ab55)))
+          : SingleChildScrollView(
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
@@ -180,6 +194,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                       }
                                     },
                                     onTap: () async {
+                                      print('Shipping: ${widget.shippingFee}');
                                       DateTime now = DateTime.now();
                                       DateTime timeLimit = DateTime(now.year, now.month, now.day, 17, 0);
 
@@ -286,14 +301,16 @@ class _CreateOrderState extends State<CreateOrder> {
                                         final currentDateTime = DateTime.now();
                                         bool changeDate = true;
 
+                                        print('DateTime: ${currentDateTime.isAfter(freeTime)}');
+                                        print('Initial Date: $currentDateTime');
+
                                         if (currentDateTime.isAfter(freeTime)) {
-                                          print(currentDateTime.isAfter(freeTime));
                                           changeDate = false;
                                         }
 
                                         DateTime picked = await showDatePicker(
                                           context: context,
-                                          initialDate: intialdate,
+                                          initialDate: currentDateTime,
                                           initialDatePickerMode: DatePickerMode.day,
                                           firstDate: DateTime.now(),
                                           lastDate: DateTime(2101),
@@ -308,6 +325,8 @@ class _CreateOrderState extends State<CreateOrder> {
                                         DateTime timeLimit21 = DateTime(now.year, now.month, now.day, 21, 0);
                                         final today = DateTime(now.year, now.month, now.day);
                                         final pickedDay = DateTime(picked.year, picked.month, picked.day);
+
+                                        print('Test: ${intialdate.isAfter(timeLimit08) && pickedDay == today}');
 
                                         timeDropDownValues = List.from(timeDropDownValuesT);
                                         if (intialdate.isAfter(timeLimit08) && pickedDay == today) {
@@ -424,9 +443,10 @@ class _CreateOrderState extends State<CreateOrder> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width / 1.7,
                                 child: TextFormField(
+                                  // controller: firstNameController,
                                   textAlignVertical: TextAlignVertical.center,
                                   textAlign: TextAlign.start,
-                                  initialValue: customer.firstName,
+                                  initialValue: firstName,
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.only(left: 10),
                                     focusedBorder: const OutlineInputBorder(
@@ -461,8 +481,11 @@ class _CreateOrderState extends State<CreateOrder> {
                                   maxLines: 1,
                                   keyboardType: TextInputType.text,
                                   onChanged: (String value) {
-                                    firstName = value;
-                                    print(first);
+                                    // updateCustomerData('firstName', value);
+                                    setState(() {
+                                      firstName = value;
+                                    });
+                                    // print(first);
                                   },
                                   validator: (value) {
                                     bool valid = isAlpha(value);
@@ -494,7 +517,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                 child: TextFormField(
                                   textAlignVertical: TextAlignVertical.center,
                                   textAlign: TextAlign.start,
-                                  initialValue: customer.lastName,
+                                  initialValue: lastName,
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.only(left: 10),
                                     focusedBorder: const OutlineInputBorder(
@@ -530,7 +553,6 @@ class _CreateOrderState extends State<CreateOrder> {
                                   keyboardType: TextInputType.text,
                                   onChanged: (String value) {
                                     lastName = value;
-                                    print(first);
                                   },
                                   validator: (value) {
                                     bool valid = isAlpha(value);
@@ -562,7 +584,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                 child: TextFormField(
                                   textAlignVertical: TextAlignVertical.center,
                                   textAlign: TextAlign.start,
-                                  initialValue: customer.email,
+                                  initialValue: emailId,
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.only(left: 10),
                                     focusedBorder: const OutlineInputBorder(
@@ -597,8 +619,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                   maxLines: 1,
                                   keyboardType: TextInputType.emailAddress,
                                   onChanged: (String value) {
-                                    print(value);
-                                    mail = value;
+                                    emailId = value;
                                   },
                                   validator: (value) {
                                     bool valid = isEmail(value);
@@ -630,7 +651,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                 child: TextFormField(
                                   textAlignVertical: TextAlignVertical.center,
                                   textAlign: TextAlign.start,
-                                  initialValue: customer.billing.phone,
+                                  initialValue: phoneNumber,
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.only(left: 10),
                                     focusedBorder: const OutlineInputBorder(
@@ -665,8 +686,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                   maxLines: 1,
                                   keyboardType: TextInputType.number,
                                   onChanged: (String value) {
-                                    mobile = value;
-                                    print(first);
+                                    phoneNumber = value;
                                   },
                                   validator: (value) {
                                     bool valid = isLength(value, 10);
@@ -722,7 +742,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                   child: TextFormField(
                                     textAlignVertical: TextAlignVertical.center,
                                     textAlign: TextAlign.start,
-                                    initialValue: customer.billing.address1,
+                                    initialValue: address1,
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.only(left: 10, top: 10),
                                       focusedBorder: const OutlineInputBorder(
@@ -757,8 +777,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                     maxLines: 2,
                                     keyboardType: TextInputType.text,
                                     onChanged: (String value) {
-                                      flat = value;
-                                      print(address);
+                                      address1 = value;
                                     },
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -787,7 +806,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                   child: TextFormField(
                                     textAlignVertical: TextAlignVertical.center,
                                     textAlign: TextAlign.start,
-                                    initialValue: customer.billing.address2,
+                                    initialValue: address2,
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.only(left: 10, top: 10),
                                       focusedBorder: const OutlineInputBorder(
@@ -822,9 +841,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                     maxLines: 2,
                                     keyboardType: TextInputType.text,
                                     onChanged: (String value) {
-                                      apartmnt = value;
-                                      return;
-                                      print(apartmnt);
+                                      address2 = value;
                                     },
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -894,8 +911,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                         maxLines: 1,
                                         keyboardType: TextInputType.number,
                                         onChanged: (String value) {
-                                          postcode = value;
-                                          print(postcode);
+                                          pinsCode = value;
                                         },
                                         validator: (value) {
                                           bool valid = isNumeric(value);
@@ -927,7 +943,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                       child: TextFormField(
                                         textAlignVertical: TextAlignVertical.center,
                                         textAlign: TextAlign.end,
-                                        initialValue: customer.billing.city,
+                                        initialValue: townCity,
                                         decoration: InputDecoration(
                                           contentPadding: const EdgeInsets.only(left: 10),
                                           focusedBorder: const OutlineInputBorder(
@@ -962,7 +978,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                         maxLines: 1,
                                         keyboardType: TextInputType.text,
                                         onChanged: (String value) {
-                                          city = value;
+                                          townCity = value;
                                         },
                                         validator: (value) {
                                           bool valid = isAlpha(value);
@@ -1024,10 +1040,10 @@ class _CreateOrderState extends State<CreateOrder> {
                                         ),
                                         maxLines: 1,
                                         keyboardType: TextInputType.text,
-                                        onChanged: (String value) {
-                                          state = value;
-                                          print(state);
-                                        },
+                                        // onChanged: (String value) {
+                                        //   state = value;
+                                        //   print(state);
+                                        // },
                                         validator: (value) {
                                           bool valid = isAlpha(value);
                                           if (valid) {
@@ -1218,30 +1234,120 @@ class _CreateOrderState extends State<CreateOrder> {
                                   child: const Center(child: Text("Update", style: TextStyle(fontSize: 18)))),
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
+                                  // if (customer.billing.phone.isEmpty || customer.billing.phone != phoneNumber) {
+                                  //   {
+                                  //     showDialog(
+                                  //       context: context,
+                                  //       builder: (BuildContext context) {
+                                  //         return StatefulBuilder(builder: (context, setState) {
+                                  //           return AlertDialog(
+                                  //             title: const Text('Mobile Number Verification'),
+                                  //             content: Column(
+                                  //               mainAxisSize: MainAxisSize.min,
+                                  //               children: [
+                                  //                 if (!showOTPField)
+                                  //                   const Text(
+                                  //                       'You have changed the Mobile Number. Please click verify button to verify the mobile number.'),
+                                  //                 if (showOTPField)
+                                  //                   Column(
+                                  //                     children: [
+                                  //                       const SizedBox(height: 16),
+                                  //                       const Text('Please enter the OTP sent to your mobile number'),
+                                  //                       OTPTextField(
+                                  //                         controller: otpController,
+                                  //                         otpFieldStyle: OtpFieldStyle(
+                                  //                             borderColor: const Color(0xffB0B0B0), focusBorderColor: const Color(0xff00ab55)),
+                                  //                         length: 4,
+                                  //                         width: MediaQuery.of(context).size.width,
+                                  //                         fieldWidth: MediaQuery.of(context).size.width * 0.1,
+                                  //                         style: const TextStyle(fontFamily: 'Outfit', fontSize: 20, fontWeight: FontWeight.w500),
+                                  //                         textFieldAlignment: MainAxisAlignment.spaceAround,
+                                  //                         fieldStyle: FieldStyle.underline,
+                                  //                         keyboardType: TextInputType.number,
+                                  //                         onChanged: (pin) {
+                                  //                           print("CHanged: " + pin);
+                                  //                         },
+                                  //                         onCompleted: (pin) {
+                                  //                           setState(() {
+                                  //                             otpValue = pin;
+                                  //                           });
+                                  //                           print("Completed: " + pin);
+                                  //                         },
+                                  //                       ),
+                                  //                     ],
+                                  //                   ),
+                                  //               ],
+                                  //             ),
+                                  //             actions: [
+                                  //               if (!showOTPField)
+                                  //                 TextButton(
+                                  //                   onPressed: () {
+                                  //                     setState(() {
+                                  //                       showOTPField = true;
+                                  //                     });
+                                  //                   },
+                                  //                   child: Text('Sent OTP'),
+                                  //                 ),
+                                  //               if (showOTPField)
+                                  //                 TextButton(
+                                  //                   onPressed: () {
+                                  //                     // Perform OTP verification here
+                                  //                     Navigator.of(context).pop();
+                                  //                   },
+                                  //                   child: Text('Verify OTP'),
+                                  //                 ),
+                                  //               if (showOTPField)
+                                  //                 TextButton(
+                                  //                   onPressed: () {
+                                  //                     // Navigator.of(context).pop();
+                                  //                     // setState(() {
+                                  //                     //   showOTPField = false;
+                                  //                     // });
+                                  //                   },
+                                  //                   child: Text('Resent OTP'),
+                                  //                 ),
+                                  //               TextButton(
+                                  //                 onPressed: () {
+                                  //                   Navigator.of(context).pop();
+                                  //                   setState(() {
+                                  //                     showOTPField = false;
+                                  //                   });
+                                  //                 },
+                                  //                 child: Text('Cancel'),
+                                  //               ),
+                                  //             ],
+                                  //           );
+                                  //         });
+                                  //       },
+                                  //     );
+                                  //   }
+                                  // } else {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => VerifyAddress(
+                                                customerId: customerId,
                                                 shippingMode: widget.shippingFee,
                                                 product: widget.product,
                                                 id: widget.id,
-                                                first: customer.firstName,
-                                                last: customer.lastName,
-                                                address: customer.billing.address1,
-                                                apartmnt: customer.billing.address2,
+                                                first: firstName,
+                                                last: lastName,
+                                                apartmnt: address1,
+                                                address: address2,
                                                 state: customer.billing.state,
-                                                city: customer.billing.city,
+                                                city: townCity,
                                                 country: customer.billing.country,
                                                 postcode: pinsCode,
                                                 cartProducts: widget.cartProducts,
-                                                mobile: customer.billing.phone,
-                                                mail: customer.email,
+                                                mobile: phoneNumber,
+                                                mail: emailId,
                                                 deliveryDate: datePickerController.text,
                                                 deliveryTime: dropDownValue,
                                                 giftFrom: giftFrom,
                                                 giftMsg: giftMsg,
                                                 couponSelection: widget.couponSelection,
                                               )));
+                                  // }
                                 }
                               },
                             ),
@@ -1255,10 +1361,7 @@ class _CreateOrderState extends State<CreateOrder> {
                   ],
                 ),
               ),
-            );
-          }
-        },
-      ),
+            ),
     );
   }
 }

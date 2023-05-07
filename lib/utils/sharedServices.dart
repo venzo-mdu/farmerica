@@ -24,7 +24,7 @@ class SharedServices {
   Future<void> setLoginDetails(Customers loginResponseModel) async {
     final prefs = await SharedPreferences.getInstance();
     // print(prefs.getString("login_details"));
-    print('loginResponseModel: ${loginResponseModel.username}');
+    // print('loginResponseModel: ${loginResponseModel.username}');
     return prefs.setString(
         "login_details",
         loginResponseModel != null

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:farmerica/Providers/CartProviders.dart';
@@ -28,6 +29,8 @@ class _GridViewListState extends State<GridViewList> {
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int id) {
           var width = MediaQuery.of(context).size.width;
+          // print('ImageURL: ${widget.product[id].images[0].src}');
+
           return GestureDetector(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
@@ -37,15 +40,18 @@ class _GridViewListState extends State<GridViewList> {
                   child: Stack(
                     children: <Widget>[
 //Product Image
-                      Container(
+                      SizedBox(
                         height: MediaQuery.of(context).size.height * 0.25,
-                        decoration: BoxDecoration(
+                        width: MediaQuery.of(context).size.width-40,
+                        child: ClipRRect(
                           borderRadius: const BorderRadius.all(Radius.circular(15)),
-                          image: DecorationImage(
-                            fit: BoxFit.fitWidth,
-                            image: NetworkImage(
-                              widget.product[id].images[0].src,
-                            ),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: widget.product[id].images[0].src,
+                            placeholder: (context, url) =>const Center(child: CircularProgressIndicator(color: Color(0xff3a9046),)),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            fadeOutDuration: const Duration(milliseconds: 300),
+                            fadeInDuration: const Duration(milliseconds: 300),
                           ),
                         ),
                       ),

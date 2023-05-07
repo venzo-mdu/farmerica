@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:farmerica/Config.dart';
 import 'package:farmerica/models/Category.dart';
@@ -112,6 +113,14 @@ class _CategoryPageState extends BasePageState<CategoryPage> {
                     child: Container(
                       height: width * 0.18,
                       child: ListTile(
+                        // leading:CachedNetworkImage(
+                        //   height: width * 0.18,
+                        //   imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png',
+                        //   placeholder: (context, url) =>const Center(child: CircularProgressIndicator(color: Color(0xff3a9046),)),
+                        //   errorWidget: (context, url, error) => Icon(Icons.error),
+                        //   fadeOutDuration: const Duration(milliseconds: 300),
+                        //   fadeInDuration: const Duration(milliseconds: 300),
+                        // ),
                         leading: Image.network(
                           // category.image.src.toString() ??
                           'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png',

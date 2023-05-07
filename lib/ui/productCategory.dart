@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:farmerica/models/ParentCategory.dart' as pc;
 import 'package:farmerica/models/Products.dart';
@@ -41,10 +42,21 @@ class ItemState extends State<Item> {
                 children: <Widget>[
                   Stack(
                     children: <Widget>[
-                      Image.network(
-                        product[id].images[0].src,
+                      CachedNetworkImage(
                         width: width * 0.3,
+                        imageUrl: 'product[id].images[0].src',
+                        placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(
+                          color: Color(0xff3a9046),
+                        )),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        fadeOutDuration: const Duration(milliseconds: 300),
+                        fadeInDuration: const Duration(milliseconds: 300),
                       ),
+                      // Image.network(
+                      //   product[id].images[0].src,
+                      //   width: width * 0.3,
+                      // ),
                       (price == sale)
                           ? Text("")
                           : Container(

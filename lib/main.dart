@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:farmerica/Providers/CartProviders.dart';
 
 import "package:provider/provider.dart";
-import 'package:farmerica/ui/BasePage.dart';
-import 'package:farmerica/ui/dashboard.dart';
 import 'package:farmerica/ui/splash.dart';
 import 'package:farmerica/ui/widgets/checkout_widget.dart';
 import 'package:farmerica/utils/sharedServices.dart';
