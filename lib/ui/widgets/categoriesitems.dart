@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:farmerica/ui/widgets/component.dart';
+import 'package:Farmerica/ui/widgets/component.dart';
 
 class CategoryItemsView extends StatefulWidget {
   final itemsId;

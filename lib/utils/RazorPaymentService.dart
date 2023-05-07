@@ -8,8 +8,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:farmerica/models/Order.dart';
-import 'package:farmerica/ui/success.dart';
+import 'package:Farmerica/models/Order.dart';
+import 'package:Farmerica/ui/success.dart';
 
 class RazorPaymentService {
   Razorpay _razorpay;

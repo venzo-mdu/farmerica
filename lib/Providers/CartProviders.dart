@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
-import 'package:farmerica/models/CartRequest.dart';
-import 'package:farmerica/networks/ApiServices.dart';
-import 'package:farmerica/ui/CartPage.dart';
+import 'package:Farmerica/models/CartRequest.dart';
+import 'package:Farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/ui/CartPage.dart';
 
 class CartModel extends ChangeNotifier {
 

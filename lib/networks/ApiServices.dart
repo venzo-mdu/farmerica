@@ -1,20 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:farmerica/Config.dart';
-import 'package:farmerica/models/CartRequest.dart';
+import 'package:Farmerica/Config.dart';
+import 'package:Farmerica/models/CartRequest.dart';
 
-import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/models/Login.dart';
-import 'package:farmerica/models/Order.dart';
-import 'package:farmerica/models/ParentCategory.dart';
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/models/bundledProduct.dart';
-import 'package:farmerica/models/coupon.dart';
+import 'package:Farmerica/models/Customers.dart';
+import 'package:Farmerica/models/Login.dart';
+import 'package:Farmerica/models/Order.dart';
+import 'package:Farmerica/models/ParentCategory.dart';
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/models/bundledProduct.dart';
+import 'package:Farmerica/models/coupon.dart';
 
-import 'package:farmerica/networks/Authorization.dart';
-import 'package:farmerica/models/TokenResponse.dart';
-import 'package:farmerica/models/wrongCredential.dart';
+import 'package:Farmerica/networks/Authorization.dart';
+import 'package:Farmerica/models/TokenResponse.dart';
+import 'package:Farmerica/models/wrongCredential.dart';
 
 import 'package:http/http.dart' as http;
 

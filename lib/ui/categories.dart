@@ -3,18 +3,18 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:farmerica/Config.dart';
-import 'package:farmerica/models/Category.dart';
-import 'package:farmerica/models/ParentCategory.dart' as p;
-import 'package:farmerica/models/ParentCategory.dart';
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/networks/ApiServices.dart';
-import 'package:farmerica/networks/Authorization.dart';
-import 'package:farmerica/ui/BasePage.dart';
-import 'package:farmerica/ui/Recommendedforyou.dart';
+import 'package:Farmerica/Config.dart';
+import 'package:Farmerica/models/Category.dart';
+import 'package:Farmerica/models/ParentCategory.dart' as p;
+import 'package:Farmerica/models/ParentCategory.dart';
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/networks/Authorization.dart';
+import 'package:Farmerica/ui/BasePage.dart';
+import 'package:Farmerica/ui/Recommendedforyou.dart';
 
-import 'package:farmerica/ui/gertProductfromapi.dart';
-import 'package:farmerica/ui/grocery.dart';
+import 'package:Farmerica/ui/gertProductfromapi.dart';
+import 'package:Farmerica/ui/grocery.dart';
 import 'package:http/http.dart' as http;
 
 class CategoryPage extends BasePage {

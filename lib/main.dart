@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:farmerica/Providers/CartProviders.dart';
+import 'package:Farmerica/Providers/CartProviders.dart';
 
 import "package:provider/provider.dart";
-import 'package:farmerica/ui/splash.dart';
-import 'package:farmerica/ui/widgets/checkout_widget.dart';
-import 'package:farmerica/utils/sharedServices.dart';
+import 'package:Farmerica/ui/splash.dart';
+import 'package:Farmerica/ui/widgets/checkout_widget.dart';
+import 'package:Farmerica/utils/sharedServices.dart';
 
 void main() {
   runApp(MyApp());

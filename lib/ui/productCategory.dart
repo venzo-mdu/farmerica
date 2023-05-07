@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:farmerica/models/ParentCategory.dart' as pc;
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/ui/widgets/component.dart';
+import 'package:Farmerica/models/ParentCategory.dart' as pc;
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/ui/widgets/component.dart';
 
 class Item extends StatefulWidget {
   final id;

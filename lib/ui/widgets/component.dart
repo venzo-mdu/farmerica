@@ -4,12 +4,12 @@ import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/networks/ApiServices.dart';
-import 'package:farmerica/ui/productCategory.dart';
-import 'package:farmerica/models/global.dart' as Globals;
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/ui/productCategory.dart';
+import 'package:Farmerica/models/global.dart' as Globals;
 
-import 'package:farmerica/ui/gertProductfromapi.dart';
+import 'package:Farmerica/ui/gertProductfromapi.dart';
 
 class Carousal extends StatelessWidget {
   final height;

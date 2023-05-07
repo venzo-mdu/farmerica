@@ -1,11 +1,11 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:farmerica/constant.dart';
-import 'package:farmerica/ui/LoginPage.dart';
-import 'package:farmerica/ui/Welcome.dart';
-import 'package:farmerica/ui/success.dart';
-import 'package:farmerica/ui/widgets/mytextbutton.dart';
+import 'package:Farmerica/constant.dart';
+import 'package:Farmerica/ui/LoginPage.dart';
+import 'package:Farmerica/ui/Welcome.dart';
+import 'package:Farmerica/ui/success.dart';
+import 'package:Farmerica/ui/widgets/mytextbutton.dart';
 
 class ForgotPassword extends StatefulWidget {
   @override

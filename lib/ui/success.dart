@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:farmerica/ui/BasePage.dart';
+import 'package:Farmerica/ui/BasePage.dart';
 
 class Success extends BasePage {
   String text;

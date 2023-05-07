@@ -1,20 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:farmerica/models/CartRequest.dart';
-import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/models/Order.dart';
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/networks/ApiServices.dart';
-import 'package:farmerica/ui/BasePage.dart';
-import 'package:farmerica/ui/UpiPay.dart';
-import 'package:farmerica/ui/checkoutPage.dart';
-import 'package:farmerica/ui/homepage.dart';
-import 'package:farmerica/ui/success.dart';
-import 'package:farmerica/ui/widgets/cashondelivery.dart';
-import 'package:farmerica/utils/RazorPaymentService.dart';
+import 'package:Farmerica/models/CartRequest.dart';
+import 'package:Farmerica/models/Customers.dart';
+import 'package:Farmerica/models/Order.dart';
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/ui/BasePage.dart';
+import 'package:Farmerica/ui/UpiPay.dart';
+import 'package:Farmerica/ui/checkoutPage.dart';
+import 'package:Farmerica/ui/homepage.dart';
+import 'package:Farmerica/ui/success.dart';
+import 'package:Farmerica/ui/widgets/cashondelivery.dart';
+import 'package:Farmerica/utils/RazorPaymentService.dart';
 import 'package:upi_india/upi_india.dart';
-import 'package:farmerica/utils/RazorPaymentService.dart';
+import 'package:Farmerica/utils/RazorPaymentService.dart';
 
 class PaymentGateway extends BasePage {
   final String first, last, city, state, postcode, apartmnt, flat, mobile, mail, address, country, giftFrom, giftMsg;

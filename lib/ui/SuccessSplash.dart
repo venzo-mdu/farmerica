@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:farmerica/ui/CartPage.dart';
+import 'package:Farmerica/ui/CartPage.dart';
 
 class SuccessScreen extends StatelessWidget {
   final String text;

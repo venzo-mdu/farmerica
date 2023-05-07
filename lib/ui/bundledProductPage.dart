@@ -1,22 +1,22 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:farmerica/Config.dart';
-import 'package:farmerica/Providers/CartProviders.dart';
-import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/networks/ApiServices.dart';
-import 'package:farmerica/ui/CartPage.dart';
-import 'package:farmerica/ui/widgets/dialog_box.dart';
-import 'package:farmerica/utils/pincode.dart';
-import 'package:farmerica/utils/sharedServices.dart';
+import 'package:Farmerica/Config.dart';
+import 'package:Farmerica/Providers/CartProviders.dart';
+import 'package:Farmerica/models/Customers.dart';
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/ui/CartPage.dart';
+import 'package:Farmerica/ui/widgets/dialog_box.dart';
+import 'package:Farmerica/utils/pincode.dart';
+import 'package:Farmerica/utils/sharedServices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:farmerica/models/Products.dart' as p;
+import 'package:Farmerica/models/Products.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BundledProductPage extends StatefulWidget {

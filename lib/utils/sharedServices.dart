@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/models/TokenResponse.dart';
+import 'package:Farmerica/models/Customers.dart';
+import 'package:Farmerica/models/TokenResponse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedServices {

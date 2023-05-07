@@ -1,4 +1,4 @@
-import 'package:farmerica/models/Customers.dart';
+import 'package:Farmerica/models/Customers.dart';
 
 class ProductCategories {
   int id;

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
-import 'package:farmerica/models/CartRequest.dart';
-import 'package:farmerica/models/Order.dart';
-import 'package:farmerica/networks/ApiServices.dart';
-import 'package:farmerica/ui/gertProductfromapi.dart';
-import 'package:farmerica/models/Products.dart';
+import 'package:Farmerica/models/CartRequest.dart';
+import 'package:Farmerica/models/Order.dart';
+import 'package:Farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/ui/gertProductfromapi.dart';
+import 'package:Farmerica/models/Products.dart';
 
 class OrderModel extends ChangeNotifier {
   List<Orders> order = [];
