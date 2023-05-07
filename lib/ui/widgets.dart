@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "package:farmerica/ui/widgets/theme.dart";
+import "package:Farmerica/ui/widgets/theme.dart";
 
 class TitleText extends StatelessWidget {
   final String text;

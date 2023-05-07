@@ -1,10 +1,10 @@
-import 'package:farmerica/ui/verifyAddress.dart';
+import 'package:Farmerica/ui/verifyAddress.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:farmerica/models/CartRequest.dart';
-import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/models/CartRequest.dart';
+import 'package:Farmerica/models/Customers.dart';
+import 'package:Farmerica/networks/ApiServices.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';

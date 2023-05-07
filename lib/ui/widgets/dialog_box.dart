@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:farmerica/ui/LoginPage.dart';
+import 'package:Farmerica/ui/LoginPage.dart';
 import 'package:flutter/material.dart';
 
 class MyDialogBox extends StatelessWidget {

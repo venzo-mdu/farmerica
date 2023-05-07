@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:farmerica/Providers/CartProviders.dart';
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/networks/ApiServices.dart';
-import 'package:farmerica/ui/productDetails.dart';
+import 'package:Farmerica/Providers/CartProviders.dart';
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/ui/productDetails.dart';
 import 'package:provider/provider.dart';
 
 class GridViewList extends StatefulWidget {

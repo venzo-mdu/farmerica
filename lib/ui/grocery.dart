@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:farmerica/Providers/CartProviders.dart';
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/ui/BasePage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:farmerica/ui/CartPage.dart';
-import 'package:farmerica/ui/gridViewList.dart';
-import 'package:farmerica/ui/productDetails.dart';
-import 'package:farmerica/ui/widgets/component.dart';
-import 'package:provider/provider.dart';
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/ui/gridViewList.dart';
 
 class Grocery extends StatefulWidget {
   Grocery({this.product});

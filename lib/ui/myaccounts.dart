@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/networks/ApiServices.dart';
-import 'package:farmerica/ui/BasePage.dart';
-
-import 'package:farmerica/ui/profile.dart';
-import 'package:farmerica/ui/widgets/checkout_widget.dart';
-import 'package:farmerica/utils/sharedServices.dart';
+import 'package:Farmerica/models/Customers.dart';
+import 'package:Farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/ui/BasePage.dart';
+import 'package:Farmerica/ui/widgets/checkout_widget.dart';
+import 'package:Farmerica/utils/sharedServices.dart';
 import 'package:string_validator/string_validator.dart';
 
 class MyAccount extends BasePage {

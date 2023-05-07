@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:farmerica/models/Order.dart' as o;
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/ui/BasePage.dart';
-import 'package:farmerica/ui/SuccessSplash.dart';
-import 'package:farmerica/ui/dashboard.dart';
-import 'package:farmerica/ui/homepage.dart';
-import 'package:farmerica/ui/productDetails.dart';
+import 'package:Farmerica/models/Order.dart' as o;
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/ui/BasePage.dart';
+import 'package:Farmerica/ui/SuccessSplash.dart';
+import 'package:Farmerica/ui/dashboard.dart';
+import 'package:Farmerica/ui/homepage.dart';
+import 'package:Farmerica/ui/productDetails.dart';
 
-import 'package:farmerica/ui/widgets/checkout_widget.dart';
+import 'package:Farmerica/ui/widgets/checkout_widget.dart';
 
 class CheckoutScreen extends BasePage {
   o.Orders state;

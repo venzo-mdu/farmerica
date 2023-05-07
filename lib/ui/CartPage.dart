@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/models/Products.dart' as p;
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/ui/BasePage.dart';
-import 'package:farmerica/ui/createOrder.dart';
+import 'package:Farmerica/models/Customers.dart';
+import 'package:Farmerica/models/Products.dart' as p;
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/ui/BasePage.dart';
+import 'package:Farmerica/ui/createOrder.dart';
 import "package:provider/provider.dart";
-import 'package:farmerica/Providers/CartProviders.dart';
+import 'package:Farmerica/Providers/CartProviders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:farmerica/models/global.dart' as Globals;
+import 'package:Farmerica/models/global.dart' as Globals;
 import '../networks/ApiServices.dart';
 
 class AddToCart {

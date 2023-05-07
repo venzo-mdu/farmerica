@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:farmerica/models/Order.dart';
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/ui/checkoutPage.dart';
-import 'package:farmerica/ui/productDetails.dart';
+import 'package:Farmerica/models/Order.dart';
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/ui/checkoutPage.dart';
+import 'package:Farmerica/ui/productDetails.dart';
 
 enum CardType { MasterCard, Visa }
 

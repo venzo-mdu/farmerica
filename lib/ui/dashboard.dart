@@ -1,23 +1,23 @@
 import 'dart:async';
 
-import 'package:farmerica/ui/bundledProductPage.dart';
+import 'package:Farmerica/ui/bundledProductPage.dart';
 import 'package:flutter/material.dart';
-import 'package:farmerica/models/global.dart' as Globals;
-import 'package:farmerica/models/Categories.dart';
-import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/models/ParentCategory.dart';
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/networks/ApiServices.dart';
-import 'package:farmerica/ui/BasePage.dart';
-import 'package:farmerica/ui/Products.dart';
-import 'package:farmerica/ui/Recommendedforyou.dart';
-import 'package:farmerica/ui/categories.dart';
-import 'package:farmerica/ui/categoriesDetails.dart';
+import 'package:Farmerica/models/global.dart' as Globals;
+import 'package:Farmerica/models/Categories.dart';
+import 'package:Farmerica/models/Customers.dart';
+import 'package:Farmerica/models/ParentCategory.dart';
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/ui/BasePage.dart';
+import 'package:Farmerica/ui/Products.dart';
+import 'package:Farmerica/ui/Recommendedforyou.dart';
+import 'package:Farmerica/ui/categories.dart';
+import 'package:Farmerica/ui/categoriesDetails.dart';
 
-import 'package:farmerica/ui/gertProductfromapi.dart';
-import 'package:farmerica/ui/grocery.dart';
-import 'package:farmerica/ui/widgets/component.dart';
-import 'package:farmerica/ui/widgets/homeScreenBoxWidget.dart';
+import 'package:Farmerica/ui/gertProductfromapi.dart';
+import 'package:Farmerica/ui/grocery.dart';
+import 'package:Farmerica/ui/widgets/component.dart';
+import 'package:Farmerica/ui/widgets/homeScreenBoxWidget.dart';
 
 class Dashboard extends StatefulWidget {
   List<Product> product;

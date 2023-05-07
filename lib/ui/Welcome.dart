@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:farmerica/ui/LoginPage.dart';
-import 'package:farmerica/ui/SignUp.dart';
-import 'package:farmerica/ui/widgets/mytextbutton.dart';
+import 'package:Farmerica/ui/LoginPage.dart';
+import 'package:Farmerica/ui/SignUp.dart';
+import 'package:Farmerica/ui/widgets/mytextbutton.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key key}) : super(key: key);

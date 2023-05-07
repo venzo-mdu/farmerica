@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:farmerica/ui/widgets/categoriesitems.dart';
+import 'package:Farmerica/ui/widgets/categoriesitems.dart';
 
 class CategoriesDetails extends StatefulWidget {
   CategoriesDetails({this.catergories});

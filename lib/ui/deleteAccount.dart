@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/networks/ApiServices.dart';
-import 'package:farmerica/ui/Welcome.dart';
-import 'package:farmerica/utils/sharedServices.dart';
+import 'package:Farmerica/models/Customers.dart';
+import 'package:Farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/ui/Welcome.dart';
+import 'package:Farmerica/utils/sharedServices.dart';
 
 class DeleteAccount extends StatefulWidget {
   Customers customers;

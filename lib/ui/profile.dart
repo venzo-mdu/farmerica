@@ -5,23 +5,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 // import 'package:image_picker/image_picker.dart';
-import 'package:farmerica/ui/CartPage.dart';
-import 'package:farmerica/ui/deleteAccount.dart';
-import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/networks/ApiServices.dart';
-import 'package:farmerica/ui/BasePage.dart';
+import 'package:Farmerica/ui/CartPage.dart';
+import 'package:Farmerica/ui/deleteAccount.dart';
+import 'package:Farmerica/models/Customers.dart';
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/ui/BasePage.dart';
 
-import 'package:farmerica/ui/Welcome.dart';
-import 'package:farmerica/ui/homepage.dart';
-import 'package:farmerica/ui/myaccounts.dart';
-import 'package:farmerica/ui/notificationPage.dart';
-import 'package:farmerica/ui/orderPage.dart';
-import 'package:farmerica/ui/savedaddress.dart';
-import 'package:farmerica/ui/success.dart';
-import 'package:farmerica/utils/notification.dart';
-import 'package:farmerica/utils/sharedServices.dart';
-import 'package:farmerica/utils/sharedpreferences.dart';
+import 'package:Farmerica/ui/Welcome.dart';
+import 'package:Farmerica/ui/homepage.dart';
+import 'package:Farmerica/ui/myaccounts.dart';
+import 'package:Farmerica/ui/notificationPage.dart';
+import 'package:Farmerica/ui/orderHistoryPage.dart';
+import 'package:Farmerica/ui/savedaddress.dart';
+import 'package:Farmerica/ui/success.dart';
+import 'package:Farmerica/utils/notification.dart';
+import 'package:Farmerica/utils/sharedServices.dart';
+import 'package:Farmerica/utils/sharedpreferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileMenu extends StatelessWidget {

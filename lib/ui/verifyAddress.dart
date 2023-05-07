@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:farmerica/form_helper.dart';
-import 'package:farmerica/models/CartRequest.dart';
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/ui/BasePage.dart';
-import 'package:farmerica/ui/payment.dart';
+import 'package:Farmerica/form_helper.dart';
+import 'package:Farmerica/models/CartRequest.dart';
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/ui/BasePage.dart';
+import 'package:Farmerica/ui/payment.dart';
 
 // ignore: must_be_immutable
 class VerifyAddress extends StatefulWidget {

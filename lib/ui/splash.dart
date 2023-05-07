@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/ui/BasePage.dart';
-import 'package:farmerica/ui/Welcome.dart';
-import 'package:farmerica/utils/sharedServices.dart';
+import 'package:Farmerica/models/Customers.dart';
+import 'package:Farmerica/ui/BasePage.dart';
+import 'package:Farmerica/ui/Welcome.dart';
+import 'package:Farmerica/utils/sharedServices.dart';
 
 class AnimatedSplash extends StatefulWidget {
   @override

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:farmerica/models/Customers.dart';
-import 'package:farmerica/models/ParentCategory.dart';
-import 'package:farmerica/models/Products.dart';
-import 'package:farmerica/models/global.dart' as Globals;
-import 'package:farmerica/networks/ApiServices.dart';
-import 'package:farmerica/ui/CartPage.dart';
-import 'package:farmerica/ui/categories.dart';
-import 'package:farmerica/ui/dashboard.dart';
-import 'package:farmerica/ui/profile.dart';
+import 'package:Farmerica/models/Customers.dart';
+import 'package:Farmerica/models/ParentCategory.dart';
+import 'package:Farmerica/models/Products.dart';
+import 'package:Farmerica/models/global.dart' as Globals;
+import 'package:Farmerica/networks/ApiServices.dart';
+import 'package:Farmerica/ui/CartPage.dart';
+import 'package:Farmerica/ui/categories.dart';
+import 'package:Farmerica/ui/dashboard.dart';
+import 'package:Farmerica/ui/profile.dart';
 import 'package:flutter/cupertino.dart';
 
 class BasePage extends StatefulWidget {
