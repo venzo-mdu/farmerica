@@ -20,7 +20,7 @@ class CashOnDelivery extends StatefulWidget {
   String gift_message;
   List cartProducts;
 
-  CashOnDelivery({
+  CashOnDelivery({Key key,
     this.id,
     this.shippingMode,
     this.delivery_type,
@@ -28,7 +28,7 @@ class CashOnDelivery extends StatefulWidget {
     this.gift_from,
     this.gift_message,
     this.cartProducts,
-  });
+  }) : super(key: key);
 
   @override
   State<CashOnDelivery> createState() => _CashOnDeliveryState();
@@ -58,8 +58,8 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
   @override
   void initState() {
     getValidation().then((value) => setState(() {
-      loginDetails = value;
-    }));
+          loginDetails = value;
+        }));
     orderId = getList();
     getList();
     super.initState();
@@ -89,80 +89,95 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
               children: [
                 Container(
                     width: double.infinity,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 140, vertical: 25),
-                    child: Text(
+                    padding: const EdgeInsets.symmetric(horizontal: 140, vertical: 25),
+                    child: const Text(
                       'Thank You!!',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, fontFamily: 'Outfit'),
                     )),
-                Text(
+                const Text(
                   'Your order is Placed!',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, fontFamily: 'Outfit'),
                 ),
                 Container(
                   width: double.infinity,
-                  height: 180,
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  decoration: BoxDecoration(
+                  // height: 180,
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration: const BoxDecoration(
                     color: Color(0XFFF0F0F1),
                   ),
                   child: Card(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          FutureBuilder<List<Orders>>(
-                              future: orderId,
-                              builder: (context, snapshot) {
-                                var orderIds;
-                                if (snapshot.hasData) {
-                                  orderIds = snapshot.data[0].id;
-                                  print(snapshot.data[0].id);
-                                }
-                                return Text('Order number: ${orderIds.toString()}',
-                                    style: TextStyle(
-                                        fontSize: 16, fontWeight: FontWeight.w500));
-                              }),
-                          SizedBox(width: 25),
-                          Text('Date : ${widget.delivery_type}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500)),
-                          SizedBox(width: 25),
-                          Text('Total: ${widget.cartProducts[0].price}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500)),
-                          SizedBox(width: 25),
-                          Text('Gift From: ${widget.gift_from.toString()}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500)),
-                          SizedBox(width: 25),
-                          Text('Gift Msg: ${widget.gift_message.toString()}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              FutureBuilder<List<Orders>>(
+                                  future: orderId,
+                                  builder: (context, snapshot) {
+                                    var orderIds;
+                                    if (snapshot.hasData) {
+                                      orderIds = snapshot.data[0].id;
+                                      print(snapshot.data[0].id);
+                                    }
+                                    return Row(
+                                      children: [
+                                        const Text('Order number: ', style:  TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                        Text(orderIds.toString() , style:const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                                      ],);
+                                  }),
+                              Row(
+                                children: [
+                                  const Text('Date: ', style:  TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                  Text(widget.delivery_type , style:const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15,),
+                          Row(
+                            children: [
+                              const Text('Total: ', style:  TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                              Text(widget.cartProducts[0].price , style:const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                            ],
+                          ),
+                          const SizedBox(height: 5,),
+                          Row(
+                            children: [
+                              const Text('Shipping Date: ', style:  TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                              Text(widget.delivery_type , style:const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                            ],
+                          ),
+                          const SizedBox(height: 5,),
+                          Row(
+                            children: [
+                              const Text('Shipping Time: ', style:  TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                              Text(widget.delivery_time , style:const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                            ],
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
-
-                SizedBox(height: 15),
-
+                const SizedBox(height: 15),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff00ab55),
+                      backgroundColor:const Color(0xff00ab55),
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
                       Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => BasePage(
-                            customer: loginDetails,
-                            title: "Farmerica App",
-                          )), (route) => false);
+                          MaterialPageRoute(
+                              builder: (context) => BasePage(
+                                    customer: loginDetails,
+                                    title: "Farmerica App",
+                                  )),
+                          (route) => false);
                     },
-                    child: Text('Continue Shopping')),
+                    child:const Text('Continue Shopping')),
               ],
             ),
           ),

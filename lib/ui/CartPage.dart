@@ -168,6 +168,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
           if (intFlag == false) {
             subTotals += double.parse(it.price);
             finalTotal += double.parse(it.price);
+            total = finalTotal;
           }
           arraySize++;
           intFlag = true;
@@ -277,6 +278,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                               }
                                               setState(() {
                                                 finalTotal = shippingFee + subTotals;
+                                                total = finalTotal;
                                               });
                                             },
                                             child: Container(
@@ -657,7 +659,10 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                 onTap: () {
                                   textEditingController.clear();
                                   setState(() {
-                                    couponError = '';
+                                    couponError = null;
+                                    couponTotal = null;
+                                    couponDiscount = null;
+                                    total = finalTotal;
                                   });
                                 },
                                 child: Container(
@@ -674,6 +679,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
                               ),
                             ],
                           ),
+                          // Text('test'),
                           if (couponError != null)
                             Column(
                               children: [
@@ -682,6 +688,17 @@ class _CartScreenState extends BasePageState<CartScreen> {
                               ],
                             ),
                           const Divider(color: Colors.grey),
+                          if (couponDiscount != null)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 10),
+                                const Text('You have saved ', style: TextStyle(fontFamily: 'Outfit', fontSize: 13, fontWeight: FontWeight.w500)),
+                                Text('₹${couponDiscount.toString()}',
+                                    style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500)),
+                                const Text(' in this order.', style: TextStyle(fontFamily: 'Outfit', fontSize: 13, fontWeight: FontWeight.w500)),
+                              ],
+                            ),
                           const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -691,10 +708,16 @@ class _CartScreenState extends BasePageState<CartScreen> {
                             ],
                           ),
                           couponTotal != null
-                              ? const Text('Coupon Applied Successfully',
-                                  style: TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500, color: Color(0xff00ab55)))
+                              ? Column(
+                                children: const[
+                                   SizedBox(height: 10),
+                                   Text('Coupon Applied Successfully',
+                                      style: TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500, color: Color(0xff00ab55))),
+                                  const SizedBox(height: 10),
+                                ],
+                              )
                               : const Text(''),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 10),
                           Center(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(

@@ -135,7 +135,7 @@ class _PaymentGatewayState extends BasePageState<PaymentGateway> {
 
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(top: 0, left: 10, right: 10),
+        padding: EdgeInsets.only(top: 20, left: 10, right: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

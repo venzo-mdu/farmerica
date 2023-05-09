@@ -30,6 +30,7 @@ class _CreateOrderState extends State<CreateOrder> {
   int selected = 2;
   String title = "Create Order";
   String dropDownValue;
+  String defaultInitialTime;
   // BasePage basePage = BasePage();
   DateTime intialdate = DateTime.now();
   DateTime selectedDate;
@@ -200,6 +201,7 @@ class _CreateOrderState extends State<CreateOrder> {
 
                                       if (widget.shippingFee == 200) {
                                         selectedDate = intialdate ?? DateTime.now();
+                                          defaultInitialTime = '11:00 PM to 12:00 AM';
 
                                         final midNightTime = DateTime(now.year, now.month, now.day, 23, 00);
                                         final currentDateTime = DateTime.now();
@@ -216,13 +218,25 @@ class _CreateOrderState extends State<CreateOrder> {
                                           initialDatePickerMode: DatePickerMode.day,
                                           firstDate: changeDate ? selectedDate : selectedDate.add(const Duration(days: 1)),
                                           lastDate: DateTime(2101),
-                                        );
+                                            builder: (context, child) => Theme(
+                                              data: ThemeData().copyWith(
+                                                  colorScheme: const ColorScheme.light(
+                                                    primary: Color(0xff00ab55),
+                                                    onPrimary: Colors.white,
+                                                    surface: Color(0xff00ab55),
+                                                    onSurface: Color(0xff00ab55),
+
+                                                  )
+                                              ),
+                                              child: child,
+                                            ));
 
                                         if (picked != null && picked != selectedDate) {
                                           selectedDate = picked;
                                           isCurrentDaySelected = selectedDate.year == DateTime.now().year &&
                                               selectedDate.month == DateTime.now().month &&
                                               selectedDate.day == DateTime.now().day;
+
                                           if (isCurrentDaySelected == true) {
                                             print(DateTime.now());
 
@@ -243,11 +257,12 @@ class _CreateOrderState extends State<CreateOrder> {
                                             datePickerController.text = DateFormat.yMd().format(picked);
                                           });
                                         }
-                                      } else if (widget.shippingFee == 75) {
+                                      } else
+                                        if (widget.shippingFee == 75) {
                                         final earlyTime = DateTime(now.year, now.month, now.day, 06, 30);
                                         final currentDateTime = DateTime.now();
                                         bool changeDate = true;
-
+                                        defaultInitialTime = '06:30 AM to 07:00 AM';
                                         if (currentDateTime.isAfter(earlyTime)) {
                                           print(currentDateTime.isAfter(earlyTime));
                                           changeDate = false;
@@ -262,12 +277,14 @@ class _CreateOrderState extends State<CreateOrder> {
                                             lastDate: DateTime(2101),
                                             builder: (context, child) => Theme(
                                                   data: ThemeData().copyWith(
-                                                      colorScheme: const ColorScheme.dark(
+                                                      colorScheme: const ColorScheme.light(
                                                     primary: Color(0xff00ab55),
                                                     onPrimary: Colors.white,
                                                     surface: Color(0xff00ab55),
-                                                    onSurface: Colors.white,
-                                                  )),
+                                                    onSurface: Color(0xff00ab55),
+
+                                                  )
+                                                  ),
                                                   child: child,
                                                 ));
 
@@ -296,8 +313,10 @@ class _CreateOrderState extends State<CreateOrder> {
                                             datePickerController.text = DateFormat.yMd().format(picked);
                                           });
                                         }
-                                      } else if (widget.shippingFee == 0) {
+                                      } else
+                                        if (widget.shippingFee == 0) {
                                         final freeTime = DateTime(now.year, now.month, now.day, 24, 00);
+                                        print('Freetime: $freeTime');
                                         final currentDateTime = DateTime.now();
                                         bool changeDate = true;
 
@@ -314,7 +333,18 @@ class _CreateOrderState extends State<CreateOrder> {
                                           initialDatePickerMode: DatePickerMode.day,
                                           firstDate: DateTime.now(),
                                           lastDate: DateTime(2101),
-                                        );
+                                            builder: (context, child) => Theme(
+                                              data: ThemeData().copyWith(
+                                                  colorScheme: const ColorScheme.light(
+                                                    primary: Color(0xff00ab55),
+                                                    onPrimary: Colors.white,
+                                                    surface: Color(0xff00ab55),
+                                                    onSurface: Color(0xff00ab55),
+
+                                                  )
+                                              ),
+                                              child: child,
+                                            ));
                                         // String datetime = DateFormat('H').format(DateTime.now());
                                         print('objectPicked: ${picked}');
 
@@ -340,7 +370,8 @@ class _CreateOrderState extends State<CreateOrder> {
                                         }
                                         if (intialdate.isAfter(timeLimit21) && pickedDay == today) {
                                           showTime = false;
-                                          setState(() {});
+                                          setState(() {
+                                          });
                                           Fluttertoast.showToast(
                                             msg: "Free delivery for the day is closed.",
                                             toastLength: Toast.LENGTH_SHORT,
@@ -369,7 +400,8 @@ class _CreateOrderState extends State<CreateOrder> {
                             height: 10,
                           ),
 // Delivery Time
-                          widget.shippingFee == 0 && datePickerController.text.isNotEmpty
+                          widget.shippingFee == 0 &&
+                              datePickerController.text.isNotEmpty
                               ? (showTime
                                   ? Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -394,7 +426,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                                     padding: const EdgeInsets.only(left: 10),
                                                     child: Text(
                                                       value,
-                                                      style: TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
+                                                      style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
                                                     ),
                                                   ),
                                                 );
@@ -411,6 +443,60 @@ class _CreateOrderState extends State<CreateOrder> {
                                     )
                                   : Container())
                               : Container(),
+
+                          (widget.shippingFee == 75 || widget.shippingFee == 200) &&
+                              datePickerController.text.isNotEmpty ?
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Time',
+                                    style: TextStyle(fontFamily: 'OutFit', fontSize: 15, fontWeight: FontWeight.w600),
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width / 1.7,
+                                    child: TextFormField(
+                                      readOnly: true,
+                                      textAlignVertical: TextAlignVertical.center,
+                                      textAlign: TextAlign.start,
+                                      initialValue: defaultInitialTime,
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.only(left: 10),
+                                        focusedBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xff00ab55),
+                                          ),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.grey.shade400,
+                                          ),
+                                        ),
+                                        errorBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                        focusedErrorBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                        border: InputBorder.none,
+                                        suffixIcon: const Icon(
+                                          Icons.timer,
+                                          size: 20,
+                                          color: Color(0xff00ab55),
+                                        ),
+                                        hintText: defaultInitialTime,
+                                        hintStyle: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ],
+                              ) : Container(),
+
                           const SizedBox(
                             height: 10,
                           ),
@@ -1342,7 +1428,7 @@ class _CreateOrderState extends State<CreateOrder> {
                                                 mobile: phoneNumber,
                                                 mail: emailId,
                                                 deliveryDate: datePickerController.text,
-                                                deliveryTime: dropDownValue,
+                                                deliveryTime: dropDownValue ?? defaultInitialTime,
                                                 giftFrom: giftFrom,
                                                 giftMsg: giftMsg,
                                                 couponSelection: widget.couponSelection,
