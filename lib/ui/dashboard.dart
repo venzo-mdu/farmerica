@@ -63,6 +63,7 @@ class _DashboardState extends State<Dashboard> {
   bool end = false;
   @override
   void initState() {
+    print('Respo: $response');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
         if (_carouselController.hasClients) {
@@ -355,7 +356,7 @@ class _DashboardState extends State<Dashboard> {
             ),
 //Product banner
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
               child: Column(
                 children: [
                   ListView.separated(
@@ -368,22 +369,22 @@ class _DashboardState extends State<Dashboard> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                           onTap: () async {
-                            if (homeScreen[index].toString() == 'assets/images/exotic-vegetable-a-gift-basket.jpg') {
-                              Globals.globalInt = 68;
+                            if (homeScreen[index].toString() == 'assets/images/exotic-vegetable-a-gift-basket.jpeg') {
+
                               response = await api_services.getProducts(68);
                               Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
                                   builder: (context) => Grocery(
                                         product: response,
                                       )));
-                            } else if (homeScreen[index].toString() == 'assets/images/healthy-food-from-our-farm-1.jpg') {
-                              Globals.globalInt = 86;
+                            } else if (homeScreen[index].toString() == 'assets/images/healthy-food-from-our-farm-1.jpeg') {
                               response = await api_services.getProducts(86);
                               Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
                                   builder: (context) => Grocery(
                                         product: response,
                                       )));
-                            } else {
-                              Globals.globalInt = 45;
+                            }
+                            else {
+                              print('came here: ${homeScreen[index].toString()}');
                               response = await api_services.getProducts(45);
                               Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
                                   builder: (context) => Grocery(

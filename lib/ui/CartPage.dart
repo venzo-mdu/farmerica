@@ -53,6 +53,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
   double totalSubtotal = 0.0;
   int dummyCount = 0;
   double finalTotal = 0.0;
+  double total = 0.0;
 
   Timer timer;
   var shippingFee = 0;
@@ -317,6 +318,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                               }
                                               setState(() {
                                                 finalTotal = shippingFee + subTotals;
+                                                total = finalTotal;
                                               });
                                             },
                                             child: Container(
@@ -482,7 +484,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                         finalTotal += int.parse(cartItem[i]['price']) * counterArray[i];
                                       }
                                       finalTotal = 0 + finalTotal;
-
+                                      total = finalTotal;
                                       shippingFee = 0;
                                       _character = value;
                                       String text = _character.toString();
@@ -507,7 +509,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                         finalTotal += int.parse(cartItem[i]['price']) * counterArray[i];
                                       }
                                       finalTotal = 200 + finalTotal;
-
+                                      total = finalTotal;
                                       _character = value;
                                       shippingFee = 200;
                                       String text = _character.toString();
@@ -533,7 +535,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                         finalTotal += int.parse(cartItem[i]['price']) * counterArray[i];
                                       }
                                       finalTotal = 75 + finalTotal;
-
+                                      total = finalTotal;
                                       shippingFee = 75;
                                       _character = value;
                                       String text = _character.toString();
@@ -589,6 +591,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                   couponDiscount = (double.parse(trimValue) / 100) * finalTotal;
                                   setState(() {
                                     couponTotal = finalTotal - couponDiscount;
+                                    total = couponTotal;
                                     couponError = '';
                                   });
                                   print('couponTotal: $couponTotal');
@@ -597,12 +600,15 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                   return SizedBox(
                                     width: MediaQuery.of(context).size.width / 2.3,
                                     child: TextFormField(
+                                      textInputAction: TextInputAction.done,
                                       controller: textEditingController,
                                       focusNode: focusNode,
                                       onEditingComplete: onEditingComplete,
                                       decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                        isDense: true,
                                         hintStyle: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
-                                        hintText: 'Enter Pin Code',
+                                        hintText: 'Enter Coupon Code',
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Colors.grey.shade400,
@@ -668,18 +674,20 @@ class _CartScreenState extends BasePageState<CartScreen> {
                               ),
                             ],
                           ),
-                          if (couponError != null) Text(couponError, style: TextStyle(color: Colors.red)),
+                          if (couponError != null)
+                            Column(
+                              children: [
+                                const SizedBox(height: 10),
+                                Text(couponError, style: const TextStyle(color: Colors.red)),
+                              ],
+                            ),
                           const Divider(color: Colors.grey),
                           const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text('Total', style: TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500)),
-                              couponTotal == null
-                                  ? Text('₹${finalTotal.toString()}',
-                                      style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500))
-                                  : Text('₹${couponTotal.toString()}',
-                                      style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500)),
+                              Text('₹${total.toString()}', style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500)),
                             ],
                           ),
                           couponTotal != null

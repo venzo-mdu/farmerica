@@ -8,16 +8,12 @@ import 'package:Farmerica/ui/CartPage.dart';
 import 'package:Farmerica/ui/categories.dart';
 import 'package:Farmerica/ui/dashboard.dart';
 import 'package:Farmerica/ui/profile.dart';
-import 'package:flutter/cupertino.dart';
 
 class BasePage extends StatefulWidget {
   Customers customer;
   int selectedPage;
   String title;
-  BasePage({
-    this.customer,
-    this.title,this.selectedPage = 0
-  });
+  BasePage({this.customer, this.title, this.selectedPage = 0});
 
   @override
   BasePageState createState() => BasePageState();
@@ -41,9 +37,7 @@ class BasePageState<T extends BasePage> extends State<T> {
     selected = widget.selectedPage;
     getList().then((value) {
       list = [
-        Dashboard(
-          product: response,
-        ),
+        Dashboard(),
         CategoryPage(
           catergories: categories,
           product: response,
@@ -66,13 +60,14 @@ class BasePageState<T extends BasePage> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff00ab55),
         centerTitle: true,
-        title: Image.asset('assets/images/farmerica-logo.png',
-          color: Colors.white,width: MediaQuery.of(context).size.width * 0.5,
+        title: Image.asset(
+          'assets/images/farmerica-logo.png',
+          color: Colors.white,
+          width: MediaQuery.of(context).size.width * 0.5,
         ),
       ),
       body: body(context),
