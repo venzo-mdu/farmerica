@@ -36,7 +36,6 @@ var totalprice = 0;
 // List<int> counterArray = new List.filled(arraySize, null, growable: false);
 
 class _CartScreenState extends BasePageState<CartScreen> {
-  int counter = 1;
   int arraySize = 1;
   List counterArray = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
@@ -97,11 +96,15 @@ class _CartScreenState extends BasePageState<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int counter = 1;
+
     var width = MediaQuery.of(context).size.width;
 
     List cartItem = [];
 
     return Consumer<CartModel>(builder: (context, cartModel, child) {
+      print('Data: ${cartModel.cartProducts.length}');
+
       if (cartModel.cartProducts.isEmpty) {
         return Scaffold(
           body: Center(
@@ -157,6 +160,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
             'id': it.product_id,
             'quantity': it.quantity,
           });
+
           counterArray.add(it.quantity);
 
           counter = it.quantity;
@@ -176,7 +180,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
 
         subTotals = 0;
         for (int i = 0; i < cartItem.length; i++) {
-          subTotals += int.parse(cartItem[i]['price']) * counter;
+          subTotals += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
         }
 
         return Scaffold(
@@ -263,18 +267,31 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                         children: <Widget>[
                                           GestureDetector(
                                             onTap: () {
-                                              if (counter > 0) {
-                                                setState(() {
-                                                  counter--;
-                                                });
-                                              } else {
-                                                setState(() {
-                                                  counter = 1;
-                                                });
-                                              }
+                                              setState(() {
+                                                if (cartModel.cartProducts[index].quantity > 0) {
+                                                  // directly update the quantity of the item in the cartModel.cartProducts list
+                                                  cartModel.cartProducts[index].quantity--;
+                                                  counter = cartModel.cartProducts[index].quantity;
+                                                  print('Counter: $counter');
+                                                }
+                                              });
+                                              // if (counter > 0) {
+                                              //   setState(() {
+                                              //     counter--;
+                                              //   });
+                                              //   print('Coubter:$counter');
+                                              //
+                                              // } else {
+                                              //   setState(() {
+                                              //     counter = 0;
+                                              //   });
+                                              //   print('Coubter00:$counter');
+                                              //
+                                              //
+                                              // }
                                               subTotals = 0;
                                               for (int i = 0; i < cartItem.length; i++) {
-                                                subTotals += int.parse(cartItem[i]['price']) * counter;
+                                                subTotals += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
                                               }
                                               setState(() {
                                                 finalTotal = shippingFee + subTotals;
@@ -302,7 +319,8 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                             width: 10,
                                           ),
                                           Text(
-                                            counter.toString(),
+                                            cartModel.cartProducts[index].quantity.toString(),
+                                            // counter.toString(),
                                             style: TextStyle(
                                                 fontSize: width * 0.035, fontFamily: 'Outfit', fontWeight: FontWeight.w500, color: Colors.black),
                                           ),
@@ -312,11 +330,18 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                           GestureDetector(
                                             onTap: () {
                                               setState(() {
-                                                counter++;
+                                                cartModel.cartProducts[index]
+                                                    .quantity++; // directly update the quantity of the item in the cartModel.cartProducts list
+                                                counter = cartModel.cartProducts[index].quantity;
+                                                print('Counter: $counter');
                                               });
+                                              // setState(() {
+                                              //   counter++;
+                                              // });
+
                                               subTotals = 0;
                                               for (int i = 0; i < cartItem.length; i++) {
-                                                subTotals += int.parse(cartItem[i]['price']) * counter;
+                                                subTotals += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
                                               }
                                               setState(() {
                                                 finalTotal = shippingFee + subTotals;
@@ -483,7 +508,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                     setState(() {
                                       finalTotal = 0;
                                       for (int i = 0; i < cartItem.length; i++) {
-                                        finalTotal += int.parse(cartItem[i]['price']) * counterArray[i];
+                                        finalTotal += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
                                       }
                                       finalTotal = 0 + finalTotal;
                                       total = finalTotal;
@@ -508,7 +533,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                     setState(() {
                                       finalTotal = 0;
                                       for (int i = 0; i < cartItem.length; i++) {
-                                        finalTotal += int.parse(cartItem[i]['price']) * counterArray[i];
+                                        finalTotal += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
                                       }
                                       finalTotal = 200 + finalTotal;
                                       total = finalTotal;
@@ -534,7 +559,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                     setState(() {
                                       finalTotal = 0;
                                       for (int i = 0; i < cartItem.length; i++) {
-                                        finalTotal += int.parse(cartItem[i]['price']) * counterArray[i];
+                                        finalTotal += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
                                       }
                                       finalTotal = 75 + finalTotal;
                                       total = finalTotal;
@@ -571,14 +596,27 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                     });
                                     return const Iterable<String>.empty();
                                   } else {
+                                    final now = DateTime.now();
                                     final matches = couponList
-                                        .where((coupon) => coupon.code.toLowerCase().contains(textEditingValue.text.toLowerCase()))
+                                        .where((coupon) =>
+                                            coupon.code.toLowerCase().contains(textEditingValue.text.toLowerCase()) &&
+                                            now.isBefore(DateTime.parse(coupon.dateExpires)))
                                         .toList();
                                     if (matches.isEmpty) {
-                                      // Entered coupon code is not valid
-                                      setState(() {
-                                        couponError = 'Invalid coupon code';
-                                      });
+                                      final expiredCoupons = couponList
+                                          .where((coupon) =>
+                                              coupon.code.toLowerCase().contains(textEditingValue.text.toLowerCase()) &&
+                                              now.isAfter(DateTime.parse(coupon.dateExpires)))
+                                          .toList();
+                                      if (expiredCoupons.isNotEmpty) {
+                                        setState(() {
+                                          couponError = 'Coupon is expired';
+                                        });
+                                      } else {
+                                        setState(() {
+                                          couponError = 'Invalid coupon code';
+                                        });
+                                      }
                                     } else {
                                       setState(() {
                                         couponError = '';
@@ -606,6 +644,15 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                       controller: textEditingController,
                                       focusNode: focusNode,
                                       onEditingComplete: onEditingComplete,
+                                      onChanged:(value){
+                                        if(value.isEmpty){
+                                          setState(() {
+                                            couponTotal = null;
+                                            couponDiscount = null;
+                                            total = finalTotal;
+                                          });
+                                        }
+                                      },
                                       decoration: InputDecoration(
                                         contentPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                                         isDense: true,
@@ -688,7 +735,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
                               ],
                             ),
                           const Divider(color: Colors.grey),
-                          if (couponDiscount != null)
+                          if (couponDiscount != null && textEditingController.text.isNotEmpty)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -707,15 +754,15 @@ class _CartScreenState extends BasePageState<CartScreen> {
                               Text('₹${total.toString()}', style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500)),
                             ],
                           ),
-                          couponTotal != null
+                          couponDiscount != null && textEditingController.text.isNotEmpty
                               ? Column(
-                                children: const[
-                                   SizedBox(height: 10),
-                                   Text('Coupon Applied Successfully',
-                                      style: TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500, color: Color(0xff00ab55))),
-                                  const SizedBox(height: 10),
-                                ],
-                              )
+                                  children: const [
+                                    SizedBox(height: 10),
+                                    Text('Coupon Applied Successfully',
+                                        style: TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500, color: Color(0xff00ab55))),
+                                    const SizedBox(height: 10),
+                                  ],
+                                )
                               : const Text(''),
                           const SizedBox(height: 10),
                           Center(
@@ -727,6 +774,8 @@ class _CartScreenState extends BasePageState<CartScreen> {
                               ),
                               child: const Text("Proceed to Checkout", style: TextStyle(fontSize: 18)),
                               onPressed: () {
+                                List tempCartDate = cartItem;
+                                // cartItem.clear();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

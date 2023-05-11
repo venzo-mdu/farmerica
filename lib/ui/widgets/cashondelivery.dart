@@ -1,14 +1,12 @@
 import 'dart:convert';
 
+import 'package:Farmerica/Providers/CartProviders.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:Farmerica/Config.dart';
 import 'package:Farmerica/models/Customers.dart';
-import 'package:Farmerica/models/Order.dart' as o;
 import 'package:Farmerica/models/Order.dart';
-import 'package:http/http.dart' as http;
 import 'package:Farmerica/networks/ApiServices.dart';
 import 'package:Farmerica/ui/BasePage.dart';
-import 'package:Farmerica/ui/dashboard.dart';
 import 'package:Farmerica/utils/sharedServices.dart';
 
 class CashOnDelivery extends StatefulWidget {
@@ -169,6 +167,8 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
+                      Provider.of<CartModel>(context, listen: false).clearCart();
+
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (context) => BasePage(
