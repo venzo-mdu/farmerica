@@ -181,6 +181,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
         subTotals = 0;
         for (int i = 0; i < cartItem.length; i++) {
           subTotals += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
+          total = subTotals;
         }
 
         return Scaffold(
@@ -275,20 +276,6 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                                   print('Counter: $counter');
                                                 }
                                               });
-                                              // if (counter > 0) {
-                                              //   setState(() {
-                                              //     counter--;
-                                              //   });
-                                              //   print('Coubter:$counter');
-                                              //
-                                              // } else {
-                                              //   setState(() {
-                                              //     counter = 0;
-                                              //   });
-                                              //   print('Coubter00:$counter');
-                                              //
-                                              //
-                                              // }
                                               subTotals = 0;
                                               for (int i = 0; i < cartItem.length; i++) {
                                                 subTotals += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
@@ -335,10 +322,6 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                                 counter = cartModel.cartProducts[index].quantity;
                                                 print('Counter: $counter');
                                               });
-                                              // setState(() {
-                                              //   counter++;
-                                              // });
-
                                               subTotals = 0;
                                               for (int i = 0; i < cartItem.length; i++) {
                                                 subTotals += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
