@@ -22,7 +22,7 @@ class Coupon {
   Coupon.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     code = json['code'];
-    amount = json['amount'];
+    amount = json['discount'];
     status = json['status'];
     dateCreated = json['date_created'];
     discountType = json['discount_type'];

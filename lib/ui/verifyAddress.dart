@@ -7,19 +7,20 @@ import 'package:Farmerica/ui/payment.dart';
 
 // ignore: must_be_immutable
 class VerifyAddress extends StatefulWidget {
+  String shippingMethodTitle;
   var customerId;
-  var couponSelection;
+  var couponDiscount;
   List product = [];
   final int id;
   final String first, last, city, state, postcode, apartmnt, flat, address, country, mobile, mail, giftFrom, giftMsg;
-  var shippingMode;
+  var shippingFee;
   final String deliveryDate;
   final String deliveryTime;
-
   List<CartProducts> cartProducts;
 
   VerifyAddress(
-      {this.customerId,
+      {this.shippingMethodTitle,
+      this.customerId,
       this.id,
       this.mobile,
       this.mail,
@@ -38,8 +39,8 @@ class VerifyAddress extends StatefulWidget {
       this.deliveryTime,
       this.giftMsg,
       this.giftFrom,
-      this.shippingMode,
-      this.couponSelection});
+      this.shippingFee,
+      this.couponDiscount});
   @override
   _VerifyAddressState createState() => _VerifyAddressState();
 }
@@ -104,7 +105,7 @@ class _VerifyAddressState extends State<VerifyAddress> {
                     fit: FlexFit.tight,
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 10,top: 5,bottom: 5),
+                      padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: FormHelper.fieldLabelValu(context, widget.deliveryDate),
                     ),
                   ),
@@ -114,7 +115,7 @@ class _VerifyAddressState extends State<VerifyAddress> {
                       fit: FlexFit.tight,
                       flex: 1,
                       child: Padding(
-                        padding: const EdgeInsets.only(right: 10,top: 5,bottom: 5),
+                        padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                         child: FormHelper.fieldLabelValu(context, widget.deliveryTime),
                       ),
                     ),
@@ -141,7 +142,7 @@ class _VerifyAddressState extends State<VerifyAddress> {
                     fit: FlexFit.tight,
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 10,top: 5,bottom: 5),
+                      padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: FormHelper.fieldLabelValu(context, widget.first),
                     ),
                   ),
@@ -149,7 +150,7 @@ class _VerifyAddressState extends State<VerifyAddress> {
                     fit: FlexFit.tight,
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 5,top: 5,bottom: 5),
+                      padding: const EdgeInsets.only(right: 5, top: 5, bottom: 5),
                       child: FormHelper.fieldLabelValu(context, widget.last),
                     ),
                   ),
@@ -185,7 +186,7 @@ class _VerifyAddressState extends State<VerifyAddress> {
                     fit: FlexFit.tight,
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 10,top: 5,bottom: 5),
+                      padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: FormHelper.fieldLabelValu(context, widget.city),
                     ),
                   ),
@@ -193,7 +194,7 @@ class _VerifyAddressState extends State<VerifyAddress> {
                     fit: FlexFit.tight,
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 10,top: 5,bottom: 5),
+                      padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: FormHelper.fieldLabelValu(context, widget.state),
                     ),
                   ),
@@ -219,7 +220,7 @@ class _VerifyAddressState extends State<VerifyAddress> {
                     fit: FlexFit.tight,
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 10,top: 5,bottom: 5),
+                      padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: FormHelper.fieldLabelValu(context, widget.postcode),
                     ),
                   ),
@@ -227,7 +228,7 @@ class _VerifyAddressState extends State<VerifyAddress> {
                     fit: FlexFit.tight,
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 10,top: 5,bottom: 5),
+                      padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: FormHelper.fieldLabelValu(context, widget.mobile),
                     ),
                   ),
@@ -253,7 +254,7 @@ class _VerifyAddressState extends State<VerifyAddress> {
                     fit: FlexFit.tight,
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 10,top: 5,bottom: 5),
+                      padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: FormHelper.fieldLabelValu(context, widget.giftFrom),
                     ),
                   ),
@@ -261,7 +262,7 @@ class _VerifyAddressState extends State<VerifyAddress> {
                     fit: FlexFit.tight,
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 10,top: 5,bottom: 5),
+                      padding: const EdgeInsets.only(right: 10, top: 5, bottom: 5),
                       child: FormHelper.fieldLabelValu(context, widget.giftMsg),
                     ),
                   ),
@@ -274,8 +275,9 @@ class _VerifyAddressState extends State<VerifyAddress> {
                 child: FormHelper.saveButton("Confirm", () {
                   final route = MaterialPageRoute(
                       builder: (context) => PaymentGateway(
+                            shippingMethodTitle: widget.shippingMethodTitle,
                             customerId: widget.customerId,
-                            shippingMode: widget.shippingMode,
+                            shippingFee: widget.shippingFee,
                             first: widget.first,
                             last: widget.last,
                             cartProducts: widget.cartProducts,
@@ -294,7 +296,7 @@ class _VerifyAddressState extends State<VerifyAddress> {
                             giftMsg: widget.giftMsg,
                             mobile: widget.mobile,
                             product: widget.product,
-                            couponSelection: widget.couponSelection,
+                            couponDiscount: widget.couponDiscount,
                           ));
                   Navigator.push(context, route);
                 }),

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:Farmerica/Providers/CartProviders.dart';
+import 'package:Farmerica/models/CartRequest.dart';
 import 'package:Farmerica/ui/bundledProductPage.dart';
 import 'package:flutter/material.dart';
 import 'package:Farmerica/models/global.dart' as Globals;
@@ -32,7 +34,7 @@ class _DashboardState extends State<Dashboard> {
   var response;
   int selected = 0;
   List<Product> product = [];
-
+  List<CartProducts> cartProducts = [];
   List<String> homeScreen = [
     'assets/images/birthday-gift-basket.jpeg',
     'assets/images/anniversary-gift-basket-1.jpeg',
@@ -63,6 +65,7 @@ class _DashboardState extends State<Dashboard> {
   bool end = false;
   @override
   void initState() {
+    print('CartModel: ${CartModel().cartProducts}');
     print('Respo: $response');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {

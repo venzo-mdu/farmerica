@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:Farmerica/Providers/CartProviders.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:Farmerica/models/Customers.dart';
@@ -11,16 +12,17 @@ import 'package:Farmerica/utils/sharedServices.dart';
 
 class CashOnDelivery extends StatefulWidget {
   int id;
-  var shippingMode;
+  var shippingFee;
   String delivery_type;
   String delivery_time;
   String gift_from;
   String gift_message;
   List cartProducts;
 
-  CashOnDelivery({Key key,
+  CashOnDelivery({
+    Key key,
     this.id,
-    this.shippingMode,
+    this.shippingFee,
     this.delivery_type,
     this.delivery_time,
     this.gift_from,
@@ -42,7 +44,7 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
   }
 
   List<Orders> orderList = [];
-
+  String totalValue = '';
   Api_Services api_services = Api_Services();
 
   Future<List<Orders>> orderId;
@@ -74,7 +76,7 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
     } else {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xff00ab55),
+          backgroundColor: const Color(0xff00ab55),
           title: Image.asset(
             'assets/images/farmerica-logo.png',
             color: Colors.white,
@@ -109,52 +111,74 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              FutureBuilder<List<Orders>>(
-                                  future: orderId,
-                                  builder: (context, snapshot) {
-                                    var orderIds;
-                                    if (snapshot.hasData) {
-                                      orderIds = snapshot.data[0].id;
-                                      print(snapshot.data[0].id);
+                          FutureBuilder<List<Orders>>(
+                              future: getList(),
+                              builder: (context, snapshot) {
+                                var orderIds;
+                                String deliveryDate = '';
+                                String deliveryTime = '';
+
+                                if (snapshot.hasData) {
+                                  orderIds = snapshot.data[0].id;
+                                  for (int i = 0; i < snapshot.data[0].metaData.length; i++) {
+                                    if (snapshot.data[0].metaData[i].key == 'delivery_date') {
+                                        deliveryDate = snapshot.data[0].metaData[i].value;
+                                    } else if (snapshot.data[0].metaData[i].key == 'delivery_time') {
+                                        deliveryTime = snapshot.data[0].metaData[i].value;
                                     }
-                                    return Row(
-                                      children: [
-                                        const Text('Order number: ', style:  TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
-                                        Text(orderIds.toString() , style:const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
-                                      ],);
-                                  }),
-                              Row(
-                                children: [
-                                  const Text('Date: ', style:  TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
-                                  Text(widget.delivery_type , style:const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 15,),
-                          Row(
-                            children: [
-                              const Text('Total: ', style:  TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
-                              Text(widget.cartProducts[0].price , style:const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
-                            ],
-                          ),
-                          const SizedBox(height: 5,),
-                          Row(
-                            children: [
-                              const Text('Shipping Date: ', style:  TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
-                              Text(widget.delivery_type , style:const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
-                            ],
-                          ),
-                          const SizedBox(height: 5,),
-                          Row(
-                            children: [
-                              const Text('Shipping Time: ', style:  TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
-                              Text(widget.delivery_time , style:const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
-                            ],
-                          ),
+                                  }
+                                  print('Meta: ${snapshot.data[0].metaData.length}');
+                                  return Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text('Order number: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                              Text(orderIds.toString(), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Text('Date: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                              Text(DateFormat.yMd().format(DateTime.parse(snapshot.data[0].dateCreated)), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Text('Total: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                          Text(snapshot.data[0].total, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Text('Shipping Date: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                          Text(deliveryDate, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Text('Shipping Time: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                          Text(deliveryTime, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                }
+                                return CircularProgressIndicator();
+                              }),
                         ],
                       ),
                     ),
@@ -163,7 +187,7 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                 const SizedBox(height: 15),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:const Color(0xff00ab55),
+                      backgroundColor: const Color(0xff00ab55),
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
@@ -177,7 +201,7 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
                                   )),
                           (route) => false);
                     },
-                    child:const Text('Continue Shopping')),
+                    child: const Text('Continue Shopping')),
               ],
             ),
           ),

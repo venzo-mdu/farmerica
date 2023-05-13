@@ -12,13 +12,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:string_validator/string_validator.dart';
 
 class CreateOrder extends StatefulWidget {
+  String shippingMethodTitle;
   List<CartProducts> cartProducts;
-  var couponSelection;
+  var couponDiscount;
   List product = [];
   final int id;
   var shippingFee;
   var details;
-  CreateOrder({this.cartProducts, this.product, this.id, this.shippingFee, this.details, this.couponSelection});
+  CreateOrder({this.shippingMethodTitle,this.cartProducts, this.product, this.id, this.shippingFee, this.details, this.couponDiscount});
   @override
   _CreateOrderState createState() => _CreateOrderState();
 }
@@ -1408,19 +1409,21 @@ class _CreateOrderState extends State<CreateOrder> {
                                   //     );
                                   //   }
                                   // } else {
+                                  print('Coupon: ${widget.couponDiscount}');
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => VerifyAddress(
+                                            shippingMethodTitle: widget.shippingMethodTitle,
                                                 customerId: customerId,
-                                                shippingMode: widget.shippingFee,
+                                                shippingFee: widget.shippingFee,
                                                 product: widget.product,
                                                 id: widget.id,
                                                 first: firstName,
                                                 last: lastName,
                                                 apartmnt: address1,
                                                 address: address2,
-                                                state: customer.billing.state,
+                                                state: 'Odissa',
                                                 city: townCity,
                                                 country: customer.billing.country,
                                                 postcode: pinsCode,
@@ -1428,10 +1431,12 @@ class _CreateOrderState extends State<CreateOrder> {
                                                 mobile: phoneNumber,
                                                 mail: emailId,
                                                 deliveryDate: datePickerController.text,
+                                                // shippingTotal:,
+                                                // discont_total:,
                                                 deliveryTime: dropDownValue ?? defaultInitialTime,
                                                 giftFrom: giftFrom,
                                                 giftMsg: giftMsg,
-                                                couponSelection: widget.couponSelection,
+                                                couponDiscount: widget.couponDiscount,
                                               )));
                                   // }
                                 }

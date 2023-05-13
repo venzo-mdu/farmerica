@@ -100,9 +100,9 @@ class Api_Services {
       Uri.parse(url),
       body: {"username": username, "password": password},
     );
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       return jsonDecode(response.body);
-    }else if(response.statusCode == 403){
+    } else if (response.statusCode == 403) {
       return jsonDecode(response.body);
     }
 
@@ -144,10 +144,11 @@ class Api_Services {
   }
 
   Future<List<BundledProduct>> getBundled(int id) async {
-    var url = "${Config.urlfor}" "${Config.productUrl}/$id?consumer_key=ck_eedc4b30808be5c1110691e5b29f16280ebd3b72&consumer_secret=cs_2313913bc74d5e096c91d308745b50afee52e61c";
+    var url = "${Config.urlfor}"
+        "${Config.productUrl}/$id?consumer_key=ck_eedc4b30808be5c1110691e5b29f16280ebd3b72&consumer_secret=cs_2313913bc74d5e096c91d308745b50afee52e61c";
     var response = await api.getAsync(url);
     List<BundledProduct> bundledList = [];
-    if(response is List){
+    if (response is List) {
       for (var item in response) {
         bundledList.add(BundledProduct.fromJson(item));
       }
@@ -156,9 +157,9 @@ class Api_Services {
     return bundledList;
   }
 
-
   Future<List<Coupon>> getCoupon() async {
-    var url = "${Config.urlfor}" "${Config.coupons}?consumer_key=ck_eedc4b30808be5c1110691e5b29f16280ebd3b72&consumer_secret=cs_2313913bc74d5e096c91d308745b50afee52e61c";
+    var url = "${Config.urlfor}"
+        "${Config.coupons}?consumer_key=ck_eedc4b30808be5c1110691e5b29f16280ebd3b72&consumer_secret=cs_2313913bc74d5e096c91d308745b50afee52e61c";
     var response = await api.getAsync(url);
     List<Coupon> couponList = [];
     for (var item in response) {
@@ -167,8 +168,6 @@ class Api_Services {
     return couponList;
   }
 
-
-
   Future getProductsById(int id) async {
     var url = "${Config.url}" "${Config.urlfor}" "${Config.productUrl}/$id";
     var response = await api.getAsync(url);
@@ -176,8 +175,6 @@ class Api_Services {
     Product product = Product.fromJson(response);
     return product;
   }
-
-
 
   Future<List<ParentCategory>> getCategory(int parentId) async {
     var url = "${Config.urlfor}" "${Config.categoriesUrl}/$parentId";
@@ -246,7 +243,7 @@ class Api_Services {
     for (var item in response) {
       orderList.add(Orders.fromJson(item));
     }
-    for(int i=0;i<orderList.length;i++){
+    for (int i = 0; i < orderList.length; i++) {
       print('orderList: ${orderList[i].id} => ${orderList[i].customerId}');
     }
     return orderList;
@@ -321,6 +318,10 @@ class Api_Services {
   }
 
   Future createOrder({
+    String shippingMethodTitle,
+    String shippingFee,
+    String shippingCartName,
+    int shippingCartProdQty,
     int customerId,
     String payment_method,
     String payment_method_title,
@@ -344,7 +345,7 @@ class Api_Services {
     List<CartProducts> cartProducts,
     List<Coupon> coupon_lines,
     String coupon,
-
+    var discount,
   }) async {
     final productsData = cartProducts
         .map((product) => {
@@ -353,14 +354,16 @@ class Api_Services {
             })
         .toList();
 
-    print('Prod Qty: ${cartProducts}');
+    print("code: ${coupon}");
+    print("discount: $discount");
     var url = Uri.parse(
       '${Config.url}/wp-json/wc/v3/orders?consumer_key=${Config.key}&consumer_secret=${Config.secret}',
     );
     var parameters = <String, dynamic>{
-      'customer_id':customerId,
+      'customer_id': customerId,
+      'status': 'processing',
       'payment_method_title': 'Cash on Delivery',
-      'payment_method': 'cp',
+      'payment_method': 'cod',
       'billing': {
         'first_name': firstName,
         'last_name': lastName,
@@ -395,6 +398,13 @@ class Api_Services {
         {"key": "gift_from", "value": gift_from},
         {"key": "gift_message", "value": gift_message}
       ],
+      "shipping_lines": [
+        {
+          "method_id": "flat_rate",
+          "method_title": "$shippingMethodTitle",
+          "total": "$shippingFee",
+        }
+      ],
       'coupon_lines': [
         {
           "code": coupon.toString(),
@@ -411,10 +421,10 @@ class Api_Services {
     final json = jsonDecode(jsonString) as Map<String, dynamic>;
     final order = Orders.fromJson(json);
 
-    print('orderResponse: ${response}');
-
-    print('order created successfully');
-    print('Order Details: ${order}');
+    // print('orderResponse: ${response}');
+    //
+    // print('order created successfully');
+    // print('Order Details: ${order}');
     return order;
   }
 
