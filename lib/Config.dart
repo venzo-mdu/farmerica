@@ -3,8 +3,7 @@ class Config {
   static String secret = "cs_2313913bc74d5e096c91d308745b50afee52e61c";
   static String url = "https://www.farmerica.in";
   static String customerUrl = "customers";
-  static String tokenUrl =
-      "https://www.farmerica.in/wp-json/jwt-auth/v1/token";
+  static String tokenUrl = "https://www.farmerica.in/wp-json/jwt-auth/v1/token";
   static String categoriesUrl = "products/categories";
   static String parentforCategory = "?parent=";
   static String productUrl = "products";

@@ -1,19 +1,18 @@
 import 'dart:convert';
 
+import 'package:Farmerica/Providers/CartProviders.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:Farmerica/Config.dart';
 import 'package:Farmerica/models/Customers.dart';
-import 'package:Farmerica/models/Order.dart' as o;
 import 'package:Farmerica/models/Order.dart';
-import 'package:http/http.dart' as http;
 import 'package:Farmerica/networks/ApiServices.dart';
 import 'package:Farmerica/ui/BasePage.dart';
-import 'package:Farmerica/ui/dashboard.dart';
 import 'package:Farmerica/utils/sharedServices.dart';
 
 class CashOnDelivery extends StatefulWidget {
   int id;
-  var shippingMode;
+  var shippingFee;
   String delivery_type;
   String delivery_time;
   String gift_from;
@@ -21,14 +20,15 @@ class CashOnDelivery extends StatefulWidget {
   List cartProducts;
 
   CashOnDelivery({
+    Key key,
     this.id,
-    this.shippingMode,
+    this.shippingFee,
     this.delivery_type,
     this.delivery_time,
     this.gift_from,
     this.gift_message,
     this.cartProducts,
-  });
+  }) : super(key: key);
 
   @override
   State<CashOnDelivery> createState() => _CashOnDeliveryState();
@@ -44,7 +44,7 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
   }
 
   List<Orders> orderList = [];
-
+  String totalValue = '';
   Api_Services api_services = Api_Services();
 
   Future<List<Orders>> orderId;
@@ -58,8 +58,8 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
   @override
   void initState() {
     getValidation().then((value) => setState(() {
-      loginDetails = value;
-    }));
+          loginDetails = value;
+        }));
     orderId = getList();
     getList();
     super.initState();
@@ -76,7 +76,7 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
     } else {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xff00ab55),
+          backgroundColor: const Color(0xff00ab55),
           title: Image.asset(
             'assets/images/farmerica-logo.png',
             color: Colors.white,
@@ -89,80 +89,119 @@ class _CashOnDeliveryState extends State<CashOnDelivery> {
               children: [
                 Container(
                     width: double.infinity,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 140, vertical: 25),
-                    child: Text(
+                    padding: const EdgeInsets.symmetric(horizontal: 140, vertical: 25),
+                    child: const Text(
                       'Thank You!!',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, fontFamily: 'Outfit'),
                     )),
-                Text(
+                const Text(
                   'Your order is Placed!',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, fontFamily: 'Outfit'),
                 ),
                 Container(
                   width: double.infinity,
-                  height: 180,
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  decoration: BoxDecoration(
+                  // height: 180,
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration: const BoxDecoration(
                     color: Color(0XFFF0F0F1),
                   ),
                   child: Card(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           FutureBuilder<List<Orders>>(
-                              future: orderId,
+                              future: getList(),
                               builder: (context, snapshot) {
                                 var orderIds;
+                                String deliveryDate = '';
+                                String deliveryTime = '';
+
                                 if (snapshot.hasData) {
                                   orderIds = snapshot.data[0].id;
-                                  print(snapshot.data[0].id);
+                                  for (int i = 0; i < snapshot.data[0].metaData.length; i++) {
+                                    if (snapshot.data[0].metaData[i].key == 'delivery_date') {
+                                        deliveryDate = snapshot.data[0].metaData[i].value;
+                                    } else if (snapshot.data[0].metaData[i].key == 'delivery_time') {
+                                        deliveryTime = snapshot.data[0].metaData[i].value;
+                                    }
+                                  }
+                                  print('Meta: ${snapshot.data[0].metaData.length}');
+                                  return Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text('Order number: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                              Text(orderIds.toString(), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Text('Date: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                              Text(DateFormat.yMd().format(DateTime.parse(snapshot.data[0].dateCreated)), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Text('Total: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                          Text(snapshot.data[0].total, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Text('Shipping Date: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                          Text(deliveryDate, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Text('Shipping Time: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                                          Text(deliveryTime, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                                        ],
+                                      ),
+                                    ],
+                                  );
                                 }
-                                return Text('Order number: ${orderIds.toString()}',
-                                    style: TextStyle(
-                                        fontSize: 16, fontWeight: FontWeight.w500));
+                                return CircularProgressIndicator();
                               }),
-                          SizedBox(width: 25),
-                          Text('Date : ${widget.delivery_type}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500)),
-                          SizedBox(width: 25),
-                          Text('Total: ${widget.cartProducts[0].price}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500)),
-                          SizedBox(width: 25),
-                          Text('Gift From: ${widget.gift_from.toString()}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500)),
-                          SizedBox(width: 25),
-                          Text('Gift Msg: ${widget.gift_message.toString()}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500)),
                         ],
                       ),
                     ),
                   ),
                 ),
-
-                SizedBox(height: 15),
-
+                const SizedBox(height: 15),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff00ab55),
+                      backgroundColor: const Color(0xff00ab55),
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
+                      Provider.of<CartModel>(context, listen: false).clearCart();
+
                       Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => BasePage(
-                            customer: loginDetails,
-                            title: "Farmerica App",
-                          )), (route) => false);
+                          MaterialPageRoute(
+                              builder: (context) => BasePage(
+                                    customer: loginDetails,
+                                    title: "Farmerica App",
+                                  )),
+                          (route) => false);
                     },
-                    child: Text('Continue Shopping')),
+                    child: const Text('Continue Shopping')),
               ],
             ),
           ),

@@ -17,17 +17,19 @@ import 'package:upi_india/upi_india.dart';
 import 'package:Farmerica/utils/RazorPaymentService.dart';
 
 class PaymentGateway extends BasePage {
+  String shippingMethodTitle;
   final String first, last, city, state, postcode, apartmnt, flat, mobile, mail, address, country, giftFrom, giftMsg;
-  var shippingMode;
+  var shippingFee;
   final String deliveryDate;
   final String deliveryTime;
-  var couponSelection;
+  var couponDiscount;
   final int id;
   List product = [];
   List<CartProducts> cartProducts;
   int customerId;
 
   PaymentGateway({
+    this.shippingMethodTitle,
     this.customerId,
     this.address,
     this.product,
@@ -47,8 +49,8 @@ class PaymentGateway extends BasePage {
     this.deliveryTime,
     this.giftFrom,
     this.giftMsg,
-    this.shippingMode,
-    this.couponSelection,
+    this.shippingFee,
+    this.couponDiscount,
   });
 
   @override
@@ -85,7 +87,12 @@ class _PaymentGatewayState extends BasePageState<PaymentGateway> {
       gift_from: widget.giftFrom,
       gift_message: widget.giftMsg,
       cartProducts: widget.cartProducts,
-      coupon: widget.couponSelection,
+      coupon: widget.couponDiscount,
+      shippingMethodTitle: widget.shippingMethodTitle,
+      shippingCartName: widget.cartProducts[0].name,
+      shippingCartProdQty: widget.cartProducts[0].quantity,
+      shippingFee: widget.shippingFee.toString(),
+      // discount: widget.couponDiscount,
       // delivery_type: widget.deliveryDate,
       // delivery_time: widget.deliveryTime,
       // gift_from: widget.giftFrom,
@@ -122,7 +129,7 @@ class _PaymentGatewayState extends BasePageState<PaymentGateway> {
                 MaterialPageRoute(
                     builder: (context) => CashOnDelivery(
                           id: widget.id,
-                          shippingMode: widget.shippingMode,
+                          shippingFee: widget.shippingFee,
                           delivery_type: widget.deliveryDate,
                           delivery_time: widget.deliveryTime,
                           gift_from: widget.giftFrom,
@@ -135,7 +142,7 @@ class _PaymentGatewayState extends BasePageState<PaymentGateway> {
 
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(top: 0, left: 10, right: 10),
+        padding: EdgeInsets.only(top: 20, left: 10, right: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

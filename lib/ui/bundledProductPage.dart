@@ -1,11 +1,9 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:Farmerica/Config.dart';
 import 'package:Farmerica/Providers/CartProviders.dart';
 import 'package:Farmerica/models/Customers.dart';
 import 'package:Farmerica/models/Products.dart';
-import 'package:Farmerica/networks/ApiServices.dart';
 import 'package:Farmerica/ui/CartPage.dart';
 import 'package:Farmerica/ui/widgets/dialog_box.dart';
 import 'package:Farmerica/utils/pincode.dart';
@@ -13,7 +11,6 @@ import 'package:Farmerica/utils/sharedServices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:Farmerica/models/Products.dart' as p;
@@ -74,22 +71,23 @@ class _BundledProductPageState extends State<BundledProductPage> {
   int maxValue = 10;
   ValueChanged<int> onChanged;
   Map<int, int> counts = {};
+  var basket;
   bool flag = false;
   bool errorMsg = true;
   final textController = TextEditingController();
   final focusNode = FocusNode();
   SharedPreferences pinCodePrefs;
 
-  double get totalCount {
-    double total = 0;
-    counts.forEach((index, count) {
-      if (count > 0) {
-        total += count;
-        print('totalCount: $count');
-      }
-    });
-    return total;
-  }
+  // double get totalCount {
+  //   double total = 0;
+  //   counts.forEach((index, count) {
+  //     if (count > 0) {
+  //       total += count;
+  //       print('totalCount: $count');
+  //     }
+  //   });
+  //   return total;
+  // }
 
   Future<Customers> loginCheckData() async {
     final loginData = await sharedServices.loginDetails();
@@ -147,7 +145,7 @@ class _BundledProductPageState extends State<BundledProductPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(_product['name'], style: const TextStyle(fontFamily: 'Outfit', fontSize: 25, fontWeight: FontWeight.w500)),
+              Text(_product['name'], style: const TextStyle(fontFamily: 'Outfit', fontSize: 20, fontWeight: FontWeight.w500)),
               FutureBuilder<List<Product>>(
                 future: Future.wait(products),
                 builder: (BuildContext context, AsyncSnapshot<List<Product>> snapshot) {
@@ -155,21 +153,27 @@ class _BundledProductPageState extends State<BundledProductPage> {
                     double totalPrice = 0.0;
                     counts.forEach((index, count) {
                       if (count > 0) {
-                        print('total: ${snapshot.data[index].price}');
-                        print('total: ${snapshot.data[index].price.runtimeType}');
-                        print('total: ${count.runtimeType}');
-                        print('total: $totalPrice');
-                        print('total: ${totalPrice.runtimeType}');
+                        // print('total: ${snapshot.data[index].price}');
+                        // print('total: ${snapshot.data[index].price.runtimeType}');
+                        // print('total: ${count}');
+                        // print('total: $totalPrice');
+                        // print('total: ${totalPrice.runtimeType}');
                         totalPrice += double.parse(snapshot.data[index].price) * count;
                       }
+                      basket = counts.values.reduce((sum, count) => sum + count);
+                      print('Coude: $basket');
                     });
+
+
                     return Column(
                       children: [
                         const SizedBox(
                           height: 20,
                         ),
-                        Text("₹ $totalPrice", style: const TextStyle(fontFamily: 'Outfit', fontSize: 20, fontWeight: FontWeight.w400)),
-                        Text('Total Price: $totalPrice', style: const TextStyle(fontFamily: 'Outfit', fontSize: 20, fontWeight: FontWeight.w400)),
+                        Text('Total Price: ₹ $totalPrice', style: const TextStyle(fontFamily: 'Outfit', fontSize: 17, fontWeight: FontWeight.w400)),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         GridView.builder(
                           physics: const ScrollPhysics(),
                           shrinkWrap: true,
@@ -186,7 +190,10 @@ class _BundledProductPageState extends State<BundledProductPage> {
                                     fit: BoxFit.contain,
                                     height: MediaQuery.of(context).size.height * 0.206,
                                     imageUrl: product.images[0].src,
-                                    placeholder: (context, url) =>const Center(child: CircularProgressIndicator(color: Color(0xff3a9046),)),
+                                    placeholder: (context, url) => const Center(
+                                        child: CircularProgressIndicator(
+                                      color: Color(0xff3a9046),
+                                    )),
                                     errorWidget: (context, url, error) => Icon(Icons.error),
                                     fadeOutDuration: const Duration(milliseconds: 300),
                                     fadeInDuration: const Duration(milliseconds: 300),
@@ -230,11 +237,17 @@ class _BundledProductPageState extends State<BundledProductPage> {
                                           Text('${counts[index] ?? 0}'),
                                           GestureDetector(
                                             onTap: () {
+print(basket);
+                                              // int basketCount = counts.values.reduce((sum, count) => sum + count);
+                                              // print('Total: $basketCount');
+                                              //
+                                              if(basket == null || basket < 5){
                                               setState(() {
                                                 counts[index] = count + 1;
-                                                print('count: $count');
+                                                print('count: $counts');
                                                 print('countIndex: ${counts[index]}');
                                                 // Provider.of<CartModel>(context, listen: false);
+                                                print('CountL : $count');
                                                 cart.add(product);
                                                 Provider.of<CartModel>(context, listen: false).addCartProduct(
                                                   product.id,
@@ -244,6 +257,18 @@ class _BundledProductPageState extends State<BundledProductPage> {
                                                   product.images[0].src,
                                                 );
                                               });
+                                              }
+                                              else{
+                                                Fluttertoast.showToast(
+                                                  msg: "Sorry, you can add maximum 5 products in the basket",
+                                                  toastLength: Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor: Color(0xff00ab55),
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0,
+                                                );
+                                              }
                                             },
                                             child: Container(
                                               decoration: BoxDecoration(

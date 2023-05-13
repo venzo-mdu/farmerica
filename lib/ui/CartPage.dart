@@ -36,10 +36,9 @@ var totalprice = 0;
 // List<int> counterArray = new List.filled(arraySize, null, growable: false);
 
 class _CartScreenState extends BasePageState<CartScreen> {
-  int counter = 1;
   int arraySize = 1;
   List counterArray = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-
+  String shippingMethodTitle;
   double subTotals = 0.0;
   var couponError;
   List<AddToCart> addtoCart = [];
@@ -53,6 +52,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
   double totalSubtotal = 0.0;
   int dummyCount = 0;
   double finalTotal = 0.0;
+  var total;
 
   Timer timer;
   var shippingFee = 0;
@@ -96,11 +96,16 @@ class _CartScreenState extends BasePageState<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {});
+    int counter = 1;
+
     var width = MediaQuery.of(context).size.width;
 
     List cartItem = [];
 
     return Consumer<CartModel>(builder: (context, cartModel, child) {
+      print('Data: ${cartModel.cartProducts.length}');
+
       if (cartModel.cartProducts.isEmpty) {
         return Scaffold(
           body: Center(
@@ -156,6 +161,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
             'id': it.product_id,
             'quantity': it.quantity,
           });
+
           counterArray.add(it.quantity);
 
           counter = it.quantity;
@@ -167,6 +173,7 @@ class _CartScreenState extends BasePageState<CartScreen> {
           if (intFlag == false) {
             subTotals += double.parse(it.price);
             finalTotal += double.parse(it.price);
+            total = finalTotal;
           }
           arraySize++;
           intFlag = true;
@@ -174,7 +181,8 @@ class _CartScreenState extends BasePageState<CartScreen> {
 
         subTotals = 0;
         for (int i = 0; i < cartItem.length; i++) {
-          subTotals += int.parse(cartItem[i]['price']) * counter;
+          subTotals += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
+          // total = subTotals;
         }
 
         return Scaffold(
@@ -261,21 +269,21 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                         children: <Widget>[
                                           GestureDetector(
                                             onTap: () {
-                                              if (counter > 0) {
-                                                setState(() {
-                                                  counter--;
-                                                });
-                                              } else {
-                                                setState(() {
-                                                  counter = 1;
-                                                });
-                                              }
+                                              setState(() {
+                                                if (cartModel.cartProducts[index].quantity > 0) {
+                                                  // directly update the quantity of the item in the cartModel.cartProducts list
+                                                  cartModel.cartProducts[index].quantity--;
+                                                  counter = cartModel.cartProducts[index].quantity;
+                                                  print('Counter: $counter');
+                                                }
+                                              });
                                               subTotals = 0;
                                               for (int i = 0; i < cartItem.length; i++) {
-                                                subTotals += int.parse(cartItem[i]['price']) * counter;
+                                                subTotals += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
                                               }
                                               setState(() {
                                                 finalTotal = shippingFee + subTotals;
+                                                total = finalTotal;
                                               });
                                             },
                                             child: Container(
@@ -299,7 +307,8 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                             width: 10,
                                           ),
                                           Text(
-                                            counter.toString(),
+                                            cartModel.cartProducts[index].quantity.toString(),
+                                            // counter.toString(),
                                             style: TextStyle(
                                                 fontSize: width * 0.035, fontFamily: 'Outfit', fontWeight: FontWeight.w500, color: Colors.black),
                                           ),
@@ -309,14 +318,18 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                           GestureDetector(
                                             onTap: () {
                                               setState(() {
-                                                counter++;
+                                                cartModel.cartProducts[index]
+                                                    .quantity++; // directly update the quantity of the item in the cartModel.cartProducts list
+                                                counter = cartModel.cartProducts[index].quantity;
+                                                print('Counter: $counter');
                                               });
                                               subTotals = 0;
                                               for (int i = 0; i < cartItem.length; i++) {
-                                                subTotals += int.parse(cartItem[i]['price']) * counter;
+                                                subTotals += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
                                               }
                                               setState(() {
                                                 finalTotal = shippingFee + subTotals;
+                                                total = finalTotal;
                                               });
                                             },
                                             child: Container(
@@ -363,7 +376,11 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                                 setState(() {
                                                   cartItem.removeAt(index);
                                                   cartModel.cartProducts.removeAt(index);
+                                                  if (cartModel.cartProducts.isEmpty) {
+                                                    Provider.of<CartModel>(context, listen: false).clearCart();
+                                                  }
                                                 });
+
                                                 Navigator.of(context).pop();
                                               },
                                             ),
@@ -477,50 +494,56 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                   groupValue: _character,
                                   onChanged: (shipping value) {
                                     setState(() {
+                                      shippingMethodTitle = 'Free shipping';
                                       finalTotal = 0;
                                       for (int i = 0; i < cartItem.length; i++) {
-                                        finalTotal += int.parse(cartItem[i]['price']) * counterArray[i];
+                                        finalTotal += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
                                       }
                                       finalTotal = 0 + finalTotal;
-
+                                      total = finalTotal;
                                       shippingFee = 0;
                                       _character = value;
                                       String text = _character.toString();
                                       shippingType = text.replaceAll('_', ' ');
                                       shippingType = shippingType.substring(shippingType.indexOf('.') + 1);
-                                      print('shippingType $shippingType');
+                                      if (couponDiscount != null) {
+                                        total = finalTotal - couponDiscount;
+                                      }
                                     });
                                   }),
                               RadioListTile<shipping>(
                                   contentPadding: EdgeInsets.zero,
                                   visualDensity:
                                       const VisualDensity(horizontal: VisualDensity.minimumDensity, vertical: VisualDensity.minimumDensity),
-                                  title: const Text("Midnight Delivery 11pm to 12am",
+                                  title: const Text("Midnight Delivery 11:00 PM to 12:00 AM",
                                       style: TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400)),
                                   subtitle: const Text('₹200.00', style: TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w300)),
                                   value: shipping.Midnight_Delivery_11pm_to_12am,
                                   groupValue: _character,
                                   onChanged: (shipping value) {
                                     setState(() {
+                                      shippingMethodTitle = "Midnight Delivery 11:00 PM to 12:00 AM";
                                       finalTotal = 0;
                                       for (int i = 0; i < cartItem.length; i++) {
-                                        finalTotal += int.parse(cartItem[i]['price']) * counterArray[i];
+                                        finalTotal += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
                                       }
                                       finalTotal = 200 + finalTotal;
-
+                                      total = finalTotal;
                                       _character = value;
                                       shippingFee = 200;
                                       String text = _character.toString();
                                       shippingType = text.replaceAll('_', ' ');
                                       shippingType = shippingType.substring(shippingType.indexOf('.') + 1);
-                                      print('shippingType $shippingType');
+                                      if (couponDiscount != null) {
+                                        total = finalTotal - couponDiscount;
+                                      }
                                     });
                                   }),
                               RadioListTile<shipping>(
                                   visualDensity:
                                       const VisualDensity(horizontal: VisualDensity.minimumDensity, vertical: VisualDensity.minimumDensity),
                                   contentPadding: EdgeInsets.zero,
-                                  title: const Text("Early morning Delivery 6.30am to 7am",
+                                  title: const Text("Early morning Delivery 6.30 AM to 7:00 AM",
                                       style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400)),
                                   subtitle:
                                       const Text('₹75.00', style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w300)),
@@ -528,18 +551,21 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                   groupValue: _character,
                                   onChanged: (shipping value) {
                                     setState(() {
+                                      shippingMethodTitle = "Early morning Delivery 6.30 AM to 7:00 AM";
                                       finalTotal = 0;
                                       for (int i = 0; i < cartItem.length; i++) {
-                                        finalTotal += int.parse(cartItem[i]['price']) * counterArray[i];
+                                        finalTotal += int.parse(cartItem[i]['price']) * cartModel.cartProducts[i].quantity;
                                       }
                                       finalTotal = 75 + finalTotal;
-
+                                      total = finalTotal;
                                       shippingFee = 75;
                                       _character = value;
                                       String text = _character.toString();
                                       shippingType = text.replaceAll('_', ' ');
                                       shippingType = shippingType.substring(shippingType.indexOf('.') + 1);
-                                      print('shippingType $shippingType');
+                                      if (couponDiscount != null) {
+                                        total = finalTotal - couponDiscount;
+                                      }
                                     });
                                   }),
                             ],
@@ -567,14 +593,27 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                     });
                                     return const Iterable<String>.empty();
                                   } else {
+                                    final now = DateTime.now();
                                     final matches = couponList
-                                        .where((coupon) => coupon.code.toLowerCase().contains(textEditingValue.text.toLowerCase()))
+                                        .where((coupon) =>
+                                            coupon.code.toLowerCase().contains(textEditingValue.text.toLowerCase()) &&
+                                            now.isBefore(DateTime.parse(coupon.dateExpires)))
                                         .toList();
                                     if (matches.isEmpty) {
-                                      // Entered coupon code is not valid
-                                      setState(() {
-                                        couponError = 'Invalid coupon code';
-                                      });
+                                      final expiredCoupons = couponList
+                                          .where((coupon) =>
+                                              coupon.code.toLowerCase().contains(textEditingValue.text.toLowerCase()) &&
+                                              now.isAfter(DateTime.parse(coupon.dateExpires)))
+                                          .toList();
+                                      if (expiredCoupons.isNotEmpty) {
+                                        setState(() {
+                                          couponError = 'Coupon is expired';
+                                        });
+                                      } else {
+                                        setState(() {
+                                          couponError = 'Invalid coupon code';
+                                        });
+                                      }
                                     } else {
                                       setState(() {
                                         couponError = '';
@@ -584,11 +623,17 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                   }
                                 },
                                 onSelected: (selection) async {
-                                  var trimValue = selection.toString().substring(selection.toString().length - 2);
-                                  couponSelection = selection;
-                                  couponDiscount = (double.parse(trimValue) / 100) * finalTotal;
+                                  final selectedCoupon = couponList.firstWhere((coupon) => coupon.code == selection);
+                                  print('Selection: ${selectedCoupon.discountType}');
+                                  print('Selection: ${selectedCoupon.amount}');
+                                  if (selectedCoupon.discountType == 'percent') {
+                                    couponDiscount = (double.parse(selectedCoupon.amount) / 100) * finalTotal;
+                                  } else if (selectedCoupon.discountType == 'amount') {
+                                    couponDiscount = selectedCoupon.amount;
+                                  }
                                   setState(() {
                                     couponTotal = finalTotal - couponDiscount;
+                                    total = couponTotal;
                                     couponError = '';
                                   });
                                   print('couponTotal: $couponTotal');
@@ -597,12 +642,24 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                   return SizedBox(
                                     width: MediaQuery.of(context).size.width / 2.3,
                                     child: TextFormField(
+                                      textInputAction: TextInputAction.done,
                                       controller: textEditingController,
                                       focusNode: focusNode,
                                       onEditingComplete: onEditingComplete,
+                                      onChanged: (value) {
+                                        if (value.isEmpty) {
+                                          setState(() {
+                                            couponTotal = null;
+                                            couponDiscount = null;
+                                            total = finalTotal;
+                                          });
+                                        }
+                                      },
                                       decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                        isDense: true,
                                         hintStyle: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
-                                        hintText: 'Enter Pin Code',
+                                        hintText: 'Enter Coupon Code',
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Colors.grey.shade400,
@@ -651,7 +708,10 @@ class _CartScreenState extends BasePageState<CartScreen> {
                                 onTap: () {
                                   textEditingController.clear();
                                   setState(() {
-                                    couponError = '';
+                                    couponError = null;
+                                    couponTotal = null;
+                                    couponDiscount = null;
+                                    total = finalTotal;
                                   });
                                 },
                                 child: Container(
@@ -668,25 +728,45 @@ class _CartScreenState extends BasePageState<CartScreen> {
                               ),
                             ],
                           ),
-                          if (couponError != null) Text(couponError, style: TextStyle(color: Colors.red)),
+                          // Text('test'),
+                          if (couponError != null)
+                            Column(
+                              children: [
+                                const SizedBox(height: 10),
+                                Text(couponError, style: const TextStyle(color: Colors.red)),
+                              ],
+                            ),
                           const Divider(color: Colors.grey),
+                          if (couponDiscount != null && textEditingController.text.isNotEmpty)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 10),
+                                const Text('You have saved ', style: TextStyle(fontFamily: 'Outfit', fontSize: 13, fontWeight: FontWeight.w500)),
+                                Text('₹${couponDiscount.toString()}',
+                                    style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500)),
+                                const Text(' in this order.', style: TextStyle(fontFamily: 'Outfit', fontSize: 13, fontWeight: FontWeight.w500)),
+                              ],
+                            ),
                           const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text('Total', style: TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500)),
-                              couponTotal == null
-                                  ? Text('₹${finalTotal.toString()}',
-                                      style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500))
-                                  : Text('₹${couponTotal.toString()}',
-                                      style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500)),
+                              Text('₹${total.toString()}', style: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500)),
                             ],
                           ),
-                          couponTotal != null
-                              ? const Text('Coupon Applied Successfully',
-                                  style: TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500, color: Color(0xff00ab55)))
+                          couponDiscount != null && textEditingController.text.isNotEmpty
+                              ? Column(
+                                  children: const [
+                                    SizedBox(height: 10),
+                                    Text('Coupon Applied Successfully',
+                                        style: TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w500, color: Color(0xff00ab55))),
+                                    const SizedBox(height: 10),
+                                  ],
+                                )
                               : const Text(''),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 10),
                           Center(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -696,11 +776,16 @@ class _CartScreenState extends BasePageState<CartScreen> {
                               ),
                               child: const Text("Proceed to Checkout", style: TextStyle(fontSize: 18)),
                               onPressed: () {
+                                // print('shippingMethodTitle: $shippingMethodTitle');
+                                // print('cartModel.cartProducts: ${cartModel.cartProducts[0].name}');
+                                // print('cartModel.cartProducts: ${cartModel.cartProducts[0].quantity}');
+                                print('Cou: $couponDiscount');
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => CreateOrder(
-                                              couponSelection: couponSelection,
+                                              shippingMethodTitle: shippingMethodTitle,
+                                              couponDiscount: couponDiscount,
                                               shippingFee: shippingFee,
                                               id: cartItem[0]['id'], // widget.details.id,
                                               cartProducts: cartModel.cartProducts,

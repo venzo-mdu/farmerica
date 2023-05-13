@@ -1,3 +1,4 @@
+import 'package:Farmerica/Providers/CartProviders.dart';
 import 'package:flutter/material.dart';
 import 'package:Farmerica/models/Customers.dart';
 import 'package:Farmerica/models/ParentCategory.dart';
@@ -8,22 +9,20 @@ import 'package:Farmerica/ui/CartPage.dart';
 import 'package:Farmerica/ui/categories.dart';
 import 'package:Farmerica/ui/dashboard.dart';
 import 'package:Farmerica/ui/profile.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 class BasePage extends StatefulWidget {
   Customers customer;
   int selectedPage;
   String title;
-  BasePage({
-    this.customer,
-    this.title,this.selectedPage = 0
-  });
+  BasePage({this.customer, this.title, this.selectedPage = 0});
 
   @override
   BasePageState createState() => BasePageState();
 }
 
 class BasePageState<T extends BasePage> extends State<T> {
+  int _productCount = 0;
   List<Product> response;
   Api_Services api_services = Api_Services();
 
@@ -39,11 +38,10 @@ class BasePageState<T extends BasePage> extends State<T> {
   @override
   void initState() {
     selected = widget.selectedPage;
+    _productCount = Provider.of<CartModel>(context, listen: false).cartProducts.length;
     getList().then((value) {
       list = [
-        Dashboard(
-          product: response,
-        ),
+        Dashboard(),
         CategoryPage(
           catergories: categories,
           product: response,
@@ -65,14 +63,34 @@ class BasePageState<T extends BasePage> extends State<T> {
   Customers customer;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // update the product count whenever the cart model changes
+    int newCount = Provider.of<CartModel>(context).cartProducts.length;
+    if (_productCount != newCount) {
+      setState(() {
+        _productCount = newCount;
+      });
+    }
+    if (_productCount > 0 && newCount == 0) {
+      setState(() {
+        _productCount = 0;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
 
+    // print('Coount: $newCount');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff00ab55),
         centerTitle: true,
-        title: Image.asset('assets/images/farmerica-logo.png',
-          color: Colors.white,width: MediaQuery.of(context).size.width * 0.5,
+        title: Image.asset(
+          'assets/images/farmerica-logo.png',
+          color: Colors.white,
+          width: MediaQuery.of(context).size.width * 0.5,
         ),
       ),
       body: body(context),
@@ -87,24 +105,53 @@ class BasePageState<T extends BasePage> extends State<T> {
             selected = inx;
           });
         },
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
               icon: Icon(
                 Icons.home,
               ),
               label: "Home"),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
               icon: Icon(
                 Icons.category_rounded,
               ),
               label: "Category"),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.shopping_cart,
+            icon: Stack(
+              children: [
+                const Icon(
+                  Icons.shopping_cart,
+                ),
+                if(_productCount != 0)
+                Positioned(
+                  top: 0.0,
+                  right: 0.0,
+                  child: Container(
+                    padding: EdgeInsets.all(1.0),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 16.0,
+                      minHeight: 16.0,
+                    ),
+                    child: Text(
+                      '$_productCount',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'Outfit',
+                        fontSize: 12,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
             label: "My Cart",
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(
               Icons.person,
             ),

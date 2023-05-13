@@ -182,10 +182,14 @@ class _ProductDetailState extends State<ProductDetail> {
                                 return SizedBox(
                                   width: MediaQuery.of(context).size.width / 2.3,
                                   child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    textInputAction: TextInputAction.done,
                                     controller: textController,
                                     focusNode: focusNode,
                                     onEditingComplete: onEditingComplete,
                                     decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                      isDense: true,
                                       hintStyle: const TextStyle(fontFamily: 'Outfit', fontSize: 15, fontWeight: FontWeight.w400),
                                       hintText: 'Enter Pin Code',
                                       enabledBorder: OutlineInputBorder(

@@ -3,10 +3,10 @@ class Coupon {
   String code;
   String amount;
   String status;
-  DateTime dateCreated;
+  var dateCreated;
   String discountType;
   String description;
-  DateTime dateExpires;
+  var dateExpires;
 
   Coupon({
     this.id,
@@ -22,12 +22,12 @@ class Coupon {
   Coupon.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     code = json['code'];
-    amount = json['amount'];
+    amount = json['discount'];
     status = json['status'];
-    dateCreated = json['dateCreated'];
-    discountType = json['discountType'];
+    dateCreated = json['date_created'];
+    discountType = json['discount_type'];
     description = json['description'];
-    dateExpires = json['dateExpires'];
+    dateExpires = json['date_expires_gmt'];
   }
 
   Map<String, dynamic> toJson() {
