@@ -104,21 +104,23 @@ class _DashboardState extends State<Dashboard> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
 //slide
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30))),
-              width: double.infinity,
-              height: 200,
-              child: PageView(
-                controller: _carouselController,
-                children: carousel,
-                onPageChanged: (int index) {
-                  setState(() {
-                    _carouselPage = 2;
-                  });
-                },
-              ),
-            ),
+            const Carousal(),
+          ///
+          //   Container(
+          //     padding: const EdgeInsets.all(10),
+          //     decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30))),
+          //     width: double.infinity,
+          //     height: 200,
+          //     child: PageView(
+          //       controller: _carouselController,
+          //       children: carousel,
+          //       onPageChanged: (int index) {
+          //         setState(() {
+          //           _carouselPage = 2;
+          //         });
+          //       },
+          //     ),
+          //   ),
 //banner 1
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),

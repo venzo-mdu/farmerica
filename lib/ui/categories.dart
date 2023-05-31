@@ -42,6 +42,8 @@ class _CategoryPageState extends BasePageState<CategoryPage> {
     'Our Farm Product',
   ];
 
+  List<String> categoryImageView = ['assets/images/fruits.png', 'assets/images/vegetable.png', 'assets/images/salad.png', 'assets/images/farm.png'];
+
   @override
   void initState() {
     super.initState();
@@ -94,8 +96,7 @@ class _CategoryPageState extends BasePageState<CategoryPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    Grocery(
+                                builder: (context) => Grocery(
                                       product: response, // widget.product,
                                     )));
                       }
@@ -104,36 +105,35 @@ class _CategoryPageState extends BasePageState<CategoryPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    Grocery(
+                                builder: (context) => Grocery(
                                       product: response, // widget.product,
                                     )));
                       }
                     },
-                    child: Container(
-                      height: width * 0.18,
-                      child: ListTile(
-                        // leading:CachedNetworkImage(
-                        //   height: width * 0.18,
-                        //   imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png',
-                        //   placeholder: (context, url) =>const Center(child: CircularProgressIndicator(color: Color(0xff3a9046),)),
-                        //   errorWidget: (context, url, error) => Icon(Icons.error),
-                        //   fadeOutDuration: const Duration(milliseconds: 300),
-                        //   fadeInDuration: const Duration(milliseconds: 300),
-                        // ),
-                        leading: Image.network(
-                          // category.image.src.toString() ??
-                          'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png',
-                          height: width * 0.18,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Container(
+                              // color: Colors.grey,
+                              // height: width * 0.18,
+                              child: ListTile(
+                            leading: Image.asset(
+                              categoryImageView[i],
+                            ),
+                            title: Text(
+                              categoryView[i],
+                              style: TextStyle(fontSize: width * 0.04, fontFamily: 'Outfit', fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.left,
+                            ),
+                          )),
                         ),
-                        title: Text(
-                          categoryView[i],
-                          style: TextStyle(
-                              fontSize: width * 0.035,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.left,
-                        ),
-                      )
+                        const Divider(
+                          thickness: 1,
+                          indent: 10,
+                          endIndent: 10,
+                        )
+                      ],
                     ),
                   );
                 },
