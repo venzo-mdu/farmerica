@@ -1,9 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_controller.dart';
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-
 import 'package:Farmerica/models/Products.dart';
 import 'package:Farmerica/networks/ApiServices.dart';
 import 'package:Farmerica/ui/productCategory.dart';
@@ -12,9 +9,7 @@ import 'package:Farmerica/models/global.dart' as Globals;
 import 'package:Farmerica/ui/gertProductfromapi.dart';
 
 class Carousal extends StatelessWidget {
-  final height;
-
-  Carousal(this.height);
+  const Carousal({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,47 +17,43 @@ class Carousal extends StatelessWidget {
     CarouselController buttonCarouselController = CarouselController();
     Api_Services api_services = Api_Services();
 
-    List child = [
-      'https://www.farmerica.in/wp-content/uploads/2023/03/mathers-day-banner.jpg',
+    List slides = [
       "https://www.farmerica.in/wp-content/uploads/2023/03/exotic-vagetable-1.jpg",
       "https://www.farmerica.in/wp-content/uploads/2023/03/fruits-basket-1.jpg",
       "https://www.farmerica.in/wp-content/uploads/2023/03/Dry-fruits-banner-3.jpg",
     ];
 
-    final slides = [];
-
-    return CarouselSlider(
-      items: child.map((item) {
-        return Container(
-          // width: 500,
-          // width: double.infinity,
-          child: GestureDetector(
+    return Container(
+      height: 200,
+      width: width,
+      child: CarouselSlider(
+        items: slides.map((item) {
+          return GestureDetector(
             onTap: () {
               print('CarouselSlider: $item');
             },
-            child: CachedNetworkImage(
-              fit: BoxFit.fill,
-              imageUrl: item,
-              placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(
-                color: Color(0xff3a9046),
-              )),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              fadeOutDuration: const Duration(milliseconds: 300),
-              fadeInDuration: const Duration(milliseconds: 300),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: CachedNetworkImage(
+                fit: BoxFit.fill,
+                imageUrl: item,
+                placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(
+                  color: Color(0xff3a9046),
+                )),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                fadeOutDuration: const Duration(milliseconds: 300),
+                fadeInDuration: const Duration(milliseconds: 300),
+              ),
             ),
-            //
-            // Image.network(
-            //   item,
-            //   fit: BoxFit.fill,
-            // ),
-          ),
-        );
-      }).toList(),
-      carouselController: buttonCarouselController,
-      options: CarouselOptions(
-        autoPlay: true,
-        initialPage: 2,
+          );
+        }).toList(),
+        carouselController: buttonCarouselController,
+        options: CarouselOptions(
+          viewportFraction: 1,
+          autoPlay: true,
+          initialPage: 0,
+        ),
       ),
     );
   }
